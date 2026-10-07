@@ -156,8 +156,11 @@ Polish:
 
 - Jetpack: continuous thrust while up is held, tuned to the original pulses
   (impulse 3500 and 300 fuel per 100 ms; regeneration 50 fuel per 40 ms; thrust
-  needs more than 300 fuel). Equivalent rates: force 35,000, burn 3,000
-  fuel/s, regeneration 1,250 fuel/s. Reach per tank must match the original.
+  needs more than 300 fuel). At the original's 60 fps the 40 ms timer fires
+  every third frame, so regeneration was effectively 1,000 fuel/s. Continuous
+  rates: thrust 1,750 px/s², burn 3,000 fuel/s, regeneration 1,000 fuel/s,
+  running until empty and restarting at 400 fuel. Reach per tank must match
+  the original.
 - Horizontal movement accelerates to 200 px/s over roughly 80 ms and
   decelerates similarly, in place of the instant set.
 - Hold to fire. Cooldown by gun level: 1000, 800, 600, 400 ms. Shot impulse
