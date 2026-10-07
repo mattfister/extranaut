@@ -198,6 +198,9 @@ Controls:
   uses the checkpoint room's player start.
 - Save file: `user://save_N.json` with checkpoint room, max HP, max fuel, gun
   level, artifacts, rooms with powerup taken, visited rooms.
+  The file is also rewritten on entering each room so the explored map
+  survives quitting; stats and checkpoint still change only at save events.
+  An unreadable save is treated as an empty slot.
 - Map: visited rooms, save points in visited rooms, and the current room. Shown
   in the HUD and larger on the pause screen.
 - Pause menu: Resume, Quit to Title.

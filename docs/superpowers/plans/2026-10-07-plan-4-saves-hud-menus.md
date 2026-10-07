@@ -152,7 +152,7 @@ func _test_progress() -> void:
 func _test_save_files() -> void:
 	SaveGame.directory = "user://test_saves/"
 	DirAccess.make_dir_recursive_absolute(SaveGame.directory)
-	for slot in SaveGame.SLOTS:
+	for slot: int in SaveGame.SLOTS:
 		SaveGame.delete(slot)
 	_expect(not SaveGame.exists(1), "an unused slot does not exist")
 	_expect(SaveGame.read(1) == null, "an unused slot reads as null")
@@ -1176,7 +1176,7 @@ func _initialize() -> void:
 func _run() -> void:
 	SaveGame.directory = "user://test_saves/"
 	DirAccess.make_dir_recursive_absolute(SaveGame.directory)
-	for slot in SaveGame.SLOTS:
+	for slot: int in SaveGame.SLOTS:
 		SaveGame.delete(slot)
 	await process_frame
 	_main = load("res://scenes/main.tscn").instantiate()
@@ -1234,7 +1234,7 @@ func _run() -> void:
 	_expect(_is(TitleScript), "dismissing the ending returns to the title")
 	_expect(not paused, "the tree is not left paused")
 
-	for slot in SaveGame.SLOTS:
+	for slot: int in SaveGame.SLOTS:
 		SaveGame.delete(slot)
 	print("main test passed" if _failures == 0 else "main test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
@@ -1381,8 +1381,8 @@ func _build_slots() -> void:
 	for child in _slots.get_children():
 		_slots.remove_child(child)
 		child.free()
-	for slot in SaveGame.SLOTS:
-		var y := SLOTS_TOP + SLOT_SPACING * (slot - 1)
+	for slot: int in SaveGame.SLOTS:
+		var y: float = SLOTS_TOP + SLOT_SPACING * (slot - 1)
 		if SaveGame.read(slot) != null:
 			var resume := _add_slot_button("Slot%dContinue" % slot, "Continue Game %d" % slot, Vector2(CENTER_X - SMALL_BUTTON.x - 25.0, y), SMALL_BUTTON)
 			resume.pressed.connect(func() -> void: continue_game.emit(slot))
@@ -1602,3 +1602,10 @@ git commit -m "Add the title, intro, ending and main screen flow"
 - The minimap fills in as rooms are entered and marks rooms with save points; the pause menu shows it larger.
 - P, Enter or Start pauses; Resume and Quit to Title work.
 - Falling out of the bottom of the world shows the ending and returns to the title.
+
+## Changes made during execution
+
+1. **Tests act between frames after input.** Godot delivers input once per rendered frame, so waiting a fixed number of physics frames after a simulated key press was flaky under load. Emitting a button's `pressed` signal from inside a physics tick also made the engine log an error when the handler unpaused the tree. Both tests now use a `_settle()` helper that waits for rendered frames and ends between frames. The committed test files supersede the blocks above.
+2. **Test commands use `timeout`.** A script error inside a test coroutine stops it before its `quit()` call, leaving headless Godot running forever. Run tests as `timeout 200 "$GODOT" ...`.
+3. **Typed loop variable in `scenes/title.gd`.** `for slot: int in SaveGame.SLOTS` and `var y: float`, because the element type of an untyped constant array cannot be inferred.
+
