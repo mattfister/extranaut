@@ -87,7 +87,7 @@ MONSTERS = [
     monster("monster_door", "monster_door", "animations/artifactDoor", frame=(0, 1), **DOOR),
     monster("monster_door_2", "monster_door", "animations/artifactDoor", frame=(0, 1),
             open_when_count=2, **DOOR),
-    monster("save_point", "save_point", "animations/savePoint", **HEAVY),
+    monster("save_point", "save_point", "animations/savePoint", is_save_point=True, **HEAVY),
     monster("hp_powerup", "powerup", "animations/collectibles", frame=(0, 2), kind="hp", **POWERUP),
     monster("fuel_powerup", "powerup", "animations/collectibles", kind="fuel", **POWERUP),
     monster("gun_powerup", "powerup", "animations/collectibles", frame=(0, 3), kind="gun", **POWERUP),

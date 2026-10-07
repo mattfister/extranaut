@@ -21,6 +21,8 @@ const PLAYER_CORNER_OFFSET := Vector2(-16, -16)
 @export var damages_player_on_touch := false
 @export var damaged_by_shots := true
 @export var is_powerup := false
+## Marks the room on the map once the player has been there.
+@export var is_save_point := false
 ## Frames in the looping animation along the sprite row. 1 disables it.
 @export var anim_frames := 4
 

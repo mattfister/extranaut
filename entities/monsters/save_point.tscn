@@ -19,6 +19,7 @@ lock_rotation = true
 contact_monitor = true
 max_contacts_reported = 8
 script = ExtResource("1")
+is_save_point = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("shape")

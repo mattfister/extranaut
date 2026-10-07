@@ -22,6 +22,10 @@ const ACTIONS := {
 		"keys": [KEY_Z, KEY_X, KEY_SPACE],
 		"buttons": [JOY_BUTTON_X],
 	},
+	"pause": {
+		"keys": [KEY_P, KEY_ENTER],
+		"buttons": [JOY_BUTTON_START],
+	},
 }
 
 
