@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://entities/monsters/spiky_head_monster.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/animations/snakeHeadBoss.png" id="2"]
+
+[sub_resource type="PhysicsMaterial" id="material"]
+friction = 0.5
+
+[sub_resource type="CircleShape2D" id="shape"]
+radius = 16.0
+
+[node name="SpikyHeadMonster" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 31
+mass = 20.0
+physics_material_override = SubResource("material")
+gravity_scale = 1.0
+lock_rotation = false
+contact_monitor = true
+max_contacts_reported = 8
+script = ExtResource("1")
+damages_player_on_touch = true
+damaged_by_shots = false
+anim_frames = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("shape")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2")
+hframes = 8
+vframes = 8
+frame_coords = Vector2i(0, 4)
