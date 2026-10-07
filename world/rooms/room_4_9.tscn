@@ -20,18 +20,18 @@ height = 769.0
 radius = 0.5
 height = 769.0
 
-[node name="Room_4_9" type="Node2D" unique_id=1751551529]
+[node name="Room_4_9" type="Node2D" unique_id=57285902]
 script = ExtResource("1_pw8rt")
 grid_pos = Vector2i(4, 9)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=1716490257]
+[node name="Background" type="TileMapLayer" parent="." unique_id=226208287]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAAAAAACQAAAAEAAAAAAAEACQAAAAEAAAAAAAIACQAAAAEAAAAAAAMACQAAAAEAAAAAAAQACQAAAAEAAAAAAAUACQAAAAEAAAAAAAYACQAAAAEAAAAAAAcACQAAAAEAAAAAAAgACQAAAAEAAAAAAAkACQAAAAEAAAAAAAoACQAAAAEAAAAAAAsACQAAAAEAAAAAAAwACQAAAAEAAAAAAA0ACQAAAAEAAAAAAA4ACQAAAAEAAAAAAA8ACQAAAAEAAAAAABAACQAAAAEAAAAAABEACQAAAAEAAAAAABIACQAAAAEAAAAAABMACQAAAAEAAAAAABQACQAAAAEAAAAAABUACQAAAAEAAAAAABYACQAAAAEAAAAAABcACQAAAAEAAAABAAAACQAAAAEAAAABAAEACQAAAAEAAAABAAIACQAAAAEAAAABAAMACQAAAAEAAAABAAQACQAAAAEAAAABAAUACQAAAAEAAAABAAYACQAAAAEAAAABAAcACQAAAAEAAAABAAgACQAAAAEAAAABAAkACQAAAAEAAAABAAoACQAAAAEAAAABAAsACQAAAAEAAAABAAwACQAAAAEAAAABAA0ACQAAAAEAAAABAA4ACQAAAAEAAAABAA8ACQAAAAEAAAABABAACQAAAAEAAAABABEACQAAAAEAAAABABIACQAAAAEAAAABABMACQAAAAEAAAABABQACQAAAAEAAAABABUACQAAAAEAAAABABYACQAAAAEAAAABABcACQAAAAEAAAACAAAACQAAAAEAAAACAAEACQAAAAEAAAACAAIACQAAAAEAAAACAAMACQAAAAEAAAACAAQACQAAAAEAAAACAAUACQAAAAEAAAACAAYACQAAAAEAAAACAAcACQAAAAEAAAACAAgACQAAAAEAAAACAAkACQAAAAEAAAACAAoACQAAAAEAAAACAAsACQAAAAEAAAACAAwACQAAAAEAAAACAA0ACQAAAAEAAAACAA4ACQAAAAEAAAACAA8ACQAAAAEAAAACABAACQAAAAEAAAACABEACQAAAAEAAAACABIACQAAAAEAAAACABMACQAAAAEAAAACABQACQAAAAEAAAACABUACQAAAAEAAAACABYACQAAAAEAAAACABcACQAAAAEAAAADAAAACQAAAAEAAAADAAEACQAAAAEAAAADAAIACQAAAAEAAAADAAMACQAAAAEAAAADAAQACQAAAAEAAAADAAUACQAAAAEAAAADAAYACQAAAAEAAAADAAcACQAAAAEAAAADAAgACQAAAAEAAAADAAkACQAAAAEAAAADAAoACQAAAAEAAAADAAsACQAAAAEAAAADAAwACQAAAAEAAAADAA0ACQAAAAEAAAADAA4ACQAAAAEAAAADAA8ACQAAAAEAAAADABAACQAAAAEAAAADABEACQAAAAEAAAADABIACQAAAAEAAAADABMACQAAAAEAAAADABQACQAAAAEAAAADABUACQAAAAEAAAADABYACQAAAAEAAAADABcACQAAAAEAAAAEAAAACQAAAAEAAAAEAAEACQAAAAEAAAAEAAIACQAAAAEAAAAEAAMACQAAAAEAAAAEAAQACQAAAAEAAAAEAAUACQAAAAEAAAAEAAYACQAAAAEAAAAEAAcACQAAAAEAAAAEAAgACQAAAAEAAAAEAAkACQAAAAEAAAAEAAoACQAAAAEAAAAEAAsACQAAAAEAAAAEAAwACQAAAAEAAAAEAA0ACQAAAAEAAAAEAA4ACQAAAAEAAAAEAA8ACQAAAAEAAAAEABAACQAAAAEAAAAEABEACQAAAAEAAAAEABIACQAAAAEAAAAEABMACQAAAAEAAAAEABQACQAAAAEAAAAEABUACQAAAAEAAAAEABYACQAAAAEAAAAEABcACQAAAAEAAAAFAAAACQAAAAEAAAAFAAEACQAAAAEAAAAFAAIACQAAAAEAAAAFAAMACQAAAAEAAAAFAAQACQAAAAEAAAAFAAUACQAAAAEAAAAFAAYACQAAAAEAAAAFAAcACQAAAAEAAAAFAAgACQAAAAEAAAAFAAkACQAAAAEAAAAFAAoACQAAAAEAAAAFAAsACQAAAAEAAAAFAAwACQAAAAEAAAAFAA0ACQAAAAEAAAAFAA4ACQAAAAEAAAAFAA8ACQAAAAEAAAAFABAACQAAAAEAAAAFABEACQAAAAEAAAAFABIACQAAAAEAAAAFABMACQAAAAEAAAAFABQACQAAAAEAAAAFABUACQAAAAEAAAAFABYACQAAAAEAAAAFABcACQAAAAEAAAAGAAAACQAAAAEAAAAGAAEACQAAAAEAAAAGAAIACQAAAAEAAAAGAAMACQAAAAEAAAAGAAQACQAAAAEAAAAGAAUACQAAAAEAAAAGAAYACQAAAAEAAAAGAAcACQAAAAEAAAAGAAgACQAAAAEAAAAGAAkACQAAAAEAAAAGAAoACQAAAAEAAAAGAAsACQAAAAEAAAAGAAwACQAAAAEAAAAGAA0ACQAAAAEAAAAGAA4ACQAAAAEAAAAGAA8ACQAAAAEAAAAGABAACQAAAAEAAAAGABEACQAAAAEAAAAGABIACQAAAAEAAAAGABMACQAAAAEAAAAGABQACQAAAAEAAAAGABUACQAAAAEAAAAGABYACQAAAAEAAAAGABcACQAAAAEAAAAHAAAACQAAAAEAAAAHAAEACQAAAAEAAAAHAAIACQAAAAEAAAAHAAMACQAAAAEAAAAHAAQACQAAAAEAAAAHAAUACQAAAAEAAAAHAAYACQAAAAEAAAAHAAcACQAAAAEAAAAHAAgACQAAAAEAAAAHAAkACQAAAAEAAAAHAAoACQAAAAEAAAAHAAsACQAAAAEAAAAHAAwACQAAAAEAAAAHAA0ACQAAAAEAAAAHAA4ACQAAAAEAAAAHAA8ACQAAAAEAAAAHABAACQAAAAEAAAAHABEACQAAAAEAAAAHABIACQAAAAEAAAAHABMACQAAAAEAAAAHABQACQAAAAEAAAAHABUACQAAAAEAAAAHABYACQAAAAEAAAAHABcACQAAAAEAAAAIAAAACQAAAAEAAAAIAAEACQAAAAEAAAAIAAIACQAAAAEAAAAIAAMACQAAAAEAAAAIAAQACQAAAAEAAAAIAAUACQAAAAEAAAAIAAYACQAAAAEAAAAIAAcACQAAAAEAAAAIAAgACQAAAAEAAAAIAAkACQAAAAEAAAAIAAoACQAAAAEAAAAIAAsACQAAAAEAAAAIAAwACQAAAAEAAAAIAA0ACQAAAAEAAAAIAA4ACQAAAAEAAAAIAA8ACQAAAAEAAAAIABAACQAAAAEAAAAIABEACQAAAAEAAAAIABIACQAAAAEAAAAIABMACQAAAAEAAAAIABQACQAAAAEAAAAIABUACQAAAAEAAAAIABYACQAAAAEAAAAIABcACQAAAAEAAAAJAAAACQAAAAEAAAAJAAEACQAAAAEAAAAJAAIACQAAAAEAAAAJAAMACQAAAAEAAAAJAAQACQAAAAEAAAAJAAUACQAAAAEAAAAJAAYACQAAAAEAAAAJAAcACQAAAAEAAAAJAAgACQAAAAEAAAAJAAkACQAAAAEAAAAJAAoACQAAAAEAAAAJAAsACQAAAAEAAAAJAAwACQAAAAEAAAAJAA0ACQAAAAEAAAAJAA4ACQAAAAEAAAAJAA8ACQAAAAEAAAAJABAACQAAAAEAAAAJABEACQAAAAEAAAAJABIACQAAAAEAAAAJABMACQAAAAEAAAAJABQACQAAAAEAAAAJABUACQAAAAEAAAAJABYACQAAAAEAAAAJABcACQAAAAEAAAAKAAAACQAAAAEAAAAKAAEACQAAAAEAAAAKAAIACQAAAAEAAAAKAAMACQAAAAEAAAAKAAQACQAAAAEAAAAKAAUACQAAAAEAAAAKAAYACQAAAAEAAAAKAAcACQAAAAEAAAAKAAgACQAAAAEAAAAKAAkACQAAAAEAAAAKAAoACQAAAAEAAAAKAAsACQAAAAEAAAAKAAwACQAAAAEAAAAKAA0ACQAAAAEAAAAKAA4ACQAAAAEAAAAKAA8ACQAAAAEAAAAKABAACQAAAAEAAAAKABEACQAAAAEAAAAKABIACQAAAAEAAAAKABMACQAAAAEAAAAKABQACQAAAAEAAAAKABUACQAAAAEAAAAKABYACQAAAAEAAAAKABcACQAAAAEAAAALAAAACQAAAAEAAAALAAEACQAAAAEAAAALAAIACQAAAAEAAAALAAMACQAAAAEAAAALAAQACQAAAAEAAAALAAUACQAAAAEAAAALAAYACQAAAAEAAAALAAcACQAAAAEAAAALAAgACQAAAAEAAAALAAkACQAAAAEAAAALAAoACQAAAAEAAAALAAsACQAAAAEAAAALAAwACQAAAAEAAAALAA0ACQAAAAEAAAALAA4ACQAAAAEAAAALAA8ACQAAAAEAAAALABAACQAAAAEAAAALABEACQAAAAEAAAALABIACQAAAAEAAAALABMACQAAAAEAAAALABQACQAAAAEAAAALABUACQAAAAEAAAALABYACQAAAAEAAAALABcACQAAAAEAAAAMAAAACQAAAAEAAAAMAAEACQAAAAEAAAAMAAIACQAAAAEAAAAMAAMACQAAAAEAAAAMAAQACQAAAAEAAAAMAAUACQAAAAEAAAAMAAYACQAAAAEAAAAMAAcACQAAAAEAAAAMAAgACQAAAAEAAAAMAAkACQAAAAEAAAAMAAoACQAAAAEAAAAMAAsACQAAAAEAAAAMAAwACQAAAAEAAAAMAA0ACQAAAAEAAAAMAA4ACQAAAAEAAAAMAA8ACQAAAAEAAAAMABAACQAAAAEAAAAMABEACQAAAAEAAAAMABIACQAAAAEAAAAMABMACQAAAAEAAAAMABQACQAAAAEAAAAMABUACQAAAAEAAAAMABYACQAAAAEAAAAMABcACQAAAAEAAAANAAAACQAAAAEAAAANAAEACQAAAAEAAAANAAIACQAAAAEAAAANAAMACQAAAAEAAAANAAQACQAAAAEAAAANAAUACQAAAAEAAAANAAYACQAAAAEAAAANAAcACQAAAAEAAAANAAgACQAAAAEAAAANAAkACQAAAAEAAAANAAoACQAAAAEAAAANAAsACQAAAAEAAAANAAwACQAAAAEAAAANAA0ACQAAAAEAAAANAA4ACQAAAAEAAAANAA8ACQAAAAEAAAANABAACQAAAAEAAAANABEACQAAAAEAAAANABIACQAAAAEAAAANABMACQAAAAEAAAANABQACQAAAAEAAAANABUACQAAAAEAAAANABYACQAAAAEAAAANABcACQAAAAEAAAAOAAAACQAAAAEAAAAOAAEACQAAAAEAAAAOAAIACQAAAAEAAAAOAAMACQAAAAEAAAAOAAQACQAAAAEAAAAOAAUACQAAAAEAAAAOAAYACQAAAAEAAAAOAAcACQAAAAEAAAAOAAgACQAAAAEAAAAOAAkACQAAAAEAAAAOAAoACQAAAAEAAAAOAAsACQAAAAEAAAAOAAwACQAAAAEAAAAOAA0ACQAAAAEAAAAOAA4ACQAAAAEAAAAOAA8ACQAAAAEAAAAOABAACQAAAAEAAAAOABEACQAAAAEAAAAOABIACQAAAAEAAAAOABMACQAAAAEAAAAOABQACQAAAAEAAAAOABUACQAAAAEAAAAOABYACQAAAAEAAAAOABcACQAAAAEAAAAPAAAACQAAAAEAAAAPAAEACQAAAAEAAAAPAAIACQAAAAEAAAAPAAMACQAAAAEAAAAPAAQACQAAAAEAAAAPAAUACQAAAAEAAAAPAAYACQAAAAEAAAAPAAcACQAAAAEAAAAPAAgACQAAAAEAAAAPAAkACQAAAAEAAAAPAAoACQAAAAEAAAAPAAsACQAAAAEAAAAPAAwACQAAAAEAAAAPAA0ACQAAAAEAAAAPAA4ACQAAAAEAAAAPAA8ACQAAAAEAAAAPABAACQAAAAEAAAAPABEACQAAAAEAAAAPABIACQAAAAEAAAAPABMACQAAAAEAAAAPABQACQAAAAEAAAAPABUACQAAAAEAAAAPABYACQAAAAEAAAAPABcACQAAAAEAAAAQAAAACQAAAAEAAAAQAAEACQAAAAEAAAAQAAIACQAAAAEAAAAQAAMACQAAAAEAAAAQAAQACQAAAAEAAAAQAAUACQAAAAEAAAAQAAYACQAAAAEAAAAQAAcACQAAAAEAAAAQAAgACQAAAAEAAAAQAAkACQAAAAEAAAAQAAoACQAAAAEAAAAQAAsACQAAAAEAAAAQAAwACQAAAAEAAAAQAA0ACQAAAAEAAAAQAA4ACQAAAAEAAAAQAA8ACQAAAAEAAAAQABAACQAAAAEAAAAQABEACQAAAAEAAAAQABIACQAAAAEAAAAQABMACQAAAAEAAAAQABQACQAAAAEAAAAQABUACQAAAAEAAAAQABYACQAAAAEAAAAQABcACQAAAAEAAAARAAAACQAAAAEAAAARAAEACQAAAAEAAAARAAIACQAAAAEAAAARAAMACQAAAAEAAAARAAQACQAAAAEAAAARAAUACQAAAAEAAAARAAYACQAAAAEAAAARAAcACQAAAAEAAAARAAgACQAAAAEAAAARAAkACQAAAAEAAAARAAoACQAAAAEAAAARAAsACQAAAAEAAAARAAwACQAAAAEAAAARAA0ACQAAAAEAAAARAA4ACQAAAAEAAAARAA8ACQAAAAEAAAARABAACQAAAAEAAAARABEACQAAAAEAAAARABIACQAAAAEAAAARABMACQAAAAEAAAARABQACQAAAAEAAAARABUACQAAAAEAAAARABYACQAAAAEAAAARABcACQAAAAEAAAASAAAACQAAAAEAAAASAAEACQAAAAEAAAASAAIACQAAAAEAAAASAAMACQAAAAEAAAASAAQACQAAAAEAAAASAAUACQAAAAEAAAASAAYACQAAAAEAAAASAAcACQAAAAEAAAASAAgACQAAAAEAAAASAAkACQAAAAEAAAASAAoACQAAAAEAAAASAAsACQAAAAEAAAASAAwACQAAAAEAAAASAA0ACQAAAAEAAAASAA4ACQAAAAEAAAASAA8ACQAAAAEAAAASABAACQAAAAEAAAASABEACQAAAAEAAAASABIACQAAAAEAAAASABMACQAAAAEAAAASABQACQAAAAEAAAASABUACQAAAAEAAAASABYACQAAAAEAAAASABcACQAAAAEAAAATAAAACQAAAAEAAAATAAEACQAAAAEAAAATAAIACQAAAAEAAAATAAMACQAAAAEAAAATAAQACQAAAAEAAAATAAUACQAAAAEAAAATAAYACQAAAAEAAAATAAcACQAAAAEAAAATAAgACQAAAAEAAAATAAkACQAAAAEAAAATAAoACQAAAAEAAAATAAsACQAAAAEAAAATAAwACQAAAAEAAAATAA0ACQAAAAEAAAATAA4ACQAAAAEAAAATAA8ACQAAAAEAAAATABAACQAAAAEAAAATABEACQAAAAEAAAATABIACQAAAAEAAAATABMACQAAAAEAAAATABQACQAAAAEAAAATABUACQAAAAEAAAATABYACQAAAAEAAAATABcACQAAAAEAAAAUAAAACQAAAAEAAAAUAAEACQAAAAEAAAAUAAIACQAAAAEAAAAUAAMACQAAAAEAAAAUAAQACQAAAAEAAAAUAAUACQAAAAEAAAAUAAYACQAAAAEAAAAUAAcACQAAAAEAAAAUAAgACQAAAAEAAAAUAAkACQAAAAEAAAAUAAoACQAAAAEAAAAUAAsACQAAAAEAAAAUAAwACQAAAAEAAAAUAA0ACQAAAAEAAAAUAA4ACQAAAAEAAAAUAA8ACQAAAAEAAAAUABAACQAAAAEAAAAUABEACQAAAAEAAAAUABIACQAAAAEAAAAUABMACQAAAAEAAAAUABQACQAAAAEAAAAUABUACQAAAAEAAAAUABYACQAAAAEAAAAUABcACQAAAAEAAAAVAAAACQAAAAEAAAAVAAEACQAAAAEAAAAVAAIACQAAAAEAAAAVAAMACQAAAAEAAAAVAAQACQAAAAEAAAAVAAUACQAAAAEAAAAVAAYACQAAAAEAAAAVAAcACQAAAAEAAAAVAAgACQAAAAEAAAAVAAkACQAAAAEAAAAVAAoACQAAAAEAAAAVAAsACQAAAAEAAAAVAAwACQAAAAEAAAAVAA0ACQAAAAEAAAAVAA4ACQAAAAEAAAAVAA8ACQAAAAEAAAAVABAACQAAAAEAAAAVABEACQAAAAEAAAAVABIACQAAAAEAAAAVABMACQAAAAEAAAAVABQACQAAAAEAAAAVABUACQAAAAEAAAAVABYACQAAAAEAAAAVABcACQAAAAEAAAAWAAAACQAAAAEAAAAWAAEACQAAAAEAAAAWAAIACQAAAAEAAAAWAAMACQAAAAEAAAAWAAQACQAAAAEAAAAWAAUACQAAAAEAAAAWAAYACQAAAAEAAAAWAAcACQAAAAEAAAAWAAgACQAAAAEAAAAWAAkACQAAAAEAAAAWAAoACQAAAAEAAAAWAAsACQAAAAEAAAAWAAwACQAAAAEAAAAWAA0ACQAAAAEAAAAWAA4ACQAAAAEAAAAWAA8ACQAAAAEAAAAWABAACQAAAAEAAAAWABEACQAAAAEAAAAWABIACQAAAAEAAAAWABMACQAAAAEAAAAWABQACQAAAAEAAAAWABUACQAAAAEAAAAWABYACQAAAAEAAAAWABcACQAAAAEAAAAXAAAACQAAAAEAAAAXAAEACQAAAAEAAAAXAAIACQAAAAEAAAAXAAMACQAAAAEAAAAXAAQACQAAAAEAAAAXAAUACQAAAAEAAAAXAAYACQAAAAEAAAAXAAcACQAAAAEAAAAXAAgACQAAAAEAAAAXAAkACQAAAAEAAAAXAAoACQAAAAEAAAAXAAsACQAAAAEAAAAXAAwACQAAAAEAAAAXAA0ACQAAAAEAAAAXAA4ACQAAAAEAAAAXAA8ACQAAAAEAAAAXABAACQAAAAEAAAAXABEACQAAAAEAAAAXABIACQAAAAEAAAAXABMACQAAAAEAAAAXABQACQAAAAEAAAAXABUACQAAAAEAAAAXABYACQAAAAEAAAAXABcACQAAAAEAAAAYAAAACQAAAAEAAAAYAAEACQAAAAEAAAAYAAIACQAAAAEAAAAYAAMACQAAAAEAAAAYAAQACQAAAAEAAAAYAAUACQAAAAEAAAAYAAYACQAAAAEAAAAYAAcACQAAAAEAAAAYAAgACQAAAAEAAAAYAAkACQAAAAEAAAAYAAoACQAAAAEAAAAYAAsACQAAAAEAAAAYAAwACQAAAAEAAAAYAA0ACQAAAAEAAAAYAA4ACQAAAAEAAAAYAA8ACQAAAAEAAAAYABAACQAAAAEAAAAYABEACQAAAAEAAAAYABIACQAAAAEAAAAYABMACQAAAAEAAAAYABQACQAAAAEAAAAYABUACQAAAAEAAAAYABYACQAAAAEAAAAYABcACQAAAAEAAAAZAAAACQAAAAEAAAAZAAEACQAAAAEAAAAZAAIACQAAAAEAAAAZAAMACQAAAAEAAAAZAAQACQAAAAEAAAAZAAUACQAAAAEAAAAZAAYACQAAAAEAAAAZAAcACQAAAAEAAAAZAAgACQAAAAEAAAAZAAkACQAAAAEAAAAZAAoACQAAAAEAAAAZAAsACQAAAAEAAAAZAAwACQAAAAEAAAAZAA0ACQAAAAEAAAAZAA4ACQAAAAEAAAAZAA8ACQAAAAEAAAAZABAACQAAAAEAAAAZABEACQAAAAEAAAAZABIACQAAAAEAAAAZABMACQAAAAEAAAAZABQACQAAAAEAAAAZABUACQAAAAEAAAAZABYACQAAAAEAAAAZABcACQAAAAEAAAAaAAAACQAAAAEAAAAaAAEACQAAAAEAAAAaAAIACQAAAAEAAAAaAAMACQAAAAEAAAAaAAQACQAAAAEAAAAaAAUACQAAAAEAAAAaAAYACQAAAAEAAAAaAAcACQAAAAEAAAAaAAgACQAAAAEAAAAaAAkACQAAAAEAAAAaAAoACQAAAAEAAAAaAAsACQAAAAEAAAAaAAwACQAAAAEAAAAaAA0ACQAAAAEAAAAaAA4ACQAAAAEAAAAaAA8ACQAAAAEAAAAaABAACQAAAAEAAAAaABEACQAAAAEAAAAaABIACQAAAAEAAAAaABMACQAAAAEAAAAaABQACQAAAAEAAAAaABUACQAAAAEAAAAaABYACQAAAAEAAAAaABcACQAAAAEAAAAbAAAACQAAAAEAAAAbAAEACQAAAAEAAAAbAAIACQAAAAEAAAAbAAMACQAAAAEAAAAbAAQACQAAAAEAAAAbAAUACQAAAAEAAAAbAAYACQAAAAEAAAAbAAcACQAAAAEAAAAbAAgACQAAAAEAAAAbAAkACQAAAAEAAAAbAAoACQAAAAEAAAAbAAsACQAAAAEAAAAbAAwACQAAAAEAAAAbAA0ACQAAAAEAAAAbAA4ACQAAAAEAAAAbAA8ACQAAAAEAAAAbABAACQAAAAEAAAAbABEACQAAAAEAAAAbABIACQAAAAEAAAAbABMACQAAAAEAAAAbABQACQAAAAEAAAAbABUACQAAAAEAAAAbABYACQAAAAEAAAAbABcACQAAAAEAAAAcAAAACQAAAAEAAAAcAAEACQAAAAEAAAAcAAIACQAAAAEAAAAcAAMACQAAAAEAAAAcAAQACQAAAAEAAAAcAAUACQAAAAEAAAAcAAYACQAAAAEAAAAcAAcACQAAAAEAAAAcAAgACQAAAAEAAAAcAAkACQAAAAEAAAAcAAoACQAAAAEAAAAcAAsACQAAAAEAAAAcAAwACQAAAAEAAAAcAA0ACQAAAAEAAAAcAA4ACQAAAAEAAAAcAA8ACQAAAAEAAAAcABAACQAAAAEAAAAcABEACQAAAAEAAAAcABIACQAAAAEAAAAcABMACQAAAAEAAAAcABQACQAAAAEAAAAcABUACQAAAAEAAAAcABYACQAAAAEAAAAcABcACQAAAAEAAAAdAAAACQAAAAEAAAAdAAEACQAAAAEAAAAdAAIACQAAAAEAAAAdAAMACQAAAAEAAAAdAAQACQAAAAEAAAAdAAUACQAAAAEAAAAdAAYACQAAAAEAAAAdAAcACQAAAAEAAAAdAAgACQAAAAEAAAAdAAkACQAAAAEAAAAdAAoACQAAAAEAAAAdAAsACQAAAAEAAAAdAAwACQAAAAEAAAAdAA0ACQAAAAEAAAAdAA4ACQAAAAEAAAAdAA8ACQAAAAEAAAAdABAACQAAAAEAAAAdABEACQAAAAEAAAAdABIACQAAAAEAAAAdABMACQAAAAEAAAAdABQACQAAAAEAAAAdABUACQAAAAEAAAAdABYACQAAAAEAAAAdABcACQAAAAEAAAA=")
 tile_set = ExtResource("2_oveqg")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=266662619]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1172635540]
 
-[node name="animations_448_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=851814438]
+[node name="animations_448_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=1450325620]
 position = Vector2(448, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -41,7 +41,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=194659623]
+[node name="animations_480_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=1128106569]
 position = Vector2(480, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -51,7 +51,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=900353636]
+[node name="animations_448_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=868695925]
 position = Vector2(448, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -61,7 +61,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_33" type="Sprite2D" parent="BackgroundAnimated" unique_id=1771640659]
+[node name="animations_448_33" type="Sprite2D" parent="BackgroundAnimated" unique_id=120410484]
 position = Vector2(448, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -71,7 +71,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=1367015062]
+[node name="animations_480_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=910901095]
 position = Vector2(480, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -81,7 +81,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=137091913]
+[node name="animations_448_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=1476512756]
 position = Vector2(448, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -91,7 +91,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=1264590464]
+[node name="animations_480_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=1929725482]
 position = Vector2(480, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -101,7 +101,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=285177104]
+[node name="animations_448_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=899340759]
 position = Vector2(448, 96)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -111,7 +111,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=457289585]
+[node name="animations_480_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=1973504423]
 position = Vector2(480, 96)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -121,7 +121,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=2141720076]
+[node name="animations_448_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=1719174331]
 position = Vector2(448, 128)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -131,7 +131,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=1576117443]
+[node name="animations_480_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=484746122]
 position = Vector2(480, 128)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -141,7 +141,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=92305572]
+[node name="animations_448_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=278364545]
 position = Vector2(448, 160)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -151,7 +151,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1106936351]
+[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=379575241]
 position = Vector2(480, 160)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -161,7 +161,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=209821497]
+[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1652810950]
 position = Vector2(448, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -171,7 +171,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=908230704]
+[node name="animations_480_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=896829477]
 position = Vector2(480, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -181,7 +181,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=2077077291]
+[node name="animations_448_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=530474748]
 position = Vector2(448, 224)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -191,7 +191,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=162403405]
+[node name="animations_480_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=1973345397]
 position = Vector2(480, 224)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -201,7 +201,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=2093040924]
+[node name="animations_448_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=1660825948]
 position = Vector2(448, 256)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -211,7 +211,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=1358725561]
+[node name="animations_480_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=618291176]
 position = Vector2(480, 256)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -221,7 +221,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=530179025]
+[node name="animations_448_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=1320531136]
 position = Vector2(448, 288)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -231,7 +231,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=1688423252]
+[node name="animations_480_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=102570849]
 position = Vector2(480, 288)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -241,7 +241,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=669515187]
+[node name="animations_448_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=1948924384]
 position = Vector2(448, 320)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -251,7 +251,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=924919892]
+[node name="animations_480_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=805520138]
 position = Vector2(480, 320)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -261,7 +261,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=1858237216]
+[node name="animations_448_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=756839444]
 position = Vector2(448, 352)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -271,7 +271,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=1243589553]
+[node name="animations_480_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=2126388293]
 position = Vector2(480, 352)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -281,7 +281,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=633020060]
+[node name="animations_448_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=1283266563]
 position = Vector2(448, 384)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -291,7 +291,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=1756574404]
+[node name="animations_480_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=694753216]
 position = Vector2(480, 384)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -301,7 +301,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=1420014640]
+[node name="animations_448_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=936397523]
 position = Vector2(448, 416)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -311,7 +311,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=801150903]
+[node name="animations_480_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=412273256]
 position = Vector2(480, 416)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -321,7 +321,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=1513382986]
+[node name="animations_448_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=1230748820]
 position = Vector2(448, 448)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -331,7 +331,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=540580554]
+[node name="animations_480_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=1482594393]
 position = Vector2(480, 448)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -341,7 +341,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=2103436327]
+[node name="animations_448_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=971584440]
 position = Vector2(448, 480)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -351,7 +351,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=1887348573]
+[node name="animations_448_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=515146774]
 position = Vector2(448, 512)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -361,7 +361,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=388511175]
+[node name="animations_448_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=2078840719]
 position = Vector2(448, 576)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -371,7 +371,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_577" type="Sprite2D" parent="BackgroundAnimated" unique_id=771486402]
+[node name="animations_448_577" type="Sprite2D" parent="BackgroundAnimated" unique_id=2015802165]
 position = Vector2(448, 576)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -381,7 +381,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=657319892]
+[node name="animations_448_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=1754382187]
 position = Vector2(448, 544)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -391,7 +391,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=1996977623]
+[node name="animations_480_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=1665848509]
 position = Vector2(480, 480)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -401,7 +401,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=1953431913]
+[node name="animations_480_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=1963119719]
 position = Vector2(480, 512)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -411,7 +411,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=496271846]
+[node name="animations_480_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=1846885559]
 position = Vector2(480, 544)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -421,7 +421,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=927154740]
+[node name="animations_480_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=1202363739]
 position = Vector2(480, 576)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -431,7 +431,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=2012411869]
+[node name="animations_448_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1875944194]
 position = Vector2(448, 608)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -441,7 +441,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1133345352]
+[node name="animations_480_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=124189628]
 position = Vector2(480, 608)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -451,7 +451,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=242929344]
+[node name="animations_448_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=1018012977]
 position = Vector2(448, 640)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -461,7 +461,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=2140192463]
+[node name="animations_480_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=1750687597]
 position = Vector2(480, 640)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -471,7 +471,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=611673989]
+[node name="animations_448_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=1934499723]
 position = Vector2(448, 672)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -481,7 +481,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=1808928874]
+[node name="animations_480_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=1438048924]
 position = Vector2(480, 672)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -491,7 +491,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=374790555]
+[node name="animations_448_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=1183609835]
 position = Vector2(448, 704)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -501,7 +501,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=811609196]
+[node name="animations_480_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=1800481871]
 position = Vector2(480, 704)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -511,7 +511,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_448_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=1488558955]
+[node name="animations_448_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=1474565311]
 position = Vector2(448, 736)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -521,7 +521,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="animations_480_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=1836843557]
+[node name="animations_480_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=2105702628]
 position = Vector2(480, 736)
 scale = Vector2(2, 2)
 texture = ExtResource("3_i8ta1")
@@ -531,36 +531,36 @@ vframes = 4
 frame = 12
 script = ExtResource("4_ieb14")
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=86359092]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=813245784]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAANAAAACQAFAAMAAAANAAEACQAFAAMAAAANAAIACQAFAAMAAAANAAMACQAFAAMAAAANAAQACQAFAAMAAAANAAUACQAFAAMAAAANAAYACQAFAAMAAAANAAcACQAFAAMAAAANAAgACQAFAAMAAAANAAkACQAFAAMAAAANAAoACQAFAAMAAAANAAsACQAFAAMAAAANAAwACQAFAAMAAAANAA0ACQAFAAMAAAANAA4ACQAFAAMAAAANAA8ACQAFAAMAAAANABAACQAFAAMAAAANABEACQAFAAMAAAANABIACQAFAAMAAAANABMACQAFAAMAAAANABQACQAFAAMAAAANABUACQAFAAMAAAANABYACQAFAAMAAAANABcACQAFAAMAAAAQAAAACQAFAAMAAAAQAAEACQAFAAMAAAAQAAIACQAFAAMAAAAQAAMACQAFAAMAAAAQAAQACQAFAAMAAAAQAAUACQAFAAMAAAAQAAYACQAFAAMAAAAQAAcACQAFAAMAAAAQAAgACQAFAAMAAAAQAAkACQAFAAMAAAAQAAoACQAFAAMAAAAQAAsACQAFAAMAAAAQAAwACQAFAAMAAAAQAA0ACQAFAAMAAAAQAA4ACQAFAAMAAAAQAA8ACQAFAAMAAAAQABAACQAFAAMAAAAQABEACQAFAAMAAAAQABIACQAFAAMAAAAQABMACQAFAAMAAAAQABQACQAFAAMAAAAQABUACQAFAAMAAAAQABYACQAFAAMAAAAQABcACQAFAAMAAAA=")
 tile_set = ExtResource("2_oveqg")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=162318920]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1235629270]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1660842787]
+[node name="Entities" type="Node2D" parent="." unique_id=1256352505]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1959397959]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1684641733]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_oveqg")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=948352713]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=718464172]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=481697969]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1566291035]
 physics_material_override = SubResource("PhysicsMaterial_8nymc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1489513818]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=370555166]
 position = Vector2(480, 0)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_3ry72")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=253465342]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1635548540]
 position = Vector2(512, 384)
 shape = SubResource("CapsuleShape2D_hrl4d")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=706493792]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=680044605]
 position = Vector2(448, 384)
 rotation = -3.1415927
 shape = SubResource("CapsuleShape2D_rlism")

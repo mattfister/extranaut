@@ -22,51 +22,51 @@ height = 961.0
 radius = 0.5
 height = 769.0
 
-[node name="Room_5_1" type="Node2D" unique_id=1463234156]
+[node name="Room_5_1" type="Node2D" unique_id=1843232752]
 script = ExtResource("1_7p2x0")
 grid_pos = Vector2i(5, 1)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=368746521]
+[node name="Background" type="TileMapLayer" parent="." unique_id=705505385]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAADAAoABgAFAAEAAAAUAAUABgAGAAEAAAAVABAABgAGAAIAAAAUABAABgAGAAIAAAAJABMABgAFAAIAAAAKAAQABgAFAAIAAAAZAAMABgAFAAIAAAA=")
 tile_set = ExtResource("2_l5lsk")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=445267394]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1085311254]
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=1036917268]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=126159779]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_l5lsk")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=2113176295]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=241065439]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1975120166]
+[node name="Entities" type="Node2D" parent="." unique_id=414309272]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1127471050]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=521489760]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_l5lsk")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=979231114]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1672018164]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=1419676754]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=179453483]
 physics_material_override = SubResource("PhysicsMaterial_gffq7")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=2022064913]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1789469349]
 position = Vector2(480, 768)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_tx61o")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1793574526]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=642930386]
 position = Vector2(960, 384)
 rotation = -3.1415927
 shape = SubResource("CapsuleShape2D_27wg4")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=374581298]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1802050299]
 position = Vector2(480, 0)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_sqx1e")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=42559608]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=435140680]
 position = Vector2(0, 384)
 shape = SubResource("CapsuleShape2D_gku5c")

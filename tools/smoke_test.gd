@@ -67,6 +67,10 @@ func _check_room(data: Dictionary) -> void:
 		"%s entity count is %d" % [path, room.get_node("Entities").get_child_count()]
 	)
 
+	for entity in room.get_node("Entities").get_children():
+		if not entity.is_in_group("monsters"):
+			_fail("%s entity %s is not a monster" % [path, entity.name])
+			break
 	for wall in room.get_node("Walls").get_children():
 		if not wall.shape is CapsuleShape2D:
 			_fail("%s has a wall that is not a capsule" % path)

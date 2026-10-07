@@ -15,7 +15,6 @@ const LAYERS := ["background", "midground", "foreground"]
 
 const RoomScript := preload("res://world/room.gd")
 const AnimatedTileScript := preload("res://world/animated_tile.gd")
-const MonsterSpawnScript := preload("res://world/monster_spawn.gd")
 
 
 func _init() -> void:
@@ -116,14 +115,8 @@ func _build_entities(monsters: Array) -> Node2D:
 	entities.name = "Entities"
 	for i in monsters.size():
 		var kind: String = monsters[i][0]
-		var scene_path := MONSTER_SCENE % kind.to_snake_case()
-		var node: Node2D
-		if ResourceLoader.exists(scene_path):
-			node = load(scene_path).instantiate()
-		else:
-			node = Marker2D.new()
-			node.set_script(MonsterSpawnScript)
-			node.kind = kind
+		var scene: PackedScene = load(MONSTER_SCENE % kind.to_snake_case())
+		var node: Node2D = scene.instantiate()
 		node.name = "%s%d" % [kind, i]
 		node.position = Vector2(monsters[i][1], monsters[i][2])
 		entities.add_child(node)

@@ -6,31 +6,31 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_663i8"]
 friction = 0.5
 
-[node name="Room_9_0" type="Node2D" unique_id=1311461730]
+[node name="Room_9_0" type="Node2D" unique_id=201735329]
 script = ExtResource("1_hr7bm")
 grid_pos = Vector2i(9, 0)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=324849470]
+[node name="Background" type="TileMapLayer" parent="." unique_id=1197640073]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_8lanc")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=942846169]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1395830212]
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=269868271]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=744758851]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_8lanc")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=82557270]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=2078440727]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1326469366]
+[node name="Entities" type="Node2D" parent="." unique_id=1570872046]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1983265279]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=117223226]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_8lanc")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=459471751]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1947042095]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=636837354]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1659155411]
 physics_material_override = SubResource("PhysicsMaterial_663i8")

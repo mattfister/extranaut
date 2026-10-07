@@ -24,18 +24,18 @@ height = 961.0
 radius = 0.5
 height = 769.0
 
-[node name="Room_5_0" type="Node2D" unique_id=276663398]
+[node name="Room_5_0" type="Node2D" unique_id=2087525302]
 script = ExtResource("1_h6p23")
 grid_pos = Vector2i(5, 0)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=144402108]
+[node name="Background" type="TileMapLayer" parent="." unique_id=275330367]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAFABUABgAFAAUAAAADAAMABgAFAAEAAAANAAQABgAFAAIAAAAYAAQABgAGAAEAAAAPAAkABgAGAAEAAAAYABMABgAGAAIAAAALABIABgAFAAIAAAAHAAwABgAFAAEAAAA=")
 tile_set = ExtResource("2_j8lpl")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=479264384]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1849171928]
 
-[node name="animations_192_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=610802441]
+[node name="animations_192_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=1050870702]
 position = Vector2(192, 224)
 scale = Vector2(2, 2)
 texture = ExtResource("3_dccdf")
@@ -44,7 +44,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_303rv")
 
-[node name="animations_544_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=850570531]
+[node name="animations_544_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=1528128415]
 position = Vector2(544, 480)
 scale = Vector2(2, 2)
 texture = ExtResource("3_dccdf")
@@ -53,7 +53,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_303rv")
 
-[node name="animations_736_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1813699615]
+[node name="animations_736_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=2051332001]
 position = Vector2(736, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_dccdf")
@@ -62,41 +62,41 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_303rv")
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=1226180313]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=1435686285]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAADAAMABgAFAAEAAAAFABUABgAFAAIAAAA=")
 tile_set = ExtResource("2_j8lpl")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=807596994]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1912757227]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1577989915]
+[node name="Entities" type="Node2D" parent="." unique_id=750039820]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=937825803]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1377265947]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_j8lpl")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=939284860]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1459397719]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=77036415]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1808523553]
 physics_material_override = SubResource("PhysicsMaterial_a2mvo")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1452353955]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=2088847502]
 position = Vector2(480, 0)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_3wsrj")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=649179375]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1603036731]
 position = Vector2(960, 384)
 shape = SubResource("CapsuleShape2D_s46bd")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1334857680]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=314403600]
 position = Vector2(480, 768)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_2gafb")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1248058366]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1484670299]
 position = Vector2(0, 384)
 rotation = -3.1415927
 shape = SubResource("CapsuleShape2D_w6g8l")
