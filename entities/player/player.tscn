@@ -17,6 +17,8 @@ physics_material_override = SubResource("material")
 can_sleep = false
 lock_rotation = true
 continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 8
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
