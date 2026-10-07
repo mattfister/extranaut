@@ -150,7 +150,9 @@ with a body or a player shot).
 
 ## Player
 
-Original values kept: radius 16, mass 20, run speed 200 px/s, 1 s
+The collision radius is 13, down from the original 16, so the player fits
+through one-tile (32 px) passages, which the 0.5 px wall thickness would
+otherwise close. Original values kept: mass 20, run speed 200 px/s, 1 s
 invulnerability after a hit with flashing, ground detection from contacts
 below the body.
 

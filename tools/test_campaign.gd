@@ -87,8 +87,44 @@ func _run() -> void:
 	_expect(camera.position == campaign.room.position + Vector2(512, 384), "camera is on the new room")
 	_expect(shots.get_child_count() == 0, "shots are cleared on transition")
 
+	root.remove_child(campaign)
+	campaign.free()
+	await _check_one_tile_shaft()
+
 	print("campaign test passed" if _failures == 0 else "campaign test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
+
+
+## Room (3, 2) has a hidden one-tile shaft in its floor: x 96 to 128, from
+## y 640 down to the bottom of the room. The player must fit through it, both
+## dropped in from above and when running up to it and letting go.
+func _check_one_tile_shaft() -> void:
+	for approach in ["drop", "run"]:
+		var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
+		campaign.grid = Vector2i(3, 2)
+		root.add_child(campaign)
+		var player: RigidBody2D = campaign.get_node("Player")
+		await _frames(2)
+		if approach == "drop":
+			player.global_position = campaign.room.position + Vector2(112, 600)
+		else:
+			player.global_position = campaign.room.position + Vector2(200, 620)
+			Input.action_press("move_left")
+		player.linear_velocity = Vector2.ZERO
+		var waited := 0
+		while campaign.grid != Vector2i(3, 3) and waited < 180:
+			await physics_frame
+			waited += 1
+			# Running straight across at full speed skips the hole, as it would
+			# have in the original; letting go over it must be enough.
+			if player.global_position.x - campaign.room.position.x <= 120.0:
+				Input.action_release("move_left")
+		Input.action_release("move_left")
+		var local: Vector2 = player.global_position - campaign.room.position
+		_expect(campaign.grid == Vector2i(3, 3), "%s: falls through the one-tile shaft, ended at %s in %s" % [approach, local, campaign.grid])
+		await _frames(40)
+		root.remove_child(campaign)
+		campaign.free()
 
 
 func _check_exit_rules() -> void:

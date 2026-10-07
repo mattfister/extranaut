@@ -1003,4 +1003,4 @@ The headless play test failed on first run and exposed three problems. The code 
 4. **Jetpack restart level is 500, not 400.** With fuel clamped at zero, 400 gave a 4 to 5% overshoot in reach; 500 is within about 1%.
 5. **Play test adjustments.** The run check lasts 20 frames and asserts the player gets past the ledge at x = 512. The shot count is checked after 3 frames, before the shot can hit a wall.
 6. **Screenshots are written outside the project.** PNGs under `build/` were being imported by Godot.
-
+7. **Player collision radius is 13, not 16.** Found in play-testing: capsule walls narrow a one-tile passage to 31 px, so a 32 px body could not enter the hidden shaft in room (3, 2). The sprite is offset 3 px up so the feet still meet the ground. The play test drops the player into that shaft and also runs up to it and lets go.
