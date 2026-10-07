@@ -97,19 +97,19 @@ b = Vector2(960, 0)
 a = Vector2(960, 0)
 b = Vector2(160, 0)
 
-[node name="Room_3_2" type="Node2D" unique_id=1204868011]
+[node name="Room_3_2" type="Node2D" unique_id=609959817]
 script = ExtResource("1_l5iep")
 grid_pos = Vector2i(3, 2)
 music = "zortaSurface"
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=1328245051]
+[node name="Background" type="TileMapLayer" parent="." unique_id=358158152]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAADAAsABgACAAIAAAAEAAsABgADAAIAAAADAAwABgACAAIAAAADAA0ABgACAAIAAAADAA4ABgACAAIAAAADAA8ABgACAAIAAAAEAA8ABgACAAIAAAAFAA8ABgADAAEAAAAEAA4ABgADAAIAAAAEAA0ABgADAAIAAAAEAAwABgADAAIAAAAGABAABgADAAEAAAAHABEABgADAAEAAAAIABIABgADAAEAAAAIABMABgACAAIAAAAHABMABgACAAIAAAAGABMABgACAAIAAAAFABMABgACAAIAAAAEABMABgACAAIAAAADABMABgACAAIAAAACABMABgACAAIAAAACABIABgACAAIAAAACABEABgACAAIAAAACABAABgACAAIAAAADABAABgACAAIAAAADABEABgACAAIAAAADABIABgACAAIAAAAEABIABgACAAIAAAAFABIABgACAAIAAAAHABIABgACAAIAAAAGABIABgACAAIAAAAGABEABgACAAIAAAAFABEABgACAAIAAAAEABEABgACAAIAAAAEABAABgACAAIAAAAFABAABgACAAIAAAAIAAoABgAFAAEAAAAKAAMABgAGAAEAAAARAAwABgAGAAEAAAAOAA4ABgAGAAIAAAAUAAQABgAGAAIAAAAaAAkABgAGAAEAAAAaAAEABgAGAAEAAAAbABMABgAGAAIAAAAQAAEABgAFAAEAAAA=")
 tile_set = ExtResource("2_esx7g")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=159680871]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=988705617]
 
-[node name="animations_256_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=520521861]
+[node name="animations_256_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=842181828]
 position = Vector2(256, 384)
 scale = Vector2(2, 2)
 texture = ExtResource("3_0o1jk")
@@ -118,7 +118,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_pd3hc")
 
-[node name="animations_544_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1882287834]
+[node name="animations_544_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=576170630]
 position = Vector2(544, 160)
 scale = Vector2(2, 2)
 texture = ExtResource("3_0o1jk")
@@ -127,92 +127,94 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_pd3hc")
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=2039389516]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=121474757]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAdABQABwACAAEAAAAcABQABwACAAEAAAAbABQABwACAAEAAAAaABQABwACAAEAAAAZABQABwACAAEAAAAWABIABwAEAAUAAAAVABIABwADAAUAAAAUABIABwADAAUAAAATABIABwADAAUAAAASABIABwADAAUAAAARABIABwADAAUAAAAPABMABwADAAUAAAAOABMABwADAAUAAAALABIABwADAAUAAAAKABIABwADAAUAAAAJABIABwACAAUAAAAIABMABwABAAYAAAANABIABwAFAAYAAAAMABIABwADAAUAAAAQABIABwABAAYAAAAHABQABwAHAAEAAAAGABQABwAGAAEAAAAFABQABwAGAAEAAAAEABQABwAGAAEAAAADABQABwAGAAEAAAACABQABwAFAAEAAAABABQABwACAAIAAAAAABQABwACAAIAAAAAABMABwACAAIAAAABABMABwACAAIAAAABABIABwACAAIAAAAAABIABwACAAIAAAAAABEABwACAAIAAAABABEABwACAAIAAAABABAABwACAAIAAAAAABAABwACAAIAAAAAABUABwACAAIAAAABABUABwACAAIAAAACABUABwACAAIAAAADABUABwACAAIAAAAEABUABwACAAIAAAAFABUABwACAAIAAAAGABUABwACAAIAAAAHABUABwACAAIAAAAGABcABwACAAIAAAAFABcABwACAAIAAAAEABcABwACAAIAAAADABcABwACAAIAAAACABcABwACAAIAAAAAABYABwACAAIAAAAAABcABwACAAIAAAABABcABwACAAIAAAABABYABwACAAIAAAACABYABwACAAIAAAADABYABwACAAIAAAAEABYABwACAAIAAAAFABYABwACAAIAAAAGABYABwACAAIAAAAHABYABwACAAIAAAAHABcABwACAAIAAAAIABcABwACAAIAAAAIABYABwACAAIAAAAIABUABwACAAIAAAAIABQABwACAAIAAAAJABQABwACAAIAAAAJABMABwACAAIAAAAKABMABwACAAIAAAALABMABwACAAIAAAAMABMABwACAAIAAAANABMABwACAAIAAAANABQABwACAAIAAAAMABQABwACAAIAAAALABQABwACAAIAAAAKABQABwACAAIAAAAJABUABwACAAIAAAAJABYABwACAAIAAAAJABcABwACAAIAAAAKABcABwACAAIAAAAKABYABwACAAIAAAAKABUABwACAAIAAAALABUABwACAAIAAAAMABUABwACAAIAAAALABYABwACAAIAAAALABcABwACAAIAAAAMABcABwACAAIAAAAMABYABwACAAIAAAANABUABwACAAIAAAAOABQABwACAAIAAAAOABUABwACAAIAAAAOABYABwACAAIAAAANABYABwACAAIAAAANABcABwACAAIAAAAOABcABwACAAIAAAAPABcABwACAAIAAAAPABYABwACAAIAAAAPABUABwACAAIAAAAPABQABwACAAIAAAAQABQABwACAAIAAAAQABMABwACAAIAAAARABMABwACAAIAAAASABMABwACAAIAAAATABMABwACAAIAAAAUABMABwACAAIAAAAVABMABwACAAIAAAAWABMABwACAAIAAAAYABMABwAFAAYAAAAXABMABwACAAEAAAAQABUABwACAAIAAAAQABYABwACAAIAAAAQABcABwACAAIAAAARABcABwACAAIAAAARABYABwACAAIAAAATABUABwACAAIAAAAUABUABwACAAIAAAAVABQABwACAAIAAAAUABQABwACAAIAAAATABQABwACAAIAAAASABQABwACAAIAAAARABQABwACAAIAAAARABUABwACAAIAAAASABUABwACAAIAAAASABYABwACAAIAAAASABcABwACAAIAAAATABcABwACAAIAAAATABYABwACAAIAAAAVABUABwACAAIAAAAWABQABwACAAIAAAAXABQABwACAAIAAAAYABQABwACAAIAAAAWABUABwACAAIAAAAWABYABwACAAIAAAAVABYABwACAAIAAAAUABYABwACAAIAAAAUABcABwACAAIAAAAVABcABwACAAIAAAAWABcABwACAAIAAAAXABcABwACAAIAAAAYABcABwACAAIAAAAZABcABwACAAIAAAAaABcABwACAAIAAAAbABcABwACAAIAAAAcABcABwACAAIAAAAdABcABwACAAIAAAAdABYABwACAAIAAAAdABUABwACAAIAAAAcABUABwACAAIAAAAbABUABwACAAIAAAAaABUABwACAAIAAAAZABUABwACAAIAAAAYABUABwACAAIAAAAXABUABwACAAIAAAAXABYABwACAAIAAAAYABYABwACAAIAAAAZABYABwACAAIAAAAaABYABwACAAIAAAAbABYABwACAAIAAAAcABYABwACAAIAAAACAA8ABwACAAMAAAADAAoABwACAAMAAAAAAA8ABwACAAIAAAABAA8ABwACAAIAAAABAA4ABwACAAIAAAAAAA4ABwACAAIAAAAAAA0ABwACAAIAAAAAAAwABwACAAIAAAABAAwABwACAAIAAAABAA0ABwACAAIAAAACAA4ABwADAAIAAAACAA0ABwADAAIAAAACAAwABwADAAIAAAACAAsABwADAAIAAAABAAsABwACAAIAAAAAAAsABwACAAIAAAAAAAoABwACAAIAAAABAAoABwACAAIAAAACAAoABwACAAIAAAACAAkABwACAAIAAAABAAkABwACAAIAAAABAAgABwACAAIAAAAAAAkABwACAAIAAAAAAAgABwACAAIAAAAAAAcABwACAAIAAAAAAAYABwACAAIAAAAAAAUABwACAAIAAAAAAAQABwACAAIAAAAAAAMABwACAAIAAAAAAAIABwACAAIAAAAAAAEABwACAAIAAAAAAAAABwACAAIAAAABAAAABwACAAIAAAABAAEABwACAAIAAAABAAIABwACAAIAAAABAAMABwACAAIAAAABAAQABwACAAIAAAABAAUABwACAAIAAAABAAYABwACAAIAAAABAAcABwACAAIAAAACAAgABwACAAIAAAACAAcABwACAAIAAAACAAYABwACAAIAAAACAAUABwACAAIAAAACAAQABwACAAIAAAACAAMABwACAAIAAAACAAIABwACAAIAAAACAAEABwACAAIAAAACAAAABwACAAIAAAADAAkABwACAAIAAAADAAgABwACAAIAAAADAAcABwACAAIAAAADAAYABwACAAIAAAADAAUABwACAAIAAAADAAQABwACAAIAAAADAAMABwACAAIAAAADAAIABwACAAIAAAADAAEABwACAAIAAAADAAAABwACAAIAAAAEAAoABwADAAMAAAAEAAkABwADAAIAAAAEAAgABwADAAIAAAAEAAcABwADAAIAAAAEAAYABwADAAIAAAAEAAUABwADAAIAAAAEAAQABwADAAIAAAAEAAMABwADAAIAAAAEAAIABwADAAIAAAAEAAEABwADAAIAAAAEAAAABwADAAIAAAA=")
 tile_set = ExtResource("2_esx7g")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=760238034]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1347848091]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1446265997]
+[node name="Entities" type="Node2D" parent="." unique_id=1842641181]
 
-[node name="BallMonster0" type="Marker2D" parent="Entities" unique_id=838724339]
+[node name="BallMonster0" type="Marker2D" parent="Entities" unique_id=401175564]
 position = Vector2(336, 560)
 script = ExtResource("5_d0b24")
 kind = "BallMonster"
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1833576119]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1612276675]
+z_index = 10
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAACABMABwAFAAAAAAADABMABwAGAAAAAAAEABMABwAGAAAAAAAFABMABwAGAAAAAAAGABMABwAGAAAAAAAHABMABwAHAAAAAAAPABIABwABAAAAAAAaABMABwABAAAAAAAUABEABwADAAAAAAAMABQABwACAAIAAAAUABYABwACAAIAAAADABUABwACAAIAAAADABYABwACAAIAAAADABcABwACAAIAAAADABQABwAGAAEAAAACABUABwADAAIAAAAEABcABwABAAMAAAAEABUABwABAAMAAAACABYABwADAAIAAAA=")
 tile_set = ExtResource("2_esx7g")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=835840280]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1411001560]
+z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=1054604749]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=36051315]
 physics_material_override = SubResource("PhysicsMaterial_ds6wf")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=121907464]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1256511950]
 shape = SubResource("SegmentShape2D_4dtq7")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=908740692]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1561641218]
 shape = SubResource("SegmentShape2D_m7qjg")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=29184532]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=2013745051]
 shape = SubResource("SegmentShape2D_8awol")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=754761102]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=296491361]
 shape = SubResource("SegmentShape2D_dvvx3")
 
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls" unique_id=162039933]
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls" unique_id=1503283684]
 shape = SubResource("SegmentShape2D_2bfkl")
 
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls" unique_id=401112094]
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls" unique_id=536667324]
 shape = SubResource("SegmentShape2D_6qr16")
 
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls" unique_id=248972753]
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls" unique_id=427873247]
 shape = SubResource("SegmentShape2D_p115p")
 
-[node name="CollisionShape2D8" type="CollisionShape2D" parent="Walls" unique_id=1430549199]
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Walls" unique_id=1535574615]
 shape = SubResource("SegmentShape2D_n831x")
 
-[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls" unique_id=1388680514]
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls" unique_id=1671214084]
 shape = SubResource("SegmentShape2D_x32v7")
 
-[node name="CollisionShape2D10" type="CollisionShape2D" parent="Walls" unique_id=470253728]
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Walls" unique_id=1602732803]
 shape = SubResource("SegmentShape2D_e44l1")
 
-[node name="CollisionShape2D11" type="CollisionShape2D" parent="Walls" unique_id=1425812677]
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Walls" unique_id=72304677]
 shape = SubResource("SegmentShape2D_xkx7s")
 
-[node name="CollisionShape2D12" type="CollisionShape2D" parent="Walls" unique_id=694506090]
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="Walls" unique_id=879053112]
 shape = SubResource("SegmentShape2D_4tcna")
 
-[node name="CollisionShape2D13" type="CollisionShape2D" parent="Walls" unique_id=666752888]
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="Walls" unique_id=636209288]
 shape = SubResource("SegmentShape2D_f2t7v")
 
-[node name="CollisionShape2D14" type="CollisionShape2D" parent="Walls" unique_id=263270521]
+[node name="CollisionShape2D14" type="CollisionShape2D" parent="Walls" unique_id=644602589]
 shape = SubResource("SegmentShape2D_to6yu")
 
-[node name="CollisionShape2D15" type="CollisionShape2D" parent="Walls" unique_id=1241679172]
+[node name="CollisionShape2D15" type="CollisionShape2D" parent="Walls" unique_id=265661260]
 shape = SubResource("SegmentShape2D_0cx62")
 
-[node name="CollisionShape2D16" type="CollisionShape2D" parent="Walls" unique_id=1288815622]
+[node name="CollisionShape2D16" type="CollisionShape2D" parent="Walls" unique_id=1773858512]
 shape = SubResource("SegmentShape2D_yuhjw")
 
-[node name="CollisionShape2D17" type="CollisionShape2D" parent="Walls" unique_id=1781657805]
+[node name="CollisionShape2D17" type="CollisionShape2D" parent="Walls" unique_id=1021403813]
 shape = SubResource("SegmentShape2D_qtj6g")
 
-[node name="CollisionShape2D18" type="CollisionShape2D" parent="Walls" unique_id=1885971597]
+[node name="CollisionShape2D18" type="CollisionShape2D" parent="Walls" unique_id=1343510967]
 shape = SubResource("SegmentShape2D_rmpbt")
 
-[node name="CollisionShape2D19" type="CollisionShape2D" parent="Walls" unique_id=1628217457]
+[node name="CollisionShape2D19" type="CollisionShape2D" parent="Walls" unique_id=1452596344]
 shape = SubResource("SegmentShape2D_w0trf")
 
-[node name="CollisionShape2D20" type="CollisionShape2D" parent="Walls" unique_id=1577921122]
+[node name="CollisionShape2D20" type="CollisionShape2D" parent="Walls" unique_id=1567202154]
 shape = SubResource("SegmentShape2D_g6tmd")
 
-[node name="CollisionShape2D21" type="CollisionShape2D" parent="Walls" unique_id=658804946]
+[node name="CollisionShape2D21" type="CollisionShape2D" parent="Walls" unique_id=1624432816]
 shape = SubResource("SegmentShape2D_7cd43")
 
-[node name="CollisionShape2D22" type="CollisionShape2D" parent="Walls" unique_id=580328329]
+[node name="CollisionShape2D22" type="CollisionShape2D" parent="Walls" unique_id=876014691]
 shape = SubResource("SegmentShape2D_8vpm8")

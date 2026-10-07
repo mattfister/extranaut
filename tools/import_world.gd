@@ -9,6 +9,7 @@ const ROOMS_DIR := "res://world/rooms"
 const MONSTER_SCENE := "res://entities/monsters/%s.tscn"
 const SRC_TILE := 16
 const ART_SCALE := Vector2(2, 2)
+const FOREGROUND_Z := 10
 const LAYERS := ["background", "midground", "foreground"]
 
 const RoomScript := preload("res://world/room.gd")
@@ -79,6 +80,9 @@ func _build_room(data: Dictionary, tileset: TileSet) -> Node2D:
 
 		var animated := Node2D.new()
 		animated.name = layer_name.capitalize() + "Animated"
+		if layer_name == "foreground":
+			layer.z_index = FOREGROUND_Z
+			animated.z_index = FOREGROUND_Z
 		_add(room, room, animated)
 		for a in data.animated:
 			if a.layer == layer_name:

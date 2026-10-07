@@ -67,6 +67,9 @@ func _check_room(data: Dictionary) -> void:
 		"%s entity count is %d" % [path, room.get_node("Entities").get_child_count()]
 	)
 
+	_expect(room.get_node("Foreground").z_index == 10, "%s Foreground z_index" % path)
+	_expect(room.get_node("ForegroundAnimated").z_index == 10, "%s ForegroundAnimated z_index" % path)
+
 	root.remove_child(room)
 	room.free()
 

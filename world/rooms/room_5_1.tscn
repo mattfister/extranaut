@@ -21,42 +21,44 @@ b = Vector2(0, 0)
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_gku5c"]
 b = Vector2(0, 768)
 
-[node name="Room_5_1" type="Node2D" unique_id=118513235]
+[node name="Room_5_1" type="Node2D" unique_id=676480565]
 script = ExtResource("1_7p2x0")
 grid_pos = Vector2i(5, 1)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=257168524]
+[node name="Background" type="TileMapLayer" parent="." unique_id=1442364447]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAADAAoABgAFAAEAAAAUAAUABgAGAAEAAAAVABAABgAGAAIAAAAUABAABgAGAAIAAAAJABMABgAFAAIAAAAKAAQABgAFAAIAAAAZAAMABgAFAAIAAAA=")
 tile_set = ExtResource("2_l5lsk")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1960748563]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=649710548]
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=1280997483]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=492564772]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_l5lsk")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=230192757]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1562982213]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1417870820]
+[node name="Entities" type="Node2D" parent="." unique_id=1136608079]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=770558884]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1542303428]
+z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_l5lsk")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1806591023]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1974606603]
+z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=1828738300]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1855816120]
 physics_material_override = SubResource("PhysicsMaterial_gffq7")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1891708181]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=426680032]
 shape = SubResource("SegmentShape2D_tx61o")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=246882610]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=2131572662]
 shape = SubResource("SegmentShape2D_27wg4")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1968229476]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1026034675]
 shape = SubResource("SegmentShape2D_sqx1e")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1257934414]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=525493235]
 shape = SubResource("SegmentShape2D_gku5c")
