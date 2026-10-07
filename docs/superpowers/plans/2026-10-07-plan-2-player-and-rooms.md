@@ -43,7 +43,7 @@ Jetpack: every 100 ms while up is held and fuel exceeds 300, an impulse of 3500 
 | 3500 | 4271 |
 | 5000 | 9030 |
 
-A continuous model with thrust 1750 px/s², burn 3000 fuel/s, regeneration 1000 fuel/s, running until the tank is empty and restarting at 400 fuel, matches the original apex within 1% across 2000 to 5000 max fuel.
+A continuous model with thrust 1750 px/s², burn 3000 fuel/s, regeneration 1000 fuel/s, running until the tank is empty and restarting at 500 fuel, matches the original apex within 1% across 2000 to 5000 max fuel.
 
 Gun: energy ball radius 8, mass 20, no gravity, impulse 10,000 (500 px/s). It spawns 20 px in front of the player's centre and 7 px below it. It dies on touching anything or when its speed drops below 400. Cooldown by gun level: 1000, 800, 600, 400 ms.
 
@@ -277,7 +277,7 @@ extends RefCounted
 const BURN_RATE := 3000.0
 const REGEN_RATE := 1000.0
 ## After running dry the jetpack stays off until fuel recovers to this level.
-const RESTART_FUEL := 400.0
+const RESTART_FUEL := 500.0
 
 var max_fuel := 2000.0
 var fuel := 2000.0

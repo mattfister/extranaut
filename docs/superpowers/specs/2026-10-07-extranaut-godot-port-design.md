@@ -159,7 +159,7 @@ Polish:
   needs more than 300 fuel). At the original's 60 fps the 40 ms timer fires
   every third frame, so regeneration was effectively 1,000 fuel/s. Continuous
   rates: thrust 1,750 px/s², burn 3,000 fuel/s, regeneration 1,000 fuel/s,
-  running until empty and restarting at 400 fuel. Reach per tank must match
+  running until empty and restarting at 500 fuel. Reach per tank must match
   the original.
 - Horizontal movement accelerates to 200 px/s over roughly 80 ms and
   decelerates similarly, in place of the instant set.
