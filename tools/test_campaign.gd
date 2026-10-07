@@ -87,6 +87,8 @@ func _run() -> void:
 	_expect(camera.position == campaign.room.position + Vector2(512, 384), "camera is on the new room")
 	_expect(shots.get_child_count() == 0, "shots are cleared on transition")
 
+	await _check_checkpoint_and_respawn(campaign, player)
+	_check_powerups_taken(campaign)
 	root.remove_child(campaign)
 	campaign.free()
 	await _check_one_tile_shaft()
@@ -125,6 +127,59 @@ func _check_one_tile_shaft() -> void:
 		await _frames(40)
 		root.remove_child(campaign)
 		campaign.free()
+
+
+## Runs in room (5, 2), reached by the transition check above.
+func _check_checkpoint_and_respawn(campaign: Node2D, player: RigidBody2D) -> void:
+	_expect(campaign.checkpoint == Vector2i(4, 2), "the checkpoint starts at the start room")
+	# Dying returns the player to the checkpoint room with full hp.
+	player.revive()
+	player.hp = 1
+	player.hit()
+	var waited := 0
+	while campaign.grid != Vector2i(4, 2) and waited < 180:
+		await physics_frame
+		waited += 1
+	_expect(campaign.grid == Vector2i(4, 2), "death respawns in the checkpoint room, grid %s" % campaign.grid)
+	_expect(player.hp == player.max_hp and not player.is_dead(), "respawn restores full hp")
+	var local: Vector2 = player.global_position - campaign.room.position
+	_expect(local.distance_to(Vector2(480, 352)) < 80.0, "respawn is at the room's player start, at %s" % local)
+	_expect(campaign.get_node("World").get_child_count() == 1, "only the checkpoint room is loaded")
+	await _frames(30)
+
+	# Shooting the start room's save point sets the checkpoint and heals.
+	var save_point: Node = campaign.room.get_node("Entities").get_child(0)
+	campaign.checkpoint = Vector2i(0, 0)
+	player.hp = 2
+	save_point.hit()
+	_expect(campaign.checkpoint == Vector2i(4, 2), "a save point sets the checkpoint")
+	_expect(player.hp == player.max_hp, "a save point heals the player")
+
+
+func _check_powerups_taken(campaign: Node2D) -> void:
+	var world = JSON.parse_string(FileAccess.get_file_as_string("res://tools/zorta.json"))
+	var at := Vector2i(-1, -1)
+	for data in world.rooms:
+		for m in data.monsters:
+			if m[0] == "HpPowerup":
+				at = Vector2i(int(data.x), int(data.y))
+	_expect(at != Vector2i(-1, -1), "found a room with an hp powerup")
+	var fresh: Node2D = campaign.load_room(at)
+	_expect(_count_powerups(fresh) == 1, "an untouched room has its powerup")
+	fresh.free()
+	campaign.powerups_taken[at] = true
+	var revisited: Node2D = campaign.load_room(at)
+	_expect(_count_powerups(revisited) == 0, "a taken powerup does not come back")
+	revisited.free()
+	campaign.powerups_taken.erase(at)
+
+
+func _count_powerups(room: Node2D) -> int:
+	var count := 0
+	for entity in room.get_node("Entities").get_children():
+		if entity.is_powerup:
+			count += 1
+	return count
 
 
 func _check_exit_rules() -> void:

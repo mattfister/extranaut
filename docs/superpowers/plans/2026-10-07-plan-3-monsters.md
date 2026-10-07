@@ -2107,3 +2107,10 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - The player takes damage, flashes while invulnerable, dies at 0 HP and respawns at the last checkpoint with full HP.
 - Shooting a save point or collecting a powerup sets the checkpoint. A collected powerup does not return when the room is re-entered.
 - The author has played it and reported on difficulty: whether enemies and bosses feel like the original, given the player's smaller body.
+
+## Changes made during execution
+
+1. **Default body damping is off.** Godot applies linear damping 0.1 and angular damping 1.0 to every body by default; the original physics had none. It was slowing shots in flight and would have dulled every monster impulse. `project.godot` now sets `physics/2d/default_linear_damp` and `default_angular_damp` to 0.
+2. **A slowed player shot waits 3 frames before dying.** A hit drops the shot's speed one frame before either body is told about the contact. Dying on the first slow frame removed the shot before the monster heard about it, so shots did no damage. `entities/projectiles/energy_ball.gd` in the repository supersedes the block in Task 1.
+3. **Unused parameters dropped** from `_build_entities` in the importer; the committed file is authoritative.
+

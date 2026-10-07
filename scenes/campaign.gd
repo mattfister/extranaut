@@ -1,6 +1,7 @@
 extends Node2D
-## The campaign: owns the current room, the player, shots and the camera, and
-## moves between rooms when the player crosses an edge.
+## The campaign: owns the current room, the player, shots and the camera,
+## moves between rooms when the player crosses an edge, and tracks the
+## checkpoint the player respawns at.
 ## To save a screenshot and quit:
 ##   godot --path . -- --room=4,2 --shot=C:/some/file.png
 
@@ -16,6 +17,10 @@ const SLIDE_TIME := 0.35
 
 var grid := START_ROOM
 var room: Node2D
+## The room the player respawns in. Set by save points and powerups.
+var checkpoint := START_ROOM
+## Rooms (Vector2i keys) whose powerup has been collected.
+var powerups_taken := {}
 
 ## False from a transition until the player has left every exit zone, so
 ## arriving inside the opposite zone does not bounce straight back.
@@ -26,7 +31,7 @@ var _sliding := false
 @onready var _player: RigidBody2D = $Player
 @onready var _shots: Node2D = $Shots
 @onready var _camera: Camera2D = $Camera2D
-@onready var _fuel_label: Label = $Hud/Fuel
+@onready var _status_label: Label = $Hud/Fuel
 
 
 func _ready() -> void:
@@ -39,12 +44,11 @@ func _ready() -> void:
 		elif arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
 
-	room = _load_room(grid)
-	_world.add_child(room)
-	var start: Vector2 = room.player_start if room.has_player_start else ROOM_SIZE / 2.0
-	_player.global_position = room.position + start
-	_camera.position = room.position + VIEW_CENTER
 	_player.shot_fired.connect(_on_shot_fired)
+	_player.died.connect(_respawn)
+	room = load_room(grid)
+	_world.add_child(room)
+	_place_player_at_start()
 
 	if shot_path != "":
 		await get_tree().create_timer(1.0).timeout
@@ -54,7 +58,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	_fuel_label.text = "FUEL\n%d" % int(_player.jetpack.fuel)
+	_status_label.text = "HP %d\nFUEL\n%d\nART %d" % [_player.hp, int(_player.jetpack.fuel), _player.artifacts]
 
 
 func _physics_process(_delta: float) -> void:
@@ -103,15 +107,28 @@ static func entry_position(step: Vector2i, local: Vector2) -> Vector2:
 			return Vector2(local.x, 720.0)
 
 
+## Instantiates the room at a grid position, placed in world space, with its
+## monsters wired to the campaign and any collected powerup removed.
+func load_room(at: Vector2i) -> Node2D:
+	var loaded: Node2D = load("res://world/rooms/room_%d_%d.tscn" % [at.x, at.y]).instantiate()
+	loaded.position = Vector2(at) * ROOM_SIZE
+	for entity in loaded.get_node("Entities").get_children():
+		if entity.is_powerup and powerups_taken.has(at):
+			entity.free()
+			continue
+		entity.shot_fired.connect(_on_shot_fired)
+		entity.save_requested.connect(_on_save_requested)
+	return loaded
+
+
 func _enter_room(next: Vector2i, step: Vector2i, local: Vector2) -> void:
 	_sliding = true
 	_exits_armed = false
 	var old_room := room
 	grid = next
-	room = _load_room(grid)
+	room = load_room(grid)
 	_world.add_child(room)
-	for shot in _shots.get_children():
-		shot.queue_free()
+	_clear_shots()
 	_player.global_position = room.position + entry_position(step, local)
 
 	get_tree().paused = true
@@ -125,12 +142,38 @@ func _enter_room(next: Vector2i, step: Vector2i, local: Vector2) -> void:
 	_sliding = false
 
 
-func _load_room(at: Vector2i) -> Node2D:
-	var loaded: Node2D = load("res://world/rooms/room_%d_%d.tscn" % [at.x, at.y]).instantiate()
-	loaded.position = Vector2(at) * ROOM_SIZE
-	return loaded
+## Reloads the checkpoint room and puts a revived player at its start.
+func _respawn() -> void:
+	_clear_shots()
+	_world.remove_child(room)
+	room.queue_free()
+	grid = checkpoint
+	room = load_room(grid)
+	_world.add_child(room)
+	_player.revive()
+	_place_player_at_start()
+
+
+func _place_player_at_start() -> void:
+	var start: Vector2 = room.player_start if room.has_player_start else ROOM_SIZE / 2.0
+	_player.global_position = room.position + start
+	_camera.position = room.position + VIEW_CENTER
+	_exits_armed = false
+
+
+func _clear_shots() -> void:
+	for shot in _shots.get_children():
+		shot.queue_free()
 
 
 func _on_shot_fired(shot: RigidBody2D) -> void:
 	shot.bounds = Rect2(room.position, ROOM_SIZE)
 	_shots.add_child(shot)
+
+
+## A save point was activated or a powerup collected in the current room.
+func _on_save_requested(source: Node) -> void:
+	checkpoint = grid
+	_player.hp = _player.max_hp
+	if source.is_powerup:
+		powerups_taken[grid] = true

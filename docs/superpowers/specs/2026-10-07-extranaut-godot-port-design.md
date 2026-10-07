@@ -110,8 +110,8 @@ Each room scene contains:
 ## Physics and entities
 
 - Player, monsters and projectiles are `RigidBody2D` with a `CircleShape2D`
-  using the original radius, mass and friction, bounce 0, no damping, and
-  project gravity 900.
+  using the original radius, mass and friction, bounce 0, and project gravity
+  900. Godot's default linear and angular damping are set to 0 project-wide.
 - Bodies the original gave infinite moment get `lock_rotation`. Bodies with a
   real moment rotate and draw rotated (ball monsters, grenades).
 - Original anti-gravity forces become `gravity_scale`, computed as
@@ -143,6 +143,8 @@ Monsters:
   gun +1 level, artifact +1. A room whose powerup is taken does not respawn
   its powerups.
 - SavePoint activates when shot.
+- JumpBot has 1 HP: the original set 3, then its base constructor reset it.
+- Enemy shots do not collide with each other.
 
 Projectiles: EnergyBall (player, dies below speed 400), EnemyEnergyBall, and
 EnergyGrenade (ballistic, explodes 3 s after touching a wall or on contact
