@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/room.gd" id="1_v8qi8"]
+[ext_resource type="TileSet" path="res://world/tileset.tres" id="2_30755"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n7dis"]
+friction = 0.5
+
+[node name="Room_1_2" type="Node2D" unique_id=1650761955]
+script = ExtResource("1_v8qi8")
+grid_pos = Vector2i(1, 2)
+
+[node name="Background" type="TileMapLayer" parent="." unique_id=772666939]
+scale = Vector2(2, 2)
+tile_set = ExtResource("2_30755")
+
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=2099583020]
+
+[node name="Midground" type="TileMapLayer" parent="." unique_id=2077430293]
+scale = Vector2(2, 2)
+tile_set = ExtResource("2_30755")
+
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1251464795]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1258901]
+
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=308896846]
+scale = Vector2(2, 2)
+tile_set = ExtResource("2_30755")
+
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1746473629]
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1234312178]
+physics_material_override = SubResource("PhysicsMaterial_n7dis")

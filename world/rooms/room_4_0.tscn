@@ -1,0 +1,109 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://world/room.gd" id="1_3j17e"]
+[ext_resource type="TileSet" path="res://world/tileset.tres" id="2_qvhcl"]
+[ext_resource type="Texture2D" path="res://assets/animations/animations.png" id="3_nvnub"]
+[ext_resource type="Script" path="res://world/animated_tile.gd" id="4_atab6"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ym57v"]
+friction = 0.5
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_eq4hn"]
+b = Vector2(0, 768)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_wx356"]
+a = Vector2(0, 768)
+b = Vector2(960, 768)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_pcgts"]
+a = Vector2(960, 768)
+b = Vector2(960, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_mntr7"]
+a = Vector2(960, 0)
+b = Vector2(0, 0)
+
+[node name="Room_4_0" type="Node2D" unique_id=74577222]
+script = ExtResource("1_3j17e")
+grid_pos = Vector2i(4, 0)
+
+[node name="Background" type="TileMapLayer" parent="." unique_id=919136182]
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAAEABUABgAFAAEAAAALAAgABgAFAAEAAAAQABMABgAGAAIAAAAaAA4ABgAGAAIAAAAaAAMABgAGAAIAAAAaAAQABgAGAAEAAAANAAIABgAGAAEAAAACAAcABgAFAAEAAAAFAA8ABgAFAAEAAAAVAAoABgAFAAEAAAA=")
+tile_set = ExtResource("2_qvhcl")
+
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=92219061]
+
+[node name="animations_128_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1865861126]
+position = Vector2(128, 608)
+scale = Vector2(2, 2)
+texture = ExtResource("3_nvnub")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_atab6")
+
+[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1224890484]
+position = Vector2(480, 160)
+scale = Vector2(2, 2)
+texture = ExtResource("3_nvnub")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_atab6")
+
+[node name="animations_512_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1283083631]
+position = Vector2(512, 192)
+scale = Vector2(2, 2)
+texture = ExtResource("3_nvnub")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_atab6")
+
+[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=31305532]
+position = Vector2(448, 192)
+scale = Vector2(2, 2)
+texture = ExtResource("3_nvnub")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_atab6")
+
+[node name="animations_384_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=865270048]
+position = Vector2(384, 288)
+scale = Vector2(2, 2)
+texture = ExtResource("3_nvnub")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_atab6")
+
+[node name="Midground" type="TileMapLayer" parent="." unique_id=1161062299]
+scale = Vector2(2, 2)
+tile_set = ExtResource("2_qvhcl")
+
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=2034123347]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1236256057]
+
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=532597026]
+scale = Vector2(2, 2)
+tile_set = ExtResource("2_qvhcl")
+
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=936287973]
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=663688692]
+physics_material_override = SubResource("PhysicsMaterial_ym57v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1121479575]
+shape = SubResource("SegmentShape2D_eq4hn")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1690933144]
+shape = SubResource("SegmentShape2D_wx356")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=143363211]
+shape = SubResource("SegmentShape2D_pcgts")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1043928585]
+shape = SubResource("SegmentShape2D_mntr7")

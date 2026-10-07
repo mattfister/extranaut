@@ -1,0 +1,92 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://world/room.gd" id="1_h6p23"]
+[ext_resource type="TileSet" path="res://world/tileset.tres" id="2_j8lpl"]
+[ext_resource type="Texture2D" path="res://assets/animations/animations.png" id="3_dccdf"]
+[ext_resource type="Script" path="res://world/animated_tile.gd" id="4_303rv"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a2mvo"]
+friction = 0.5
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_3wsrj"]
+b = Vector2(960, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_s46bd"]
+a = Vector2(960, 0)
+b = Vector2(960, 768)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_2gafb"]
+a = Vector2(960, 768)
+b = Vector2(0, 768)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_w6g8l"]
+a = Vector2(0, 768)
+b = Vector2(0, 0)
+
+[node name="Room_5_0" type="Node2D" unique_id=819636496]
+script = ExtResource("1_h6p23")
+grid_pos = Vector2i(5, 0)
+
+[node name="Background" type="TileMapLayer" parent="." unique_id=1095562055]
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAAFABUABgAFAAUAAAADAAMABgAFAAEAAAANAAQABgAFAAIAAAAYAAQABgAGAAEAAAAPAAkABgAGAAEAAAAYABMABgAGAAIAAAALABIABgAFAAIAAAAHAAwABgAFAAEAAAA=")
+tile_set = ExtResource("2_j8lpl")
+
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=2006206151]
+
+[node name="animations_192_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=2123254042]
+position = Vector2(192, 224)
+scale = Vector2(2, 2)
+texture = ExtResource("3_dccdf")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_303rv")
+
+[node name="animations_544_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=359955742]
+position = Vector2(544, 480)
+scale = Vector2(2, 2)
+texture = ExtResource("3_dccdf")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_303rv")
+
+[node name="animations_736_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=601467758]
+position = Vector2(736, 192)
+scale = Vector2(2, 2)
+texture = ExtResource("3_dccdf")
+centered = false
+hframes = 4
+vframes = 4
+script = ExtResource("4_303rv")
+
+[node name="Midground" type="TileMapLayer" parent="." unique_id=696418647]
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAADAAMABgAFAAEAAAAFABUABgAFAAIAAAA=")
+tile_set = ExtResource("2_j8lpl")
+
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1912230191]
+
+[node name="Entities" type="Node2D" parent="." unique_id=2005953646]
+
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=203363905]
+scale = Vector2(2, 2)
+tile_set = ExtResource("2_j8lpl")
+
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1836770760]
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=519565020]
+physics_material_override = SubResource("PhysicsMaterial_a2mvo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=297371883]
+shape = SubResource("SegmentShape2D_3wsrj")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1271971816]
+shape = SubResource("SegmentShape2D_s46bd")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=595378138]
+shape = SubResource("SegmentShape2D_2gafb")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1711368434]
+shape = SubResource("SegmentShape2D_w6g8l")
