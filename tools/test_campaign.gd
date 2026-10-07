@@ -3,6 +3,8 @@ extends SceneTree
 ## Run: godot --headless --path . --script res://tools/test_campaign.gd
 
 const CampaignScript := preload("res://scenes/campaign.gd")
+const Progress := preload("res://save/progress.gd")
+const SaveGame := preload("res://save/save_game.gd")
 
 var _failures := 0
 
@@ -14,7 +16,11 @@ func _initialize() -> void:
 func _run() -> void:
 	_check_exit_rules()
 
+	SaveGame.directory = "user://test_saves/"
+	DirAccess.make_dir_recursive_absolute(SaveGame.directory)
+	SaveGame.delete(3)
 	var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
+	campaign.slot = 3
 	root.add_child(campaign)
 	var player: RigidBody2D = campaign.get_node("Player")
 	var shots: Node = campaign.get_node("Shots")
@@ -95,9 +101,12 @@ func _run() -> void:
 
 	await _check_checkpoint_and_respawn(campaign, player)
 	_check_powerups_taken(campaign)
+	await _check_saving_map_and_pause(campaign, player)
 	root.remove_child(campaign)
 	campaign.free()
 	await _check_one_tile_shaft()
+	await _check_win()
+	SaveGame.delete(3)
 
 	print("campaign test passed" if _failures == 0 else "campaign test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
@@ -109,7 +118,8 @@ func _run() -> void:
 func _check_one_tile_shaft() -> void:
 	for approach in ["drop", "run"]:
 		var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
-		campaign.grid = Vector2i(3, 2)
+		campaign.progress = Progress.new()
+		campaign.progress.checkpoint = Vector2i(3, 2)
 		root.add_child(campaign)
 		var player: RigidBody2D = campaign.get_node("Player")
 		await _frames(2)
@@ -137,7 +147,7 @@ func _check_one_tile_shaft() -> void:
 
 ## Runs in room (5, 2), reached by the transition check above.
 func _check_checkpoint_and_respawn(campaign: Node2D, player: RigidBody2D) -> void:
-	_expect(campaign.checkpoint == Vector2i(4, 2), "the checkpoint starts at the start room")
+	_expect(campaign.progress.checkpoint == Vector2i(4, 2), "the checkpoint starts at the start room")
 	# Dying returns the player to the checkpoint room with full hp.
 	player.revive()
 	player.hp = 1
@@ -155,10 +165,10 @@ func _check_checkpoint_and_respawn(campaign: Node2D, player: RigidBody2D) -> voi
 
 	# Shooting the start room's save point sets the checkpoint and heals.
 	var save_point: Node = campaign.room.get_node("Entities").get_child(0)
-	campaign.checkpoint = Vector2i(0, 0)
+	campaign.progress.checkpoint = Vector2i(0, 0)
 	player.hp = 2
 	save_point.hit()
-	_expect(campaign.checkpoint == Vector2i(4, 2), "a save point sets the checkpoint")
+	_expect(campaign.progress.checkpoint == Vector2i(4, 2), "a save point sets the checkpoint")
 	_expect(player.hp == player.max_hp, "a save point heals the player")
 
 
@@ -173,11 +183,11 @@ func _check_powerups_taken(campaign: Node2D) -> void:
 	var fresh: Node2D = campaign.load_room(at)
 	_expect(_count_powerups(fresh) == 1, "an untouched room has its powerup")
 	fresh.free()
-	campaign.powerups_taken[at] = true
+	campaign.progress.powerups_taken[at] = true
 	var revisited: Node2D = campaign.load_room(at)
 	_expect(_count_powerups(revisited) == 0, "a taken powerup does not come back")
 	revisited.free()
-	campaign.powerups_taken.erase(at)
+	campaign.progress.powerups_taken.erase(at)
 
 
 func _count_powerups(room: Node2D) -> int:
@@ -186,6 +196,93 @@ func _count_powerups(room: Node2D) -> int:
 		if entity.is_powerup:
 			count += 1
 	return count
+
+
+## Runs in room (4, 2) after the save point there has been activated, in a
+## campaign using slot 3 that has also visited room (5, 2).
+func _check_saving_map_and_pause(campaign: Node2D, player: RigidBody2D) -> void:
+	var saved = SaveGame.read(3)
+	_expect(saved != null, "the campaign writes its slot")
+	if saved != null:
+		_expect(saved.checkpoint == Vector2i(4, 2), "the save holds the checkpoint")
+		_expect(saved.visited.has(Vector2i(4, 2)) and saved.visited.has(Vector2i(5, 2)), "the save holds visited rooms")
+		_expect(saved.save_points.has(Vector2i(4, 2)), "the save holds discovered save points")
+		_expect(not saved.save_points.has(Vector2i(5, 2)), "rooms without a save point are not marked")
+
+	# Stats are captured at save events.
+	player.max_hp = 6
+	player.artifacts = 2
+	campaign.room.get_node("Entities").get_child(0).activated = false
+	campaign.room.get_node("Entities").get_child(0).hit()
+	saved = SaveGame.read(3)
+	_expect(saved != null and saved.max_hp == 6 and saved.artifacts == 2, "a save point saves the player's stats")
+
+	var hud: Control = campaign.get_node("Hud/Strip")
+	_expect(hud.fuel_pips(2000.0) == 4 and hud.fuel_pips(499.0) == 0, "one fuel pip per 500 fuel")
+	var map: Control = campaign.get_node("Hud/Strip/MiniMap")
+	_expect(map.cell_state(Vector2i(4, 2), campaign.progress.visited, campaign.progress.save_points, Vector2i(4, 2)) == map.Cell.CURRENT, "the current room is marked")
+	_expect(map.cell_state(Vector2i(4, 2), campaign.progress.visited, campaign.progress.save_points, Vector2i(0, 0)) == map.Cell.SAVE_POINT, "a visited save room is marked")
+	_expect(map.cell_state(Vector2i(5, 2), campaign.progress.visited, campaign.progress.save_points, Vector2i(0, 0)) == map.Cell.VISITED, "a visited room is marked")
+	_expect(map.cell_state(Vector2i(9, 9), campaign.progress.visited, campaign.progress.save_points, Vector2i(0, 0)) == map.Cell.UNKNOWN, "an unvisited room is unknown")
+
+	# Pause toggles with the pause action.
+	var pause_menu: CanvasLayer = campaign.get_node("PauseMenu")
+	_expect(not pause_menu.visible and not paused, "the game starts unpaused")
+	_press("pause")
+	await _settle()
+	_expect(pause_menu.visible and paused, "the pause action opens the pause menu")
+	_press("pause")
+	await _settle()
+	_expect(not pause_menu.visible and not paused, "the pause action closes the pause menu")
+
+	# Resume and Quit buttons.
+	_press("pause")
+	await _settle()
+	pause_menu.get_node("Resume").pressed.emit()
+	await _settle()
+	_expect(not pause_menu.visible and not paused, "Resume closes the pause menu")
+	var quits := [0]
+	campaign.quit_to_title.connect(func() -> void: quits[0] += 1)
+	_press("pause")
+	await _settle()
+	pause_menu.get_node("Quit").pressed.emit()
+	await _settle()
+	_expect(quits[0] == 1, "Quit to Title is signalled")
+	_expect(not paused, "quitting unpauses the tree")
+
+
+func _check_win() -> void:
+	var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
+	campaign.progress = Progress.new()
+	campaign.progress.checkpoint = Vector2i(4, 9)
+	root.add_child(campaign)
+	var player: RigidBody2D = campaign.get_node("Player")
+	var wins := [0]
+	campaign.won.connect(func() -> void: wins[0] += 1)
+	await _frames(5)
+	_expect(wins[0] == 0, "standing in a bottom-row room does not win")
+	player.global_position = campaign.room.position + Vector2(480, 790)
+	await _frames(5)
+	_expect(wins[0] == 1, "falling out of the bottom row wins once, count %d" % wins[0])
+	root.remove_child(campaign)
+	campaign.free()
+
+
+## Waits for input to be delivered and acted on, ending between frames, where
+## real button presses arrive. Input is flushed once per rendered frame, so
+## counting physics frames alone is not enough.
+func _settle() -> void:
+	await process_frame
+	await process_frame
+	await physics_frame
+	await process_frame
+
+
+func _press(action: String) -> void:
+	var event := InputEventAction.new()
+	event.action = action
+	event.pressed = true
+	Input.parse_input_event(event)
 
 
 func _check_exit_rules() -> void:

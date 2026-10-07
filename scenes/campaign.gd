@@ -1,70 +1,87 @@
 extends Node2D
 ## The campaign: owns the current room, the player, shots and the camera,
-## moves between rooms when the player crosses an edge, and tracks the
-## checkpoint the player respawns at.
-## To save a screenshot and quit:
-##   godot --path . -- --room=4,2 --shot=C:/some/file.png
+## moves between rooms when the player crosses an edge, and records progress.
+## Set slot and progress before adding it to the tree.
+
+## The player fell out of the bottom of the world.
+signal won
+signal quit_to_title
 
 const Controls := preload("res://input/controls.gd")
+const Progress := preload("res://save/progress.gd")
+const SaveGame := preload("res://save/save_game.gd")
 
 const ROOM_SIZE := Vector2(960, 768)
 const GRID_SIZE := Vector2i(10, 10)
-const START_ROOM := Vector2i(4, 2)
 ## Camera centre relative to the room origin: the room fills the left 960 px
 ## of the 1024 px view and the HUD strip covers the rest.
 const VIEW_CENTER := Vector2(512, 384)
 const SLIDE_TIME := 0.35
+## How far below a bottom-row room the player must fall to win.
+const WIN_DEPTH := 16.0
+const MAX_GUN_LEVEL := 4
 
-var grid := START_ROOM
+## Save slot 1 to 3, or 0 to play without saving.
+var slot := 0
+## A save/progress.gd object. A fresh one is made if none is given.
+var progress: RefCounted
+var grid := Vector2i.ZERO
 var room: Node2D
-## The room the player respawns in. Set by save points and powerups.
-var checkpoint := START_ROOM
-## Rooms (Vector2i keys) whose powerup has been collected.
-var powerups_taken := {}
 
 ## False from a transition until the player has left every exit zone, so
 ## arriving inside the opposite zone does not bounce straight back.
 var _exits_armed := false
 var _sliding := false
+var _finished := false
 
 @onready var _world: Node2D = $World
 @onready var _player: RigidBody2D = $Player
 @onready var _shots: Node2D = $Shots
 @onready var _camera: Camera2D = $Camera2D
-@onready var _status_label: Label = $Hud/Fuel
+@onready var _hud: Control = $Hud/Strip
+@onready var _mini_map: Control = $Hud/Strip/MiniMap
+@onready var _pause_menu: CanvasLayer = $PauseMenu
 
 
 func _ready() -> void:
 	Controls.setup()
-	var shot_path := ""
+	if progress == null:
+		progress = Progress.new()
+	grid = progress.checkpoint
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--room="):
 			var parts := arg.trim_prefix("--room=").split(",")
 			grid = Vector2i(int(parts[0]), int(parts[1]))
-		elif arg.begins_with("--shot="):
-			shot_path = arg.trim_prefix("--shot=")
 
+	_player.max_hp = progress.max_hp
+	_player.hp = progress.max_hp
+	_player.jetpack.max_fuel = progress.max_fuel
+	_player.jetpack.fuel = progress.max_fuel
+	_player.gun_level = progress.gun_level
+	_player.artifacts = progress.artifacts
 	_player.shot_fired.connect(_on_shot_fired)
 	_player.died.connect(_respawn)
+	_pause_menu.resume_pressed.connect(_set_pause_menu.bind(false))
+	_pause_menu.quit_pressed.connect(_quit_to_title)
+
 	room = load_room(grid)
 	_world.add_child(room)
 	_place_player_at_start()
-
-	if shot_path != "":
-		await get_tree().create_timer(1.0).timeout
-		await RenderingServer.frame_post_draw
-		get_viewport().get_texture().get_image().save_png(shot_path)
-		get_tree().quit()
+	_note_room()
 
 
 func _process(_delta: float) -> void:
-	_status_label.text = "HP %d\nFUEL\n%d\nART %d" % [_player.hp, int(_player.jetpack.fuel), _player.artifacts]
+	_hud.set_status(_player.hp, _player.jetpack.fuel, _player.artifacts)
 
 
 func _physics_process(_delta: float) -> void:
-	if _sliding:
+	if _sliding or _finished:
 		return
 	var local := _player.global_position - room.position
+	if grid.y == GRID_SIZE.y - 1 and local.y >= ROOM_SIZE.y + WIN_DEPTH:
+		_finished = true
+		won.emit()
+		return
 	var step := exit_step(local)
 	if step == Vector2i.ZERO:
 		_exits_armed = true
@@ -75,6 +92,27 @@ func _physics_process(_delta: float) -> void:
 	if next.x < 0 or next.y < 0 or next.x >= GRID_SIZE.x or next.y >= GRID_SIZE.y:
 		return
 	_enter_room(next, step, local)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause") and not _sliding and not _finished:
+		_set_pause_menu(not _pause_menu.visible)
+
+
+## The original's cheat keys, in debug builds only.
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not OS.is_debug_build() or not event.pressed or event.echo:
+		return
+	match event.keycode:
+		KEY_F9:
+			_player.gun_level = mini(_player.gun_level + 1, MAX_GUN_LEVEL)
+		KEY_F10:
+			_player.jetpack.max_fuel += 500.0
+		KEY_F11:
+			_player.max_hp += 1
+			_player.hp += 1
+		KEY_F12:
+			_player.artifacts += 1
 
 
 ## Which way the player is leaving, given its centre in room coordinates.
@@ -113,7 +151,7 @@ func load_room(at: Vector2i) -> Node2D:
 	var loaded: Node2D = load("res://world/rooms/room_%d_%d.tscn" % [at.x, at.y]).instantiate()
 	loaded.position = Vector2(at) * ROOM_SIZE
 	for entity in loaded.get_node("Entities").get_children():
-		if entity.is_powerup and powerups_taken.has(at):
+		if entity.is_powerup and progress.powerups_taken.has(at):
 			entity.free()
 			continue
 		entity.shot_fired.connect(_on_shot_fired)
@@ -130,6 +168,7 @@ func _enter_room(next: Vector2i, step: Vector2i, local: Vector2) -> void:
 	_world.add_child(room)
 	_clear_shots()
 	_player.global_position = room.position + entry_position(step, local)
+	_note_room()
 
 	get_tree().paused = true
 	var tween := create_tween()
@@ -147,11 +186,12 @@ func _respawn() -> void:
 	_clear_shots()
 	_world.remove_child(room)
 	room.queue_free()
-	grid = checkpoint
+	grid = progress.checkpoint
 	room = load_room(grid)
 	_world.add_child(room)
 	_player.revive()
 	_place_player_at_start()
+	_note_room()
 
 
 func _place_player_at_start() -> void:
@@ -161,9 +201,37 @@ func _place_player_at_start() -> void:
 	_exits_armed = false
 
 
+## Records the current room on the map and writes the slot, so the explored
+## map survives quitting. Stats and checkpoint change only at save events.
+func _note_room() -> void:
+	progress.visited[grid] = true
+	for entity in room.get_node("Entities").get_children():
+		if entity.is_save_point:
+			progress.save_points[grid] = true
+	_mini_map.show_progress(progress, grid)
+	_write_slot()
+
+
+func _write_slot() -> void:
+	if slot > 0:
+		SaveGame.write(slot, progress)
+
+
 func _clear_shots() -> void:
 	for shot in _shots.get_children():
 		shot.queue_free()
+
+
+func _set_pause_menu(open: bool) -> void:
+	_pause_menu.visible = open
+	get_tree().paused = open
+	if open:
+		_pause_menu.open(progress, grid)
+
+
+func _quit_to_title() -> void:
+	_set_pause_menu(false)
+	quit_to_title.emit()
 
 
 func _on_shot_fired(shot: RigidBody2D) -> void:
@@ -173,7 +241,13 @@ func _on_shot_fired(shot: RigidBody2D) -> void:
 
 ## A save point was activated or a powerup collected in the current room.
 func _on_save_requested(source: Node) -> void:
-	checkpoint = grid
+	progress.checkpoint = grid
 	_player.hp = _player.max_hp
 	if source.is_powerup:
-		powerups_taken[grid] = true
+		progress.powerups_taken[grid] = true
+	progress.max_hp = _player.max_hp
+	progress.max_fuel = _player.jetpack.max_fuel
+	progress.gun_level = _player.gun_level
+	progress.artifacts = _player.artifacts
+	_write_slot()
+	_hud.show_saved()
