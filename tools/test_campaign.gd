@@ -77,6 +77,13 @@ func _run() -> void:
 	Input.action_release("move_right")
 	_expect(campaign.grid == Vector2i(5, 2), "entered room 5,2, grid is %s" % campaign.grid)
 	_expect(paused, "tree is paused during the slide")
+	# Checked now, while paused: once the slide ends, monsters in the new room
+	# fire shots of their own.
+	var live_shots := 0
+	for shot in shots.get_children():
+		if not shot.is_queued_for_deletion():
+			live_shots += 1
+	_expect(live_shots == 0, "shots are cleared on transition")
 	await _frames(40)
 	_expect(not paused, "tree resumes after the slide")
 	_expect(campaign.get_node("World").get_child_count() == 1, "old room is freed")
@@ -85,7 +92,6 @@ func _run() -> void:
 	_expect(local.x >= 17.0 and local.x < 300.0, "player enters at the left, x %.1f" % local.x)
 	var camera: Camera2D = campaign.get_node("Camera2D")
 	_expect(camera.position == campaign.room.position + Vector2(512, 384), "camera is on the new room")
-	_expect(shots.get_child_count() == 0, "shots are cleared on transition")
 
 	await _check_checkpoint_and_respawn(campaign, player)
 	_check_powerups_taken(campaign)
