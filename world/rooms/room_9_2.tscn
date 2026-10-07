@@ -7,337 +7,411 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q7bxi"]
 friction = 0.5
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_cogkh"]
-a = Vector2(0, 32)
-b = Vector2(512, 32)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cogkh"]
+radius = 0.5
+height = 513.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_03epd"]
-a = Vector2(512, 32)
-b = Vector2(512, 64)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_03epd"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_nm3kk"]
-a = Vector2(512, 64)
-b = Vector2(544, 64)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nm3kk"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_83rl5"]
-a = Vector2(544, 64)
-b = Vector2(544, 96)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_83rl5"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_jfgbc"]
-a = Vector2(544, 96)
-b = Vector2(576, 96)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jfgbc"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_l8ie6"]
-a = Vector2(576, 96)
-b = Vector2(576, 128)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l8ie6"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_im4jg"]
-a = Vector2(576, 128)
-b = Vector2(832, 128)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_im4jg"]
+radius = 0.5
+height = 257.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_wonga"]
-a = Vector2(832, 128)
-b = Vector2(832, 160)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wonga"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_umtrh"]
-a = Vector2(832, 160)
-b = Vector2(864, 160)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_umtrh"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_gbhcd"]
-a = Vector2(864, 160)
-b = Vector2(864, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gbhcd"]
+radius = 0.5
+height = 609.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_u3p08"]
-a = Vector2(864, 768)
-b = Vector2(576, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u3p08"]
+radius = 0.5
+height = 289.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_kyifa"]
-a = Vector2(576, 768)
-b = Vector2(576, 608)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kyifa"]
+radius = 0.5
+height = 161.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_f3vh1"]
-a = Vector2(576, 608)
-b = Vector2(640, 608)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f3vh1"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_fr6eo"]
-a = Vector2(640, 608)
-b = Vector2(608, 576)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fr6eo"]
+radius = 0.5
+height = 46.254833
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_p8cc0"]
-a = Vector2(608, 576)
-b = Vector2(512, 576)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p8cc0"]
+radius = 0.5
+height = 97.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_gtk84"]
-a = Vector2(512, 576)
-b = Vector2(480, 608)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gtk84"]
+radius = 0.5
+height = 46.254833
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_8r5ob"]
-a = Vector2(480, 608)
-b = Vector2(544, 608)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8r5ob"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_0v61t"]
-a = Vector2(544, 608)
-b = Vector2(544, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0v61t"]
+radius = 0.5
+height = 161.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_psm4n"]
-a = Vector2(544, 768)
-b = Vector2(192, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_psm4n"]
+radius = 0.5
+height = 353.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_xg3hf"]
-a = Vector2(192, 768)
-b = Vector2(192, 416)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xg3hf"]
+radius = 0.5
+height = 353.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_w8xgy"]
-a = Vector2(192, 416)
-b = Vector2(192, 384)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w8xgy"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_aisgw"]
-a = Vector2(192, 384)
-b = Vector2(256, 384)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aisgw"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_kqkdh"]
-a = Vector2(256, 384)
-b = Vector2(224, 352)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kqkdh"]
+radius = 0.5
+height = 46.254833
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_cctu0"]
-a = Vector2(224, 352)
-b = Vector2(128, 352)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cctu0"]
+radius = 0.5
+height = 97.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_40jou"]
-a = Vector2(128, 352)
-b = Vector2(96, 384)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_40jou"]
+radius = 0.5
+height = 46.254833
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_kmdfy"]
-a = Vector2(96, 384)
-b = Vector2(160, 384)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kmdfy"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_p4q3v"]
-a = Vector2(160, 384)
-b = Vector2(160, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p4q3v"]
+radius = 0.5
+height = 385.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_7jjqy"]
-a = Vector2(160, 768)
-b = Vector2(64, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7jjqy"]
+radius = 0.5
+height = 97.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_hcuak"]
-a = Vector2(64, 768)
-b = Vector2(64, 320)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcuak"]
+radius = 0.5
+height = 449.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_xrqqa"]
-a = Vector2(64, 320)
-b = Vector2(0, 320)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xrqqa"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_uetui"]
-a = Vector2(0, 320)
-b = Vector2(0, 32)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uetui"]
+radius = 0.5
+height = 289.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_puq81"]
-a = Vector2(576, 128)
-b = Vector2(832, 96)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_puq81"]
+radius = 0.5
+height = 258.99225
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_7ahke"]
-a = Vector2(832, 96)
-b = Vector2(832, 128)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7ahke"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_gv48u"]
-a = Vector2(832, 128)
-b = Vector2(576, 96)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gv48u"]
+radius = 0.5
+height = 258.99225
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_v2mj8"]
-a = Vector2(576, 96)
-b = Vector2(576, 128)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v2mj8"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_q8ex4"]
-a = Vector2(576, 96)
-b = Vector2(800, 96)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q8ex4"]
+radius = 0.5
+height = 225.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_d1til"]
-a = Vector2(832, 96)
-b = Vector2(800, 96)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d1til"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_iej8d"]
-a = Vector2(384, 32)
-b = Vector2(384, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iej8d"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_kk27v"]
-a = Vector2(384, 0)
-b = Vector2(128, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kk27v"]
+radius = 0.5
+height = 257.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_xd3qm"]
-a = Vector2(128, 0)
-b = Vector2(128, 32)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xd3qm"]
+radius = 0.5
+height = 33.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_inx6j"]
-a = Vector2(128, 32)
-b = Vector2(384, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_inx6j"]
+radius = 0.5
+height = 258.99225
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_re584"]
-a = Vector2(384, 32)
-b = Vector2(128, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_re584"]
+radius = 0.5
+height = 258.99225
 
-[node name="Room_9_2" type="Node2D" unique_id=802448871]
+[node name="Room_9_2" type="Node2D" unique_id=370917442]
 script = ExtResource("1_7oihs")
 grid_pos = Vector2i(9, 2)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=1271101703]
+[node name="Background" type="TileMapLayer" parent="." unique_id=989703945]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAAAAAABAACAAIAAAAAAAEABAACAAIAAAAAAAIABAACAAIAAAAAAAMABAACAAIAAAAAAAQABAACAAIAAAAAAAUABAACAAIAAAAAAAYABAACAAIAAAAAAAcABAACAAIAAAAAAAgABAACAAIAAAAAAAkABAACAAIAAAAAAAoABAACAAIAAAAAAAsABAACAAIAAAAAAAwABAACAAIAAAAAAA0ABAACAAIAAAAAAA4ABAACAAIAAAAAAA8ABAACAAIAAAAAABAABAACAAIAAAAAABEABAACAAIAAAAAABIABAACAAIAAAAAABMABAACAAIAAAAAABQABAACAAIAAAAAABUABAACAAIAAAAAABYABAACAAIAAAAAABcABAACAAIAAAABAAAABAACAAIAAAABAAEABAACAAIAAAABAAIABAACAAIAAAABAAMABAACAAIAAAABAAQABAACAAIAAAABAAUABAACAAIAAAABAAYABAACAAIAAAABAAcABAACAAIAAAABAAgABAACAAIAAAABAAkABAACAAIAAAABAAoABAACAAIAAAABAAsABAACAAIAAAABAAwABAACAAIAAAABAA0ABAACAAIAAAABAA4ABAACAAIAAAABAA8ABAACAAIAAAABABAABAACAAIAAAABABEABAACAAIAAAABABIABAACAAIAAAABABMABAACAAIAAAABABQABAACAAIAAAABABUABAACAAIAAAABABYABAACAAIAAAABABcABAACAAIAAAACAAAABAACAAIAAAACAAEABAACAAIAAAACAAIABAACAAIAAAACAAMABAACAAIAAAACAAQABAACAAIAAAACAAUABAACAAIAAAACAAYABAACAAIAAAACAAcABAACAAIAAAACAAgABAACAAIAAAACAAkABAACAAIAAAACAAoABAACAAIAAAACAAsABAACAAIAAAACAAwABAACAAIAAAACAA0ABAACAAIAAAACAA4ABAACAAIAAAACAA8ABAACAAIAAAACABAABAACAAIAAAACABEABAACAAIAAAACABIABAACAAIAAAACABMABAACAAIAAAACABQABAACAAIAAAACABUABAACAAIAAAACABYABAACAAIAAAACABcABAACAAIAAAADAAAABAACAAIAAAADAAEABAACAAIAAAADAAIABAACAAIAAAADAAMABAACAAIAAAADAAQABAACAAIAAAADAAUABAACAAIAAAADAAYABAACAAIAAAADAAcABAACAAIAAAADAAgABAACAAIAAAADAAkABAACAAIAAAADAAoABAACAAIAAAADAAsABAACAAIAAAADAAwABAACAAIAAAADAA0ABAACAAIAAAADAA4ABAACAAIAAAADAA8ABAACAAIAAAADABAABAACAAIAAAADABEABAACAAIAAAADABIABAACAAIAAAADABMABAACAAIAAAADABQABAACAAIAAAADABUABAACAAIAAAADABYABAACAAIAAAADABcABAACAAIAAAAEAAAABAACAAIAAAAEAAEABAACAAIAAAAEAAIABAACAAIAAAAEAAMABAACAAIAAAAEAAQABAACAAIAAAAEAAUABAACAAIAAAAEAAYABAACAAIAAAAEAAcABAACAAIAAAAEAAgABAACAAIAAAAEAAkABAACAAIAAAAEAAoABAACAAIAAAAEAAsABAACAAIAAAAEAAwABAACAAIAAAAEAA0ABAACAAIAAAAEAA4ABAACAAIAAAAEAA8ABAACAAIAAAAEABAABAACAAIAAAAEABEABAACAAIAAAAEABIABAACAAIAAAAEABMABAACAAIAAAAEABQABAACAAIAAAAEABUABAACAAIAAAAEABYABAACAAIAAAAEABcABAACAAIAAAAFAAAABAACAAIAAAAFAAEABAACAAIAAAAFAAIABAACAAIAAAAFAAMABAACAAIAAAAFAAQABAACAAIAAAAFAAUABAACAAIAAAAFAAYABAACAAIAAAAFAAcABAACAAIAAAAFAAgABAACAAIAAAAFAAkABAACAAIAAAAFAAoABAACAAIAAAAFAAsABAACAAIAAAAFAAwABAACAAIAAAAFAA0ABAACAAIAAAAFAA4ABAACAAIAAAAFAA8ABAACAAIAAAAFABAABAACAAIAAAAFABEABAACAAIAAAAFABIABAACAAIAAAAFABMABAACAAIAAAAFABQABAACAAIAAAAFABUABAACAAIAAAAFABYABAACAAIAAAAFABcABAACAAIAAAAGAAAABAACAAIAAAAGAAEABAACAAIAAAAGAAIABAACAAIAAAAGAAMABAACAAIAAAAGAAQABAACAAIAAAAGAAUABAACAAIAAAAGAAYABAACAAIAAAAGAAcABAACAAIAAAAGAAgABAACAAIAAAAGAAkABAACAAIAAAAGAAoABAACAAIAAAAGAAsABAACAAIAAAAGAAwABAACAAIAAAAGAA0ABAACAAIAAAAGAA4ABAACAAIAAAAGAA8ABAACAAIAAAAGABAABAACAAIAAAAGABEABAACAAIAAAAGABIABAACAAIAAAAGABMABAACAAIAAAAGABQABAACAAIAAAAGABUABAACAAIAAAAGABYABAACAAIAAAAGABcABAACAAIAAAAHAAAABAACAAIAAAAHAAEABAACAAIAAAAHAAIABAACAAIAAAAHAAMABAACAAIAAAAHAAQABAACAAIAAAAHAAUABAACAAIAAAAHAAYABAACAAIAAAAHAAcABAACAAIAAAAHAAgABAACAAIAAAAHAAkABAACAAIAAAAHAAoABAACAAIAAAAHAAsABAACAAIAAAAHAAwABAACAAIAAAAHAA0ABAACAAIAAAAHAA4ABAACAAIAAAAHAA8ABAACAAIAAAAHABAABAACAAIAAAAHABEABAACAAIAAAAHABIABAACAAIAAAAHABMABAACAAIAAAAHABQABAACAAIAAAAHABUABAACAAIAAAAHABYABAACAAIAAAAHABcABAACAAIAAAAIAAAABAACAAIAAAAIAAEABAACAAIAAAAIAAIABAACAAIAAAAIAAMABAACAAIAAAAIAAQABAACAAIAAAAIAAUABAACAAIAAAAIAAYABAACAAIAAAAIAAcABAACAAIAAAAIAAgABAACAAIAAAAIAAkABAACAAIAAAAIAAoABAACAAIAAAAIAAsABAACAAIAAAAIAAwABAACAAIAAAAIAA0ABAACAAIAAAAIAA4ABAACAAIAAAAIAA8ABAACAAIAAAAIABAABAACAAIAAAAIABEABAACAAIAAAAIABIABAACAAIAAAAIABMABAACAAIAAAAIABQABAACAAIAAAAIABUABAACAAIAAAAIABYABAACAAIAAAAIABcABAACAAIAAAAJAAAABAACAAIAAAAJAAEABAACAAIAAAAJAAIABAACAAIAAAAJAAMABAACAAIAAAAJAAQABAACAAIAAAAJAAUABAACAAIAAAAJAAYABAACAAIAAAAJAAcABAACAAIAAAAJAAgABAACAAIAAAAJAAkABAACAAIAAAAJAAoABAACAAIAAAAJAAsABAACAAIAAAAJAAwABAACAAIAAAAJAA0ABAACAAIAAAAJAA4ABAACAAIAAAAJAA8ABAACAAIAAAAJABAABAACAAIAAAAJABEABAACAAIAAAAJABIABAACAAIAAAAJABMABAACAAIAAAAJABQABAACAAIAAAAJABUABAACAAIAAAAJABYABAACAAIAAAAJABcABAACAAIAAAAKAAAABAACAAIAAAAKAAEABAACAAIAAAAKAAIABAACAAIAAAAKAAMABAACAAIAAAAKAAQABAACAAIAAAAKAAUABAACAAIAAAAKAAYABAACAAIAAAAKAAcABAACAAIAAAAKAAgABAACAAIAAAAKAAkABAACAAIAAAAKAAoABAACAAIAAAAKAAsABAACAAIAAAAKAAwABAACAAIAAAAKAA0ABAACAAIAAAAKAA4ABAACAAIAAAAKAA8ABAACAAIAAAAKABAABAACAAIAAAAKABEABAACAAIAAAAKABIABAACAAIAAAAKABMABAACAAIAAAAKABQABAACAAIAAAAKABUABAACAAIAAAAKABYABAACAAIAAAAKABcABAACAAIAAAALAAAABAACAAIAAAALAAEABAACAAIAAAALAAIABAACAAIAAAALAAMABAACAAIAAAALAAQABAACAAIAAAALAAUABAACAAIAAAALAAYABAACAAIAAAALAAcABAACAAIAAAALAAgABAACAAIAAAALAAkABAACAAIAAAALAAoABAACAAIAAAALAAsABAACAAIAAAALAAwABAACAAIAAAALAA0ABAACAAIAAAALAA4ABAACAAIAAAALAA8ABAACAAIAAAALABAABAACAAIAAAALABEABAACAAIAAAALABIABAACAAIAAAALABMABAACAAIAAAALABQABAACAAIAAAALABUABAACAAIAAAALABYABAACAAIAAAALABcABAACAAIAAAAMAAAABAACAAIAAAAMAAEABAACAAIAAAAMAAIABAACAAIAAAAMAAMABAACAAIAAAAMAAQABAACAAIAAAAMAAUABAACAAIAAAAMAAYABAACAAIAAAAMAAcABAACAAIAAAAMAAgABAACAAIAAAAMAAkABAACAAIAAAAMAAoABAACAAIAAAAMAAsABAACAAIAAAAMAAwABAACAAIAAAAMAA0ABAACAAIAAAAMAA4ABAACAAIAAAAMAA8ABAACAAIAAAAMABAABAACAAIAAAAMABEABAACAAIAAAAMABIABAACAAIAAAAMABMABAACAAIAAAAMABQABAACAAIAAAAMABUABAACAAIAAAAMABYABAACAAIAAAAMABcABAACAAIAAAANAAAABAACAAIAAAANAAEABAACAAIAAAANAAIABAACAAIAAAANAAMABAACAAIAAAANAAQABAACAAIAAAANAAUABAACAAIAAAANAAYABAACAAIAAAANAAcABAACAAIAAAANAAgABAACAAIAAAANAAkABAACAAIAAAANAAoABAACAAIAAAANAAsABAACAAIAAAANAAwABAACAAIAAAANAA0ABAACAAIAAAANAA4ABAACAAIAAAANAA8ABAACAAIAAAANABAABAACAAIAAAANABEABAACAAIAAAANABIABAACAAIAAAANABMABAACAAIAAAANABQABAACAAIAAAANABUABAACAAIAAAANABYABAACAAIAAAANABcABAACAAIAAAAOAAAABAACAAIAAAAOAAEABAACAAIAAAAOAAIABAACAAIAAAAOAAMABAACAAIAAAAOAAQABAACAAIAAAAOAAUABAACAAIAAAAOAAYABAACAAIAAAAOAAcABAACAAIAAAAOAAgABAACAAIAAAAOAAkABAACAAIAAAAOAAoABAACAAIAAAAOAAsABAACAAIAAAAOAAwABAACAAIAAAAOAA0ABAACAAIAAAAOAA4ABAACAAIAAAAOAA8ABAACAAIAAAAOABAABAACAAIAAAAOABEABAACAAIAAAAOABIABAACAAIAAAAOABMABAACAAIAAAAOABQABAACAAIAAAAOABUABAACAAIAAAAOABYABAACAAIAAAAOABcABAACAAIAAAAPAAAABAACAAIAAAAPAAEABAACAAIAAAAPAAIABAACAAIAAAAPAAMABAACAAIAAAAPAAQABAACAAIAAAAPAAUABAACAAIAAAAPAAYABAACAAIAAAAPAAcABAACAAIAAAAPAAgABAACAAIAAAAPAAkABAACAAIAAAAPAAoABAACAAIAAAAPAAsABAACAAIAAAAPAAwABAACAAIAAAAPAA0ABAACAAIAAAAPAA4ABAACAAIAAAAPAA8ABAACAAIAAAAPABAABAACAAIAAAAPABEABAACAAIAAAAPABIABAACAAIAAAAPABMABAACAAIAAAAPABQABAACAAIAAAAPABUABAACAAIAAAAPABYABAACAAIAAAAPABcABAACAAIAAAAQAAAABAACAAIAAAAQAAEABAACAAIAAAAQAAIABAACAAIAAAAQAAMABAACAAIAAAAQAAQABAACAAIAAAAQAAUABAACAAIAAAAQAAYABAACAAIAAAAQAAcABAACAAIAAAAQAAgABAACAAIAAAAQAAkABAACAAIAAAAQAAoABAACAAIAAAAQAAsABAACAAIAAAAQAAwABAACAAIAAAAQAA0ABAACAAIAAAAQAA4ABAACAAIAAAAQAA8ABAACAAIAAAAQABAABAACAAIAAAAQABEABAACAAIAAAAQABIABAACAAIAAAAQABMABAACAAIAAAAQABQABAACAAIAAAAQABUABAACAAIAAAAQABYABAACAAIAAAAQABcABAACAAIAAAARAAAABAACAAIAAAARAAEABAACAAIAAAARAAIABAACAAIAAAARAAMABAACAAIAAAARAAQABAACAAIAAAARAAUABAACAAIAAAARAAYABAACAAIAAAARAAcABAACAAIAAAARAAgABAACAAIAAAARAAkABAACAAIAAAARAAoABAACAAIAAAARAAsABAACAAIAAAARAAwABAACAAIAAAARAA0ABAACAAIAAAARAA4ABAACAAIAAAARAA8ABAACAAIAAAARABAABAACAAIAAAARABEABAACAAIAAAARABIABAACAAIAAAARABMABAACAAIAAAARABQABAACAAIAAAARABUABAACAAIAAAARABYABAACAAIAAAARABcABAACAAIAAAASAAAABAACAAIAAAASAAEABAACAAIAAAASAAIABAACAAIAAAASAAMABAACAAIAAAASAAQABAACAAIAAAASAAUABAACAAIAAAASAAYABAACAAIAAAASAAcABAACAAIAAAASAAgABAACAAIAAAASAAkABAACAAIAAAASAAoABAACAAIAAAASAAsABAACAAIAAAASAAwABAACAAIAAAASAA0ABAACAAIAAAASAA4ABAACAAIAAAASAA8ABAACAAIAAAASABAABAACAAIAAAASABEABAACAAIAAAASABIABAACAAIAAAASABMABAACAAIAAAASABQABAACAAIAAAASABUABAACAAIAAAASABYABAACAAIAAAASABcABAACAAIAAAATAAAABAACAAIAAAATAAEABAACAAIAAAATAAIABAACAAIAAAATAAMABAACAAIAAAATAAQABAACAAIAAAATAAUABAACAAIAAAATAAYABAACAAIAAAATAAcABAACAAIAAAATAAgABAACAAIAAAATAAkABAACAAIAAAATAAoABAACAAIAAAATAAsABAACAAIAAAATAAwABAACAAIAAAATAA0ABAACAAIAAAATAA4ABAACAAIAAAATAA8ABAACAAIAAAATABAABAACAAIAAAATABEABAACAAIAAAATABIABAACAAIAAAATABMABAACAAIAAAATABQABAACAAIAAAATABUABAACAAIAAAATABYABAACAAIAAAATABcABAACAAIAAAAUAAAABAACAAIAAAAUAAEABAACAAIAAAAUAAMABAACAAIAAAAUAAQABAACAAIAAAAUAAUABAACAAIAAAAUAAYABAACAAIAAAAUAAcABAACAAIAAAAUAAgABAACAAIAAAAUAAkABAACAAIAAAAUAAoABAACAAIAAAAUAAsABAACAAIAAAAUAAwABAACAAIAAAAUAA0ABAACAAIAAAAUAA4ABAACAAIAAAAUAA8ABAACAAIAAAAUABAABAACAAIAAAAUABEABAACAAIAAAAUABIABAACAAIAAAAUABMABAACAAIAAAAUABQABAACAAIAAAAUABUABAACAAIAAAAUABYABAACAAIAAAAUABcABAACAAIAAAAVAAAABAACAAIAAAAVAAEABAACAAIAAAAVAAIABAACAAIAAAAVAAMABAACAAIAAAAVAAQABAACAAIAAAAVAAUABAACAAIAAAAVAAYABAACAAIAAAAVAAcABAACAAIAAAAVAAgABAACAAIAAAAVAAkABAACAAIAAAAVAAoABAACAAIAAAAVAAsABAACAAIAAAAVAAwABAACAAIAAAAVAA0ABAACAAIAAAAVAA4ABAACAAIAAAAVAA8ABAACAAIAAAAVABAABAACAAIAAAAVABEABAACAAIAAAAVABIABAACAAIAAAAVABMABAACAAIAAAAVABQABAACAAIAAAAVABUABAACAAIAAAAVABYABAACAAIAAAAVABcABAACAAIAAAAWAAAABAACAAIAAAAWAAEABAACAAIAAAAWAAIABAACAAIAAAAWAAMABAACAAIAAAAWAAQABAACAAIAAAAWAAUABAACAAIAAAAWAAYABAACAAIAAAAWAAcABAACAAIAAAAWAAgABAACAAIAAAAWAAkABAACAAIAAAAWAAoABAACAAIAAAAWAAsABAACAAIAAAAWAAwABAACAAIAAAAWAA0ABAACAAIAAAAWAA4ABAACAAIAAAAWAA8ABAACAAIAAAAWABAABAACAAIAAAAWABEABAACAAIAAAAWABIABAACAAIAAAAWABMABAACAAIAAAAWABQABAACAAIAAAAWABUABAACAAIAAAAWABYABAACAAIAAAAWABcABAACAAIAAAAXAAAABAACAAIAAAAXAAEABAACAAIAAAAXAAIABAACAAIAAAAXAAMABAACAAIAAAAXAAQABAACAAIAAAAXAAUABAACAAIAAAAXAAYABAACAAIAAAAXAAcABAACAAIAAAAXAAgABAACAAIAAAAXAAkABAACAAIAAAAXAAoABAACAAIAAAAXAAsABAACAAIAAAAXAAwABAACAAIAAAAXAA0ABAACAAIAAAAXAA4ABAACAAIAAAAXAA8ABAACAAIAAAAXABAABAACAAIAAAAXABEABAACAAIAAAAXABIABAACAAIAAAAXABMABAACAAIAAAAXABQABAACAAIAAAAXABUABAACAAIAAAAXABYABAACAAIAAAAXABcABAACAAIAAAAYAAAABAACAAIAAAAYAAEABAACAAIAAAAYAAIABAACAAIAAAAYAAMABAACAAIAAAAYAAQABAACAAIAAAAYAAUABAACAAIAAAAYAAYABAACAAIAAAAYAAcABAACAAIAAAAYAAgABAACAAIAAAAYAAkABAACAAIAAAAYAAoABAACAAIAAAAYAAsABAACAAIAAAAYAAwABAACAAIAAAAYAA0ABAACAAIAAAAYAA4ABAACAAIAAAAYAA8ABAACAAIAAAAYABAABAACAAIAAAAYABEABAACAAIAAAAYABIABAACAAIAAAAYABMABAACAAIAAAAYABQABAACAAIAAAAYABUABAACAAIAAAAYABYABAACAAIAAAAYABcABAACAAIAAAAZAAAABAACAAIAAAAZAAEABAACAAIAAAAZAAIABAACAAIAAAAZAAMABAACAAIAAAAZAAQABAACAAIAAAAZAAUABAACAAIAAAAZAAYABAACAAIAAAAZAAcABAACAAIAAAAZAAgABAACAAIAAAAZAAkABAACAAIAAAAZAAoABAACAAIAAAAZAAsABAACAAIAAAAZAAwABAACAAIAAAAZAA0ABAACAAIAAAAZAA4ABAACAAIAAAAZAA8ABAACAAIAAAAZABAABAACAAIAAAAZABEABAACAAIAAAAZABIABAACAAIAAAAZABMABAACAAIAAAAZABQABAACAAIAAAAZABUABAACAAIAAAAZABYABAACAAIAAAAZABcABAACAAIAAAAaAAAABAACAAIAAAAaAAEABAACAAIAAAAaAAIABAACAAIAAAAaAAMABAACAAIAAAAaAAQABAACAAIAAAAaAAUABAACAAIAAAAaAAYABAACAAIAAAAaAAcABAACAAIAAAAaAAgABAACAAIAAAAaAAkABAACAAIAAAAaAAoABAACAAIAAAAaAAsABAACAAIAAAAaAAwABAACAAIAAAAaAA0ABAACAAIAAAAaAA4ABAACAAIAAAAaAA8ABAACAAIAAAAaABAABAACAAIAAAAaABEABAACAAIAAAAaABIABAACAAIAAAAaABMABAACAAIAAAAaABQABAACAAIAAAAaABUABAACAAIAAAAaABYABAACAAIAAAAaABcABAACAAIAAAAbAAAABAACAAIAAAAbAAEABAACAAIAAAAbAAIABAACAAIAAAAbAAMABAACAAIAAAAbAAQABAACAAIAAAAbAAUABAACAAIAAAAbAAYABAACAAIAAAAbAAcABAACAAIAAAAbAAgABAACAAIAAAAbAAkABAACAAIAAAAbAAoABAACAAIAAAAbAAsABAACAAIAAAAbAAwABAACAAIAAAAbAA0ABAACAAIAAAAbAA4ABAACAAIAAAAbAA8ABAACAAIAAAAbABAABAACAAIAAAAbABEABAACAAIAAAAbABIABAACAAIAAAAbABMABAACAAIAAAAbABQABAACAAIAAAAbABUABAACAAIAAAAbABYABAACAAIAAAAbABcABAACAAIAAAAcAAAABAACAAIAAAAcAAEABAACAAIAAAAcAAIABAACAAIAAAAcAAMABAACAAIAAAAcAAQABAACAAIAAAAcAAUABAACAAIAAAAcAAYABAACAAIAAAAcAAcABAACAAIAAAAcAAgABAACAAIAAAAcAAkABAACAAIAAAAcAAoABAACAAIAAAAcAAsABAACAAIAAAAcAAwABAACAAIAAAAcAA0ABAACAAIAAAAcAA4ABAACAAIAAAAcAA8ABAACAAIAAAAcABAABAACAAIAAAAcABEABAACAAIAAAAcABIABAACAAIAAAAcABMABAACAAIAAAAcABQABAACAAIAAAAcABUABAACAAIAAAAcABYABAACAAIAAAAcABcABAACAAIAAAAdAAAABAACAAIAAAAdAAEABAACAAIAAAAdAAIABAACAAIAAAAdAAMABAACAAIAAAAdAAQABAACAAIAAAAdAAUABAACAAIAAAAdAAYABAACAAIAAAAdAAcABAACAAIAAAAdAAgABAACAAIAAAAdAAkABAACAAIAAAAdAAoABAACAAIAAAAdAAsABAACAAIAAAAdAAwABAACAAIAAAAdAA0ABAACAAIAAAAdAA4ABAACAAIAAAAdAA8ABAACAAIAAAAdABAABAACAAIAAAAdABEABAACAAIAAAAdABIABAACAAIAAAAdABMABAACAAIAAAAdABQABAACAAIAAAAdABUABAACAAIAAAAdABYABAACAAIAAAAdABcABAACAAIAAAAUAAIABAACAAIAAAA=")
 tile_set = ExtResource("2_2fpnw")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1070778809]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=720456063]
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=646378950]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=1728002531]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAAAAoAAwACAAEAAAABAAoAAwADAAEAAAABAAsAAwADAAIAAAABAAwAAwADAAIAAAABAA0AAwADAAIAAAABAA4AAwADAAIAAAABAA8AAwADAAIAAAABABAAAwADAAIAAAABABEAAwADAAIAAAABABIAAwADAAIAAAABABMAAwADAAIAAAABABQAAwADAAIAAAABABUAAwADAAIAAAABABYAAwADAAIAAAABABcAAwADAAIAAAAAABcAAwACAAIAAAAAABYAAwACAAIAAAAAABUAAwACAAIAAAAAABQAAwACAAIAAAAAABMAAwACAAIAAAAAABIAAwACAAIAAAAAABEAAwACAAIAAAAAABAAAwACAAIAAAAAAA8AAwACAAIAAAAAAA4AAwACAAIAAAAAAA0AAwACAAIAAAAAAAwAAwACAAIAAAAAAAsAAwACAAIAAAAFABcAAwAGAAQAAAAFABYAAwAGAAQAAAAFABUAAwAGAAQAAAAFABQAAwAGAAQAAAAFABMAAwAGAAQAAAAFABIAAwAGAAQAAAAFABEAAwAGAAQAAAAFABAAAwAGAAQAAAAFAA8AAwAGAAQAAAAFAA4AAwAGAAQAAAAFAA0AAwAGAAQAAAAFAAwAAwAGAAQAAAADAAsAAwAFAAMAAAAEAAsAAwAGAAMAAAAFAAsAAwAGAAMAAAAGAAsAAwAGAAMAAAAHAAsAAwAHAAMAAAARABcAAwAGAAQAAAARABYAAwAGAAQAAAARABUAAwAGAAQAAAARABQAAwAGAAQAAAARABMAAwAGAAQAAAAPABIAAwAFAAMAAAAQABIAAwAGAAMAAAARABIAAwAGAAMAAAASABIAAwAGAAMAAAATABIAAwAHAAMAAAAAAAAAAwACAAMAAAABAAAAAwACAAMAAAACAAAAAwACAAMAAAADAAAAAwACAAMAAAAEAAAAAwACAAMAAAAFAAAAAwACAAMAAAAGAAAAAwACAAMAAAAHAAAAAwACAAMAAAAIAAAAAwACAAMAAAAJAAAAAwACAAMAAAAKAAAAAwACAAMAAAALAAAAAwACAAMAAAAMAAAAAwACAAMAAAANAAAAAwACAAMAAAAOAAAAAwACAAMAAAAPAAAAAwACAAMAAAAQAAEAAwABAAMAAAARAAIAAwABAAMAAAASAAMAAwABAAMAAAATAAMAAwACAAMAAAAUAAMAAwACAAMAAAAVAAMAAwACAAMAAAAWAAMAAwACAAMAAAAXAAMAAwACAAMAAAAYAAMAAwACAAMAAAAZAAMAAwACAAMAAAAaAAQAAwABAAMAAAAbABMAAwABAAIAAAAbABIAAwABAAIAAAAbABEAAwABAAIAAAAbABAAAwABAAIAAAAbAA8AAwABAAIAAAAbAA4AAwABAAIAAAAbAA0AAwABAAIAAAAbAAwAAwABAAIAAAAbAAsAAwABAAIAAAAbAAoAAwABAAIAAAAbAAkAAwABAAIAAAAbAAgAAwABAAIAAAAbAAcAAwABAAIAAAAbAAYAAwABAAIAAAAbAAUAAwABAAIAAAAQAAAAAwACAAIAAAARAAAAAwACAAIAAAASAAAAAwACAAIAAAATAAAAAwACAAIAAAAUAAAAAwACAAIAAAAVAAAAAwACAAIAAAAWAAAAAwACAAIAAAAXAAAAAwACAAIAAAAYAAAAAwACAAIAAAAZAAAAAwACAAIAAAAaAAAAAwACAAIAAAAbAAAAAwACAAIAAAAcAAAAAwACAAIAAAAdAAAAAwACAAIAAAAdAAEAAwACAAIAAAAcAAMAAwACAAIAAAAbAAQAAwACAAIAAAAbAAMAAwACAAIAAAAaAAMAAwACAAIAAAAbAAIAAwACAAIAAAAZAAEAAwACAAIAAAAYAAEAAwACAAIAAAAXAAEAAwACAAIAAAAWAAEAAwACAAIAAAAVAAEAAwACAAIAAAAUAAEAAwACAAIAAAATAAEAAwACAAIAAAARAAEAAwACAAIAAAASAAEAAwACAAIAAAASAAIAAwACAAIAAAATAAIAAwACAAIAAAAUAAIAAwACAAIAAAAVAAIAAwACAAIAAAAWAAIAAwACAAIAAAAXAAIAAwACAAIAAAAYAAIAAwACAAIAAAAZAAIAAwACAAIAAAAaAAIAAwACAAIAAAAaAAEAAwACAAIAAAAbAAEAAwACAAIAAAAcAAEAAwACAAIAAAAcAAIAAwACAAIAAAAdAAIAAwACAAIAAAAdAAMAAwACAAIAAAAdAAQAAwACAAIAAAAdAAUAAwACAAIAAAAdAAYAAwACAAIAAAAdAAcAAwACAAIAAAAdAAgAAwACAAIAAAAdAAkAAwACAAIAAAAdAAoAAwACAAIAAAAdAAsAAwACAAIAAAAdAAwAAwACAAIAAAAdAA0AAwACAAIAAAAdAA4AAwACAAIAAAAdAA8AAwACAAIAAAAdABAAAwACAAIAAAAdABEAAwACAAIAAAAdABIAAwACAAIAAAAdABMAAwACAAIAAAAdABQAAwACAAIAAAAdABUAAwACAAIAAAAdABYAAwACAAIAAAAdABcAAwACAAIAAAAcABcAAwACAAIAAAAcABYAAwACAAIAAAAcABUAAwACAAIAAAAcABQAAwACAAIAAAAcABMAAwACAAIAAAAcABIAAwACAAIAAAAcABEAAwACAAIAAAAcABAAAwACAAIAAAAcAA8AAwACAAIAAAAcAA4AAwACAAIAAAAcAA0AAwACAAIAAAAcAAwAAwACAAIAAAAcAAsAAwACAAIAAAAcAAoAAwACAAIAAAAcAAkAAwACAAIAAAAcAAgAAwACAAIAAAAcAAcAAwACAAIAAAAcAAYAAwACAAIAAAAcAAUAAwACAAIAAAAcAAQAAwACAAIAAAAbABQAAwABAAIAAAAbABUAAwABAAIAAAAbABYAAwABAAIAAAAbABcAAwABAAIAAAA=")
 tile_set = ExtResource("2_2fpnw")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=731521975]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=512534986]
 
-[node name="Entities" type="Node2D" parent="." unique_id=621447284]
+[node name="Entities" type="Node2D" parent="." unique_id=595505819]
 
-[node name="AimerTurret0" type="Marker2D" parent="Entities" unique_id=32716422]
+[node name="AimerTurret0" type="Marker2D" parent="Entities" unique_id=496994440]
 position = Vector2(272, 48)
 script = ExtResource("3_312n6")
 kind = "AimerTurret"
 
-[node name="AimerTurret1" type="Marker2D" parent="Entities" unique_id=1585424434]
+[node name="AimerTurret1" type="Marker2D" parent="Entities" unique_id=2141475204]
 position = Vector2(688, 144)
 script = ExtResource("3_312n6")
 kind = "AimerTurret"
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=2108639989]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=2019466312]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_2fpnw")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1258148840]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=605496744]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=108775417]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1200630658]
 physics_material_override = SubResource("PhysicsMaterial_q7bxi")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=2010423733]
-shape = SubResource("SegmentShape2D_cogkh")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=289880851]
+position = Vector2(256, 32)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_cogkh")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=2046638102]
-shape = SubResource("SegmentShape2D_03epd")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1602660675]
+position = Vector2(512, 48)
+shape = SubResource("CapsuleShape2D_03epd")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1503695093]
-shape = SubResource("SegmentShape2D_nm3kk")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=233023887]
+position = Vector2(528, 64)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_nm3kk")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=240770538]
-shape = SubResource("SegmentShape2D_83rl5")
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1464098395]
+position = Vector2(544, 80)
+shape = SubResource("CapsuleShape2D_83rl5")
 
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls" unique_id=911109643]
-shape = SubResource("SegmentShape2D_jfgbc")
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls" unique_id=330920969]
+position = Vector2(560, 96)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_jfgbc")
 
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls" unique_id=283422690]
-shape = SubResource("SegmentShape2D_l8ie6")
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls" unique_id=1344844286]
+position = Vector2(576, 112)
+shape = SubResource("CapsuleShape2D_l8ie6")
 
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls" unique_id=2066876387]
-shape = SubResource("SegmentShape2D_im4jg")
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Walls" unique_id=1891993915]
+position = Vector2(704, 128)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_im4jg")
 
-[node name="CollisionShape2D8" type="CollisionShape2D" parent="Walls" unique_id=1556338696]
-shape = SubResource("SegmentShape2D_wonga")
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Walls" unique_id=1911043691]
+position = Vector2(832, 144)
+shape = SubResource("CapsuleShape2D_wonga")
 
-[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls" unique_id=1146085679]
-shape = SubResource("SegmentShape2D_umtrh")
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Walls" unique_id=753562729]
+position = Vector2(848, 160)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_umtrh")
 
-[node name="CollisionShape2D10" type="CollisionShape2D" parent="Walls" unique_id=1578683070]
-shape = SubResource("SegmentShape2D_gbhcd")
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Walls" unique_id=349511918]
+position = Vector2(864, 464)
+shape = SubResource("CapsuleShape2D_gbhcd")
 
-[node name="CollisionShape2D11" type="CollisionShape2D" parent="Walls" unique_id=112590506]
-shape = SubResource("SegmentShape2D_u3p08")
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="Walls" unique_id=900695484]
+position = Vector2(720, 768)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_u3p08")
 
-[node name="CollisionShape2D12" type="CollisionShape2D" parent="Walls" unique_id=1572062108]
-shape = SubResource("SegmentShape2D_kyifa")
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="Walls" unique_id=1163887667]
+position = Vector2(576, 688)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_kyifa")
 
-[node name="CollisionShape2D13" type="CollisionShape2D" parent="Walls" unique_id=1599365416]
-shape = SubResource("SegmentShape2D_f3vh1")
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="Walls" unique_id=988786345]
+position = Vector2(608, 608)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_f3vh1")
 
-[node name="CollisionShape2D14" type="CollisionShape2D" parent="Walls" unique_id=1929030729]
-shape = SubResource("SegmentShape2D_fr6eo")
+[node name="CollisionShape2D14" type="CollisionShape2D" parent="Walls" unique_id=1279300554]
+position = Vector2(624, 592)
+rotation = -3.9269907
+shape = SubResource("CapsuleShape2D_fr6eo")
 
-[node name="CollisionShape2D15" type="CollisionShape2D" parent="Walls" unique_id=457432142]
-shape = SubResource("SegmentShape2D_p8cc0")
+[node name="CollisionShape2D15" type="CollisionShape2D" parent="Walls" unique_id=1175951226]
+position = Vector2(560, 576)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_p8cc0")
 
-[node name="CollisionShape2D16" type="CollisionShape2D" parent="Walls" unique_id=1155400079]
-shape = SubResource("SegmentShape2D_gtk84")
+[node name="CollisionShape2D16" type="CollisionShape2D" parent="Walls" unique_id=296721250]
+position = Vector2(496, 592)
+rotation = 0.7853982
+shape = SubResource("CapsuleShape2D_gtk84")
 
-[node name="CollisionShape2D17" type="CollisionShape2D" parent="Walls" unique_id=423384414]
-shape = SubResource("SegmentShape2D_8r5ob")
+[node name="CollisionShape2D17" type="CollisionShape2D" parent="Walls" unique_id=1175655766]
+position = Vector2(512, 608)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_8r5ob")
 
-[node name="CollisionShape2D18" type="CollisionShape2D" parent="Walls" unique_id=766657462]
-shape = SubResource("SegmentShape2D_0v61t")
+[node name="CollisionShape2D18" type="CollisionShape2D" parent="Walls" unique_id=1590936331]
+position = Vector2(544, 688)
+shape = SubResource("CapsuleShape2D_0v61t")
 
-[node name="CollisionShape2D19" type="CollisionShape2D" parent="Walls" unique_id=236854506]
-shape = SubResource("SegmentShape2D_psm4n")
+[node name="CollisionShape2D19" type="CollisionShape2D" parent="Walls" unique_id=294806657]
+position = Vector2(368, 768)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_psm4n")
 
-[node name="CollisionShape2D20" type="CollisionShape2D" parent="Walls" unique_id=1957345526]
-shape = SubResource("SegmentShape2D_xg3hf")
+[node name="CollisionShape2D20" type="CollisionShape2D" parent="Walls" unique_id=1330717294]
+position = Vector2(192, 592)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_xg3hf")
 
-[node name="CollisionShape2D21" type="CollisionShape2D" parent="Walls" unique_id=1468030354]
-shape = SubResource("SegmentShape2D_w8xgy")
+[node name="CollisionShape2D21" type="CollisionShape2D" parent="Walls" unique_id=1991445756]
+position = Vector2(192, 400)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_w8xgy")
 
-[node name="CollisionShape2D22" type="CollisionShape2D" parent="Walls" unique_id=1485948512]
-shape = SubResource("SegmentShape2D_aisgw")
+[node name="CollisionShape2D22" type="CollisionShape2D" parent="Walls" unique_id=597350422]
+position = Vector2(224, 384)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_aisgw")
 
-[node name="CollisionShape2D23" type="CollisionShape2D" parent="Walls" unique_id=128306684]
-shape = SubResource("SegmentShape2D_kqkdh")
+[node name="CollisionShape2D23" type="CollisionShape2D" parent="Walls" unique_id=627710390]
+position = Vector2(240, 368)
+rotation = -3.9269907
+shape = SubResource("CapsuleShape2D_kqkdh")
 
-[node name="CollisionShape2D24" type="CollisionShape2D" parent="Walls" unique_id=35098738]
-shape = SubResource("SegmentShape2D_cctu0")
+[node name="CollisionShape2D24" type="CollisionShape2D" parent="Walls" unique_id=1970678458]
+position = Vector2(176, 352)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_cctu0")
 
-[node name="CollisionShape2D25" type="CollisionShape2D" parent="Walls" unique_id=815753077]
-shape = SubResource("SegmentShape2D_40jou")
+[node name="CollisionShape2D25" type="CollisionShape2D" parent="Walls" unique_id=2050446668]
+position = Vector2(112, 368)
+rotation = 0.7853982
+shape = SubResource("CapsuleShape2D_40jou")
 
-[node name="CollisionShape2D26" type="CollisionShape2D" parent="Walls" unique_id=934736040]
-shape = SubResource("SegmentShape2D_kmdfy")
+[node name="CollisionShape2D26" type="CollisionShape2D" parent="Walls" unique_id=589607402]
+position = Vector2(128, 384)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_kmdfy")
 
-[node name="CollisionShape2D27" type="CollisionShape2D" parent="Walls" unique_id=1302424605]
-shape = SubResource("SegmentShape2D_p4q3v")
+[node name="CollisionShape2D27" type="CollisionShape2D" parent="Walls" unique_id=407573058]
+position = Vector2(160, 576)
+shape = SubResource("CapsuleShape2D_p4q3v")
 
-[node name="CollisionShape2D28" type="CollisionShape2D" parent="Walls" unique_id=97345868]
-shape = SubResource("SegmentShape2D_7jjqy")
+[node name="CollisionShape2D28" type="CollisionShape2D" parent="Walls" unique_id=1067362326]
+position = Vector2(112, 768)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_7jjqy")
 
-[node name="CollisionShape2D29" type="CollisionShape2D" parent="Walls" unique_id=1436389595]
-shape = SubResource("SegmentShape2D_hcuak")
+[node name="CollisionShape2D29" type="CollisionShape2D" parent="Walls" unique_id=1308400333]
+position = Vector2(64, 544)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_hcuak")
 
-[node name="CollisionShape2D30" type="CollisionShape2D" parent="Walls" unique_id=444335984]
-shape = SubResource("SegmentShape2D_xrqqa")
+[node name="CollisionShape2D30" type="CollisionShape2D" parent="Walls" unique_id=93721295]
+position = Vector2(32, 320)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_xrqqa")
 
-[node name="CollisionShape2D31" type="CollisionShape2D" parent="Walls" unique_id=1603240372]
-shape = SubResource("SegmentShape2D_uetui")
+[node name="CollisionShape2D31" type="CollisionShape2D" parent="Walls" unique_id=1668304274]
+position = Vector2(0, 176)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_uetui")
 
-[node name="CollisionShape2D32" type="CollisionShape2D" parent="Walls" unique_id=1926704269]
-shape = SubResource("SegmentShape2D_puq81")
+[node name="CollisionShape2D32" type="CollisionShape2D" parent="Walls" unique_id=1378017967]
+position = Vector2(704, 112)
+rotation = -1.6951513
+shape = SubResource("CapsuleShape2D_puq81")
 
-[node name="CollisionShape2D33" type="CollisionShape2D" parent="Walls" unique_id=289787303]
-shape = SubResource("SegmentShape2D_7ahke")
+[node name="CollisionShape2D33" type="CollisionShape2D" parent="Walls" unique_id=413049949]
+position = Vector2(832, 112)
+shape = SubResource("CapsuleShape2D_7ahke")
 
-[node name="CollisionShape2D34" type="CollisionShape2D" parent="Walls" unique_id=1651125941]
-shape = SubResource("SegmentShape2D_gv48u")
+[node name="CollisionShape2D34" type="CollisionShape2D" parent="Walls" unique_id=141386180]
+position = Vector2(704, 112)
+rotation = -4.588034
+shape = SubResource("CapsuleShape2D_gv48u")
 
-[node name="CollisionShape2D35" type="CollisionShape2D" parent="Walls" unique_id=767978121]
-shape = SubResource("SegmentShape2D_v2mj8")
+[node name="CollisionShape2D35" type="CollisionShape2D" parent="Walls" unique_id=1005328286]
+position = Vector2(576, 112)
+shape = SubResource("CapsuleShape2D_v2mj8")
 
-[node name="CollisionShape2D36" type="CollisionShape2D" parent="Walls" unique_id=719052554]
-shape = SubResource("SegmentShape2D_q8ex4")
+[node name="CollisionShape2D36" type="CollisionShape2D" parent="Walls" unique_id=459600979]
+position = Vector2(688, 96)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_q8ex4")
 
-[node name="CollisionShape2D37" type="CollisionShape2D" parent="Walls" unique_id=847816900]
-shape = SubResource("SegmentShape2D_d1til")
+[node name="CollisionShape2D37" type="CollisionShape2D" parent="Walls" unique_id=1544046495]
+position = Vector2(816, 96)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_d1til")
 
-[node name="CollisionShape2D38" type="CollisionShape2D" parent="Walls" unique_id=599144102]
-shape = SubResource("SegmentShape2D_iej8d")
+[node name="CollisionShape2D38" type="CollisionShape2D" parent="Walls" unique_id=381675488]
+position = Vector2(384, 16)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_iej8d")
 
-[node name="CollisionShape2D39" type="CollisionShape2D" parent="Walls" unique_id=37564753]
-shape = SubResource("SegmentShape2D_kk27v")
+[node name="CollisionShape2D39" type="CollisionShape2D" parent="Walls" unique_id=1575882116]
+position = Vector2(256, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_kk27v")
 
-[node name="CollisionShape2D40" type="CollisionShape2D" parent="Walls" unique_id=1810362957]
-shape = SubResource("SegmentShape2D_xd3qm")
+[node name="CollisionShape2D40" type="CollisionShape2D" parent="Walls" unique_id=441685129]
+position = Vector2(128, 16)
+shape = SubResource("CapsuleShape2D_xd3qm")
 
-[node name="CollisionShape2D41" type="CollisionShape2D" parent="Walls" unique_id=671681268]
-shape = SubResource("SegmentShape2D_inx6j")
+[node name="CollisionShape2D41" type="CollisionShape2D" parent="Walls" unique_id=251573513]
+position = Vector2(256, 16)
+rotation = -1.6951513
+shape = SubResource("CapsuleShape2D_inx6j")
 
-[node name="CollisionShape2D42" type="CollisionShape2D" parent="Walls" unique_id=702859817]
-shape = SubResource("SegmentShape2D_re584")
+[node name="CollisionShape2D42" type="CollisionShape2D" parent="Walls" unique_id=715016872]
+position = Vector2(256, 16)
+rotation = -4.588034
+shape = SubResource("CapsuleShape2D_re584")

@@ -8,33 +8,33 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_wlcty"]
 friction = 0.5
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_28i1p"]
-a = Vector2(448, 0)
-b = Vector2(512, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_28i1p"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_wk267"]
-a = Vector2(512, 0)
-b = Vector2(512, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wk267"]
+radius = 0.5
+height = 769.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_g5kk8"]
-a = Vector2(512, 768)
-b = Vector2(448, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g5kk8"]
+radius = 0.5
+height = 65.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_ux647"]
-a = Vector2(448, 768)
-b = Vector2(448, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ux647"]
+radius = 0.5
+height = 769.0
 
-[node name="Room_4_8" type="Node2D" unique_id=2051557787]
+[node name="Room_4_8" type="Node2D" unique_id=284944298]
 script = ExtResource("1_2k1xa")
 grid_pos = Vector2i(4, 8)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=515802683]
+[node name="Background" type="TileMapLayer" parent="." unique_id=56259323]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_3b5v2")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1969755063]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1958330921]
 
-[node name="animations_448_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=317374962]
+[node name="animations_448_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=1991791106]
 position = Vector2(448, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -44,7 +44,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=663643205]
+[node name="animations_480_0" type="Sprite2D" parent="BackgroundAnimated" unique_id=1389856372]
 position = Vector2(480, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -54,7 +54,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=552805910]
+[node name="animations_448_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=1771436097]
 position = Vector2(448, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -64,7 +64,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=1798667731]
+[node name="animations_480_32" type="Sprite2D" parent="BackgroundAnimated" unique_id=1929307223]
 position = Vector2(480, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -74,7 +74,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=244888322]
+[node name="animations_448_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=753076459]
 position = Vector2(448, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -84,7 +84,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=1128518868]
+[node name="animations_480_64" type="Sprite2D" parent="BackgroundAnimated" unique_id=404852115]
 position = Vector2(480, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -94,7 +94,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=888858733]
+[node name="animations_448_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=2036228197]
 position = Vector2(448, 96)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -104,7 +104,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=1319042327]
+[node name="animations_480_96" type="Sprite2D" parent="BackgroundAnimated" unique_id=767577468]
 position = Vector2(480, 96)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -114,7 +114,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=1780718756]
+[node name="animations_448_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=618558237]
 position = Vector2(448, 128)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -124,7 +124,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=1412265159]
+[node name="animations_480_128" type="Sprite2D" parent="BackgroundAnimated" unique_id=140128570]
 position = Vector2(480, 128)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -134,7 +134,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=901186572]
+[node name="animations_448_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1533059060]
 position = Vector2(448, 160)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -144,7 +144,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=75259280]
+[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1180043723]
 position = Vector2(480, 160)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -154,7 +154,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1861159307]
+[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1819595237]
 position = Vector2(448, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -164,7 +164,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=454934806]
+[node name="animations_480_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1547876165]
 position = Vector2(480, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -174,7 +174,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=1326505924]
+[node name="animations_448_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=505097421]
 position = Vector2(448, 224)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -184,7 +184,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=351158580]
+[node name="animations_480_224" type="Sprite2D" parent="BackgroundAnimated" unique_id=2089215805]
 position = Vector2(480, 224)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -194,7 +194,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=1783362000]
+[node name="animations_448_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=518656510]
 position = Vector2(448, 256)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -204,7 +204,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=433076137]
+[node name="animations_480_256" type="Sprite2D" parent="BackgroundAnimated" unique_id=373346783]
 position = Vector2(480, 256)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -214,7 +214,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=2132808134]
+[node name="animations_448_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=619020501]
 position = Vector2(448, 320)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -224,7 +224,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=69065731]
+[node name="animations_480_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=855425698]
 position = Vector2(480, 288)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -234,7 +234,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=881066608]
+[node name="animations_448_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=1374546006]
 position = Vector2(448, 288)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -244,7 +244,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=1714937115]
+[node name="animations_448_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=1818834378]
 position = Vector2(448, 352)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -254,7 +254,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=157337959]
+[node name="animations_480_320" type="Sprite2D" parent="BackgroundAnimated" unique_id=562900770]
 position = Vector2(480, 320)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -264,7 +264,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=756835772]
+[node name="animations_480_352" type="Sprite2D" parent="BackgroundAnimated" unique_id=607524769]
 position = Vector2(480, 352)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -274,7 +274,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=716223706]
+[node name="animations_480_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=1121201547]
 position = Vector2(480, 384)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -284,7 +284,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=1823693017]
+[node name="animations_448_384" type="Sprite2D" parent="BackgroundAnimated" unique_id=2085472289]
 position = Vector2(448, 384)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -294,7 +294,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=861546165]
+[node name="animations_448_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=687554549]
 position = Vector2(448, 416)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -304,7 +304,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=1746123580]
+[node name="animations_480_416" type="Sprite2D" parent="BackgroundAnimated" unique_id=1633458775]
 position = Vector2(480, 416)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -314,7 +314,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=974580696]
+[node name="animations_480_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=1551334841]
 position = Vector2(480, 448)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -324,7 +324,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=1745302943]
+[node name="animations_448_448" type="Sprite2D" parent="BackgroundAnimated" unique_id=2102036621]
 position = Vector2(448, 448)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -334,7 +334,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=1352159996]
+[node name="animations_448_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=848119612]
 position = Vector2(448, 480)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -344,7 +344,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=1727664819]
+[node name="animations_480_480" type="Sprite2D" parent="BackgroundAnimated" unique_id=1531913081]
 position = Vector2(480, 480)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -354,7 +354,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=485782739]
+[node name="animations_448_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=1582068522]
 position = Vector2(448, 512)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -364,7 +364,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=860308129]
+[node name="animations_480_512" type="Sprite2D" parent="BackgroundAnimated" unique_id=226139754]
 position = Vector2(480, 512)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -374,7 +374,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=2136149137]
+[node name="animations_448_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=1770609290]
 position = Vector2(448, 544)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -384,7 +384,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=1479108471]
+[node name="animations_480_544" type="Sprite2D" parent="BackgroundAnimated" unique_id=803085406]
 position = Vector2(480, 544)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -394,7 +394,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=1342902740]
+[node name="animations_448_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=466736512]
 position = Vector2(448, 576)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -404,7 +404,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=843884927]
+[node name="animations_480_576" type="Sprite2D" parent="BackgroundAnimated" unique_id=1057510105]
 position = Vector2(480, 576)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -414,7 +414,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=735559755]
+[node name="animations_448_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1018390052]
 position = Vector2(448, 608)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -424,7 +424,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=298226470]
+[node name="animations_480_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1119803607]
 position = Vector2(480, 608)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -434,7 +434,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=709083103]
+[node name="animations_448_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=1441848890]
 position = Vector2(448, 640)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -444,7 +444,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=1197613623]
+[node name="animations_480_640" type="Sprite2D" parent="BackgroundAnimated" unique_id=430837462]
 position = Vector2(480, 640)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -454,7 +454,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=469747852]
+[node name="animations_448_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=181555086]
 position = Vector2(448, 672)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -464,7 +464,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=895892381]
+[node name="animations_480_672" type="Sprite2D" parent="BackgroundAnimated" unique_id=775809493]
 position = Vector2(480, 672)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -474,7 +474,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=919944773]
+[node name="animations_448_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=1056917975]
 position = Vector2(448, 704)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -484,7 +484,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=457828179]
+[node name="animations_480_704" type="Sprite2D" parent="BackgroundAnimated" unique_id=1000260882]
 position = Vector2(480, 704)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -494,7 +494,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_448_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=1279866379]
+[node name="animations_448_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=2010505859]
 position = Vector2(448, 736)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -504,7 +504,7 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="animations_480_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=1962596803]
+[node name="animations_480_736" type="Sprite2D" parent="BackgroundAnimated" unique_id=628402987]
 position = Vector2(480, 736)
 scale = Vector2(2, 2)
 texture = ExtResource("3_vqet0")
@@ -514,34 +514,41 @@ vframes = 4
 frame = 12
 script = ExtResource("4_2qals")
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=1909283424]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=1960731090]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAANAAAACQAFAAMAAAANAAEACQAFAAMAAAANAAIACQAFAAMAAAANAAMACQAFAAMAAAANAAQACQAFAAMAAAANAAUACQAFAAMAAAANAAYACQAFAAMAAAANAAcACQAFAAMAAAANAAgACQAFAAMAAAANAAkACQAFAAMAAAANAAoACQAFAAMAAAANAAsACQAFAAMAAAANAAwACQAFAAMAAAANAA0ACQAFAAMAAAANAA4ACQAFAAMAAAANAA8ACQAFAAMAAAANABAACQAFAAMAAAANABEACQAFAAMAAAANABIACQAFAAMAAAANABMACQAFAAMAAAANABQACQAFAAMAAAANABUACQAFAAMAAAANABYACQAFAAMAAAANABcACQAFAAMAAAAQAAAACQAFAAMAAAAQAAEACQAFAAMAAAAQAAIACQAFAAMAAAAQAAMACQAFAAMAAAAQAAQACQAFAAMAAAAQAAUACQAFAAMAAAAQAAYACQAFAAMAAAAQAAcACQAFAAMAAAAQAAgACQAFAAMAAAAQAAkACQAFAAMAAAAQAAoACQAFAAMAAAAQAAsACQAFAAMAAAAQAAwACQAFAAMAAAAQAA0ACQAFAAMAAAAQAA4ACQAFAAMAAAAQAA8ACQAFAAMAAAAQABAACQAFAAMAAAAQABEACQAFAAMAAAAQABIACQAFAAMAAAAQABMACQAFAAMAAAAQABQACQAFAAMAAAAQABUACQAFAAMAAAAQABYACQAFAAMAAAAQABcACQAFAAMAAAA=")
 tile_set = ExtResource("2_3b5v2")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1847919796]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=508151898]
 
-[node name="Entities" type="Node2D" parent="." unique_id=305356028]
+[node name="Entities" type="Node2D" parent="." unique_id=1600831214]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1555954607]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1250819162]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_3b5v2")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=666676946]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1256245807]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=412494876]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=2128695047]
 physics_material_override = SubResource("PhysicsMaterial_wlcty")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=700621830]
-shape = SubResource("SegmentShape2D_28i1p")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=245120479]
+position = Vector2(480, 0)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_28i1p")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1483427854]
-shape = SubResource("SegmentShape2D_wk267")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1250522365]
+position = Vector2(512, 384)
+shape = SubResource("CapsuleShape2D_wk267")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=278220650]
-shape = SubResource("SegmentShape2D_g5kk8")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=900414096]
+position = Vector2(480, 768)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_g5kk8")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1691215323]
-shape = SubResource("SegmentShape2D_ux647")
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=2054091033]
+position = Vector2(448, 384)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_ux647")

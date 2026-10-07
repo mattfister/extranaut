@@ -10,6 +10,7 @@ const MONSTER_SCENE := "res://entities/monsters/%s.tscn"
 const SRC_TILE := 16
 const ART_SCALE := Vector2(2, 2)
 const FOREGROUND_Z := 10
+const WALL_RADIUS := 0.5
 const LAYERS := ["background", "midground", "foreground"]
 
 const RoomScript := preload("res://world/room.gd")
@@ -136,11 +137,18 @@ func _build_walls(walls: Array) -> StaticBody2D:
 	material.friction = 0.5
 	body.physics_material_override = material
 	for w in walls:
-		var segment := SegmentShape2D.new()
-		segment.a = Vector2(w[0], w[1])
-		segment.b = Vector2(w[2], w[3])
+		var a := Vector2(w[0], w[1])
+		var b := Vector2(w[2], w[3])
+		# Thin capsules, not SegmentShape2D: segments report a sideways contact
+		# where a wall meets a floor, which stops bodies dead at ledges.
+		var capsule := CapsuleShape2D.new()
+		capsule.radius = WALL_RADIUS
+		capsule.height = a.distance_to(b) + WALL_RADIUS * 2.0
 		var shape := CollisionShape2D.new()
-		shape.shape = segment
+		shape.shape = capsule
+		shape.position = (a + b) / 2.0
+		# A capsule's long axis is its local Y axis.
+		shape.rotation = (b - a).angle() - PI / 2.0
 		body.add_child(shape, true)
 	return body
 

@@ -8,33 +8,34 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ym57v"]
 friction = 0.5
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_eq4hn"]
-b = Vector2(0, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_eq4hn"]
+radius = 0.5
+height = 769.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_wx356"]
-a = Vector2(0, 768)
-b = Vector2(960, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wx356"]
+radius = 0.5
+height = 961.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_pcgts"]
-a = Vector2(960, 768)
-b = Vector2(960, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pcgts"]
+radius = 0.5
+height = 769.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_mntr7"]
-a = Vector2(960, 0)
-b = Vector2(0, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mntr7"]
+radius = 0.5
+height = 961.0
 
-[node name="Room_4_0" type="Node2D" unique_id=155430991]
+[node name="Room_4_0" type="Node2D" unique_id=1503924925]
 script = ExtResource("1_3j17e")
 grid_pos = Vector2i(4, 0)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=462129606]
+[node name="Background" type="TileMapLayer" parent="." unique_id=1683689476]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAEABUABgAFAAEAAAALAAgABgAFAAEAAAAQABMABgAGAAIAAAAaAA4ABgAGAAIAAAAaAAMABgAGAAIAAAAaAAQABgAGAAEAAAANAAIABgAGAAEAAAACAAcABgAFAAEAAAAFAA8ABgAFAAEAAAAVAAoABgAFAAEAAAA=")
 tile_set = ExtResource("2_qvhcl")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1877628391]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=1232394321]
 
-[node name="animations_128_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1852193272]
+[node name="animations_128_608" type="Sprite2D" parent="BackgroundAnimated" unique_id=1489861102]
 position = Vector2(128, 608)
 scale = Vector2(2, 2)
 texture = ExtResource("3_nvnub")
@@ -43,7 +44,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_atab6")
 
-[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1106752976]
+[node name="animations_480_160" type="Sprite2D" parent="BackgroundAnimated" unique_id=1546577347]
 position = Vector2(480, 160)
 scale = Vector2(2, 2)
 texture = ExtResource("3_nvnub")
@@ -52,7 +53,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_atab6")
 
-[node name="animations_512_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=276254534]
+[node name="animations_512_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1437751271]
 position = Vector2(512, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_nvnub")
@@ -61,7 +62,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_atab6")
 
-[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=1888531703]
+[node name="animations_448_192" type="Sprite2D" parent="BackgroundAnimated" unique_id=740443039]
 position = Vector2(448, 192)
 scale = Vector2(2, 2)
 texture = ExtResource("3_nvnub")
@@ -70,7 +71,7 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_atab6")
 
-[node name="animations_384_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=1188970637]
+[node name="animations_384_288" type="Sprite2D" parent="BackgroundAnimated" unique_id=1158970524]
 position = Vector2(384, 288)
 scale = Vector2(2, 2)
 texture = ExtResource("3_nvnub")
@@ -79,33 +80,40 @@ hframes = 4
 vframes = 4
 script = ExtResource("4_atab6")
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=11177694]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=1796279379]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_qvhcl")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=288911004]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1726136428]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1963520304]
+[node name="Entities" type="Node2D" parent="." unique_id=1879760488]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1754350309]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1374113267]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_qvhcl")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1002998848]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1785136038]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=2068246842]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=90539719]
 physics_material_override = SubResource("PhysicsMaterial_ym57v")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1939671000]
-shape = SubResource("SegmentShape2D_eq4hn")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1264926612]
+position = Vector2(0, 384)
+shape = SubResource("CapsuleShape2D_eq4hn")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=2044623962]
-shape = SubResource("SegmentShape2D_wx356")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=316824498]
+position = Vector2(480, 768)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_wx356")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1233383570]
-shape = SubResource("SegmentShape2D_pcgts")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=746025413]
+position = Vector2(960, 384)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_pcgts")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=1622060294]
-shape = SubResource("SegmentShape2D_mntr7")
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=504002002]
+position = Vector2(480, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_mntr7")

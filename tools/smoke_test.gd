@@ -67,6 +67,10 @@ func _check_room(data: Dictionary) -> void:
 		"%s entity count is %d" % [path, room.get_node("Entities").get_child_count()]
 	)
 
+	for wall in room.get_node("Walls").get_children():
+		if not wall.shape is CapsuleShape2D:
+			_fail("%s has a wall that is not a capsule" % path)
+			break
 	_expect(room.get_node("Foreground").z_index == 10, "%s Foreground z_index" % path)
 	_expect(room.get_node("ForegroundAnimated").z_index == 10, "%s ForegroundAnimated z_index" % path)
 

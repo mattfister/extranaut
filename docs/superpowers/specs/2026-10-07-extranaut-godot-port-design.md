@@ -102,8 +102,8 @@ Each room scene contains:
 - `TileMapLayer` nodes `Background`, `Midground`, `Foreground`. Dynamic
   entities draw between midground and foreground, as in the original.
 - Animated tile sprites on the matching layer.
-- `Walls`, a `StaticBody2D` with one `SegmentShape2D` per wall segment,
-  friction 0.5.
+- `Walls`, a `StaticBody2D` with one thin `CapsuleShape2D` (radius 0.5) per
+  wall segment, friction 0.5. Segment shapes snag bodies at wall joints.
 - Monster scene instances at their spawn positions.
 - Exported properties on the room root: grid position, music, player start.
 
@@ -121,7 +121,9 @@ Each room scene contains:
   ceiling); 0.8 for DefenseTurretVertical.
 - Collision handling uses contact monitoring in place of the pymunk callback.
   Player shots do not collide with the player (the original collision group).
-- Projectiles use continuous collision detection.
+- The player and projectiles use cast-ray continuous collision detection.
+- Walls drawn on room borders contain monsters and shots but never block the
+  player from leaving a room, as in the original.
 
 Monsters:
 

@@ -74,7 +74,7 @@ Player: layer 2, mask 1 + 4 + 16 = 21. Player shot: layer 8, mask 21.
 
 - The player has `lock_rotation` and friction 0. The original body could roll, so wall friction never slowed it; zero friction on a non-rotating body gives the same result.
 - The player has `can_sleep = false`, because `_integrate_forces` is not called on a sleeping body and input would be ignored.
-- Player and shots use `continuous_cd = 2` (cast shape). A long fall exceeds 16 px per physics frame, which would otherwise pass through a wall segment.
+- Player and shots use `continuous_cd = 1` (cast ray). A long fall exceeds 16 px per physics frame, which would otherwise pass through a wall segment.
 
 ## File structure
 
@@ -449,7 +449,7 @@ mass = 20.0
 physics_material_override = SubResource("material")
 gravity_scale = 0.0
 lock_rotation = true
-continuous_cd = 2
+continuous_cd = 1
 contact_monitor = true
 max_contacts_reported = 4
 script = ExtResource("1")
@@ -581,7 +581,7 @@ mass = 20.0
 physics_material_override = SubResource("material")
 can_sleep = false
 lock_rotation = true
-continuous_cd = 2
+continuous_cd = 1
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -960,11 +960,11 @@ Expected: `campaign test passed` and `exit=0`.
 - [ ] **Step 7: Look at it**
 
 ```bash
-mkdir -p build/shots
-"$GODOT" --path . -- --shot="$(pwd -W)/build/shots/campaign_start.png" 2>&1 | grep -i error
+mkdir -p ../extranaut-shots
+"$GODOT" --path . -- --shot="$(pwd -W)/../extranaut-shots/campaign_start.png" 2>&1 | grep -i error
 ```
 
-Open `build/shots/campaign_start.png`. Check: the player sprite stands on the ground near the middle of room (4, 2); the right 64 px is black with a `FUEL 2000` label; no collision debug lines are drawn.
+Open `../extranaut-shots/campaign_start.png`. Check: the player sprite stands on the ground near the middle of room (4, 2); the right 64 px is black with a `FUEL 2000` label; no collision debug lines are drawn.
 
 - [ ] **Step 8: Run every check**
 
@@ -992,3 +992,15 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Running the project starts in room (4, 2) with a controllable player: arrows or A/D to run, up or W to jetpack, Z, X or Space to fire.
 - Crossing a room edge slides the camera to the next room.
 - The author has played it and reported how movement, thrust and transitions feel. Tuning values are the exported properties on `entities/player/player.gd`, the constants in `entities/player/jetpack.gd`, and `SLIDE_TIME` in `scenes/campaign.gd`.
+
+## Changes made during execution
+
+The headless play test failed on first run and exposed three problems. The code blocks above for `tools/import_world.gd`, `scenes/campaign.gd` and `tools/test_campaign.gd` predate these fixes; the committed files are authoritative.
+
+1. **Walls are thin capsules, not segments.** `SegmentShape2D` reports a sideways contact where a vertical wall meets a floor, which stopped the player dead at every ledge. The importer now builds a `CapsuleShape2D` of radius 0.5 per wall segment. The smoke test checks every wall shape is a capsule.
+2. **Continuous collision uses cast ray (mode 1), not cast shape (mode 2).** With cast shape or with CCD off, a fall at 1,500 px/s passed through the floor. With cast ray the floor holds at 4,000 px/s. The play test covers both speeds.
+3. **Horizontal exit thresholds moved 1 px inward.** Many rooms have walls on their borders, including both sides of the start room, although the terrain continues at the same height next door. In the original the exit threshold was reached at the moment the player touched such a wall, so these walls only contained monsters and shots. With capsule walls the player stopped 0.4 px short. Exits are now: right at x >= 943, left at x < 17, down at y >= 742, up at y < 27. Entry positions are (17, y) and (943, y) horizontally; vertical entries are unchanged.
+4. **Jetpack restart level is 500, not 400.** With fuel clamped at zero, 400 gave a 4 to 5% overshoot in reach; 500 is within about 1%.
+5. **Play test adjustments.** The run check lasts 20 frames and asserts the player gets past the ledge at x = 512. The shot count is checked after 3 frames, before the shot can hit a wall.
+6. **Screenshots are written outside the project.** PNGs under `build/` were being imported by Godot.
+

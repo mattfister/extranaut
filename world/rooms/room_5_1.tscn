@@ -6,59 +6,67 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_gffq7"]
 friction = 0.5
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_tx61o"]
-a = Vector2(0, 768)
-b = Vector2(960, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tx61o"]
+radius = 0.5
+height = 961.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_27wg4"]
-a = Vector2(960, 768)
-b = Vector2(960, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_27wg4"]
+radius = 0.5
+height = 769.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_sqx1e"]
-a = Vector2(960, 0)
-b = Vector2(0, 0)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sqx1e"]
+radius = 0.5
+height = 961.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_gku5c"]
-b = Vector2(0, 768)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gku5c"]
+radius = 0.5
+height = 769.0
 
-[node name="Room_5_1" type="Node2D" unique_id=676480565]
+[node name="Room_5_1" type="Node2D" unique_id=1463234156]
 script = ExtResource("1_7p2x0")
 grid_pos = Vector2i(5, 1)
 
-[node name="Background" type="TileMapLayer" parent="." unique_id=1442364447]
+[node name="Background" type="TileMapLayer" parent="." unique_id=368746521]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAADAAoABgAFAAEAAAAUAAUABgAGAAEAAAAVABAABgAGAAIAAAAUABAABgAGAAIAAAAJABMABgAFAAIAAAAKAAQABgAFAAIAAAAZAAMABgAFAAIAAAA=")
 tile_set = ExtResource("2_l5lsk")
 
-[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=649710548]
+[node name="BackgroundAnimated" type="Node2D" parent="." unique_id=445267394]
 
-[node name="Midground" type="TileMapLayer" parent="." unique_id=492564772]
+[node name="Midground" type="TileMapLayer" parent="." unique_id=1036917268]
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_l5lsk")
 
-[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=1562982213]
+[node name="MidgroundAnimated" type="Node2D" parent="." unique_id=2113176295]
 
-[node name="Entities" type="Node2D" parent="." unique_id=1136608079]
+[node name="Entities" type="Node2D" parent="." unique_id=1975120166]
 
-[node name="Foreground" type="TileMapLayer" parent="." unique_id=1542303428]
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=1127471050]
 z_index = 10
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_l5lsk")
 
-[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=1974606603]
+[node name="ForegroundAnimated" type="Node2D" parent="." unique_id=979231114]
 z_index = 10
 
-[node name="Walls" type="StaticBody2D" parent="." unique_id=1855816120]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1419676754]
 physics_material_override = SubResource("PhysicsMaterial_gffq7")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=426680032]
-shape = SubResource("SegmentShape2D_tx61o")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=2022064913]
+position = Vector2(480, 768)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_tx61o")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=2131572662]
-shape = SubResource("SegmentShape2D_27wg4")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=1793574526]
+position = Vector2(960, 384)
+rotation = -3.1415927
+shape = SubResource("CapsuleShape2D_27wg4")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1026034675]
-shape = SubResource("SegmentShape2D_sqx1e")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=374581298]
+position = Vector2(480, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_sqx1e")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=525493235]
-shape = SubResource("SegmentShape2D_gku5c")
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls" unique_id=42559608]
+position = Vector2(0, 384)
+shape = SubResource("CapsuleShape2D_gku5c")
