@@ -4,6 +4,12 @@ extends "res://entities/monsters/monster.gd"
 
 const FUEL_BONUS := 500.0
 const MAX_GUN_LEVEL := 4
+const SOUNDS := {
+	"hp": "armorUpgrade",
+	"fuel": "jetpackUpgrade",
+	"gun": "gunUpgrade",
+	"artifact": "alienArtifactAcquired",
+}
 
 ## One of "hp", "fuel", "gun", "artifact".
 @export var kind := "hp"
@@ -29,5 +35,6 @@ func apply_powerup(player: Node2D) -> void:
 			player.gun_level = mini(player.gun_level + 1, MAX_GUN_LEVEL)
 		"artifact":
 			player.artifacts += 1
+	get_tree().call_group("audio", "play", SOUNDS[kind])
 	save_requested.emit(self)
 	die()

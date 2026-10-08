@@ -56,33 +56,37 @@ HEAVY = dict(mass=40000, friction=40000)
 DOOR = dict(px=32, radius=32, mass=20000, friction=100, damaged_by_shots=False, anim_frames=2)
 BOSS = dict(px=32, radius=32, mass=200, damages_player_on_touch=True)
 POWERUP = dict(is_powerup=True, damaged_by_shots=False, **HEAVY)
+ALIEN = dict(death_sound="deadAlien")
+BOT = dict(death_sound="explode", death_particles=40)
+BIG = dict(death_sound="explode", death_particles=100)
 
 MONSTERS = [
-    monster("ball_monster", "ball_monster", "animations/ballMonster", lock=False),
+    monster("ball_monster", "ball_monster", "animations/ballMonster", lock=False, **ALIEN),
     monster("spiky_ball_monster", "ball_monster", "animations/ballMonster", frame=(0, 2),
-            lock=False, damages_player_on_touch=True),
-    monster("jump_bot", "jump_bot", "animations/bots2", damages_player_on_touch=True, anim_frames=1),
+            lock=False, damages_player_on_touch=True, **ALIEN),
+    monster("jump_bot", "jump_bot", "animations/bots2", damages_player_on_touch=True, anim_frames=1, **BOT),
     monster("flyer", "flyer", "animations/ballMonster", frame=(0, 3), gravity=-1.0,
-            damages_player_on_touch=True),
+            damages_player_on_touch=True, **ALIEN),
     monster("fly_bot", "fly_bot", "animations/bots", gravity=-0.1, max_hp=3,
-            damages_player_on_touch=True),
+            damages_player_on_touch=True, **BOT),
     monster("boss_bot_1", "fly_bot", "animations/bossBots", gravity=-0.1, max_hp=6,
-            damages_player_on_touch=True, drift_interval_max=0.075, drift_up_max=0.0),
+            damages_player_on_touch=True, drift_interval_max=0.075, drift_up_max=0.0, **BOT),
     monster("boss_bot_2", "fly_bot", "animations/bossBots", frame=(0, 1), gravity=-0.1, max_hp=6,
             damages_player_on_touch=True, first_fire_delay=1.0, fire_interval=0.5,
-            random_spread=True),
+            random_spread=True, **BOT),
     monster("boss_bot_3", "fly_bot", "animations/bossBots", frame=(0, 2), gravity=-0.1, max_hp=10,
-            damages_player_on_touch=True),
+            damages_player_on_touch=True, **BOT),
     monster("aimer_turret", "aimer_turret", "animations/bots2", frame=(0, 2), mass=1000,
-            gravity=-1.0, damages_player_on_touch=True, anim_frames=2),
+            gravity=-1.0, damages_player_on_touch=True, anim_frames=2, **BOT),
     monster("defense_turret_vertical", "defense_turret_vertical", "animations/turret", mass=5,
-            gravity=0.8),
+            gravity=0.8, death_sound="explode"),
     monster("hover_block", "hover_block", "sprites/chaosBlocks", frame=(1, 4), mass=4000,
             friction=20, gravity=0.0, anim_frames=1),
     monster("hand_bot", "hand_bot", "animations/bigBots1", px=32, radius=32, mass=200, max_hp=5,
-            damages_player_on_touch=True, anim_frames=2),
+            damages_player_on_touch=True, anim_frames=2, **BOT),
     monster("spiky_head_monster", "spiky_head_monster", "animations/snakeHeadBoss", frame=(0, 4),
-            lock=False, damages_player_on_touch=True, damaged_by_shots=False, anim_frames=1),
+            lock=False, damages_player_on_touch=True, damaged_by_shots=False, anim_frames=1,
+            death_sound="explode"),
     monster("artifact_door", "artifact_door", "animations/artifactDoor", **DOOR),
     monster("monster_door", "monster_door", "animations/artifactDoor", frame=(0, 1), **DOOR),
     monster("monster_door_2", "monster_door", "animations/artifactDoor", frame=(0, 1),
@@ -94,13 +98,14 @@ MONSTERS = [
     monster("alien_artifact", "powerup", "animations/collectibles", frame=(0, 1), kind="artifact",
             **POWERUP),
     monster("orb_boss", "orb_boss", "animations/orbBoss", lock=False, max_hp=20, anim_frames=2,
-            **BOSS),
+            **BOSS, **BIG),
     monster("fallen_extranaut", "orb_boss", "animations/fallenExtranaut", lock=False, max_hp=20,
             grenade_offset=(32, 30), lob_grenades=False, fires_when_chasing=True,
-            row_per_mode=False, **BOSS),
+            row_per_mode=False, **BOSS, **BIG),
     monster("octo_boss", "octo_boss", "animations/octoBoss", gravity=0.0, max_hp=20,
-            anim_frames=1, **BOSS),
-    monster("head_boss", "head_boss", "animations/snakeHeadBoss", max_hp=15, anim_frames=1, **BOSS),
+            anim_frames=1, **BOSS, **BIG),
+    monster("head_boss", "head_boss", "animations/snakeHeadBoss", max_hp=15, anim_frames=1,
+            death_sound="explode", death_particles=200, **BOSS),
 ]
 
 

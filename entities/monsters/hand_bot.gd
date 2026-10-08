@@ -13,3 +13,4 @@ func _behave(delta: float, player: Node2D) -> void:
 	var corner := player_corner(player)
 	if absf(global_position.x - corner.x) < NEAR_X and corner.y < global_position.y:
 		apply_central_impulse(Vector2(0.0, -LIFT * delta * 60.0))
+		exhaust(delta, 32.0, 1)

@@ -16,6 +16,9 @@ const SHOT_MASS := 20.0
 const AIM_IMPULSE := 7000.0
 ## The original measured the player from its sprite's top-left corner.
 const PLAYER_CORNER_OFFSET := Vector2(-16, -16)
+const EXHAUST_INTERVAL := 0.03
+## Deaths with at least this many particles shake the screen hard.
+const BIG_EXPLOSION := 100
 
 @export var max_hp := 1
 @export var damages_player_on_touch := false
@@ -23,6 +26,10 @@ const PLAYER_CORNER_OFFSET := Vector2(-16, -16)
 @export var is_powerup := false
 ## Marks the room on the map once the player has been there.
 @export var is_save_point := false
+## Sound played on death, or empty for none.
+@export var death_sound := ""
+## Explosion particles emitted on death.
+@export var death_particles := 0
 ## Frames in the looping animation along the sprite row. 1 disables it.
 @export var anim_frames := 4
 
@@ -30,6 +37,7 @@ var hp := 1
 
 var _hit_timeout := HIT_TIMEOUT
 var _frame_elapsed := 0.0
+var _exhaust_timer := 0.0
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -67,10 +75,32 @@ func hit() -> void:
 	hp -= 1
 	if hp <= 0:
 		die()
+	else:
+		get_tree().call_group("audio", "play", "hit")
 
 
 func die() -> void:
+	if is_queued_for_deletion():
+		return
+	if death_sound != "":
+		get_tree().call_group("audio", "play", death_sound)
+	if death_particles > 0:
+		emit_particles("explosion", Vector2.ZERO, death_particles)
+		get_tree().call_group("screen_fx", "shake", 0.8 if death_particles >= BIG_EXPLOSION else 0.3)
 	queue_free()
+
+
+func emit_particles(kind: String, offset: Vector2, amount: int) -> void:
+	get_tree().call_group("particle_field", "emit", kind, global_position + offset, amount)
+
+
+## Call every frame to leave a trail of exhaust below the monster: up to
+## max_amount particles every EXHAUST_INTERVAL, drop pixels below its centre.
+func exhaust(delta: float, drop: float, max_amount: int) -> void:
+	_exhaust_timer -= delta
+	if _exhaust_timer < 0.0:
+		_exhaust_timer = EXHAUST_INTERVAL
+		emit_particles("exhaust", Vector2(randf_range(-4.0, 4.0), drop), randi_range(1, max_amount))
 
 
 ## Monster-class entities still alive in this room, this one included.

@@ -22,6 +22,7 @@ script = ExtResource("1")
 damages_player_on_touch = true
 damaged_by_shots = false
 anim_frames = 1
+death_sound = "explode"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("shape")

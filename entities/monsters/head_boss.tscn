@@ -21,6 +21,8 @@ max_contacts_reported = 8
 script = ExtResource("1")
 max_hp = 15
 anim_frames = 1
+death_sound = "explode"
+death_particles = 200
 damages_player_on_touch = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

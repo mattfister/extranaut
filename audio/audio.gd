@@ -1,6 +1,9 @@
 extends Node
 ## Autoload "Audio": sound effects and crossfading music. Names are file
 ## names in assets/sounds without the extension.
+## Callers reach it through the "audio" group, not the global name, which
+## is not defined when scripts are compiled by a headless --script run:
+##   get_tree().call_group("audio", "play", "shoot")
 
 const SOUND_PATH := "res://assets/sounds/%s.ogg"
 const SFX_PLAYER_COUNT := 8
@@ -25,6 +28,7 @@ var _fade: Tween
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_to_group("audio")
 	for i in SFX_PLAYER_COUNT:
 		var player := AudioStreamPlayer.new()
 		player.volume_db = SFX_VOLUME_DB

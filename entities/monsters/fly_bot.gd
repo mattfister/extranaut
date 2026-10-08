@@ -25,6 +25,7 @@ func _ready() -> void:
 
 
 func _behave(delta: float, _player: Node2D) -> void:
+	exhaust(delta, 14.0, 5)
 	_drift_timer -= delta
 	if _drift_timer < 0.0:
 		_drift_timer = randf_range(0.0, drift_interval_max)

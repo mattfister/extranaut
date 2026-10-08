@@ -18,6 +18,7 @@ var _failures := 0
 var _arena: Node2D
 var _entities: Node2D
 var _player: RigidBody2D
+var _field: Node2D
 ## One entry per shot fired in the current arena, recorded when it was fired.
 var _shot_log: Array[Dictionary] = []
 var _saves: Array[Node] = []
@@ -45,6 +46,7 @@ func _run() -> void:
 		"enemy_shots": _test_enemy_shots,
 		"player_death": _test_player_death,
 		"movers": _test_movers,
+		"effects": _test_effects,
 	}
 	for section_name in sections:
 		if only == "" or section_name.contains(only):
@@ -266,6 +268,47 @@ func _test_movers() -> void:
 	_expect(highest < REST_Y - 20.0, "a jump bot jumps")
 
 
+func _test_effects() -> void:
+	_new_arena()
+	var audio: Node = root.get_node("Audio")
+	var bot := _spawn("jump_bot", Vector2(300, REST_Y))
+	bot.hit()
+	_expect(_field.count() == 40, "a dying jump bot emits 40 particles, got %d" % _field.count())
+	_expect(audio.is_playing("explode"), "a dying bot plays explode")
+	_field.clear()
+
+	var ball := _spawn("ball_monster", Vector2(400, REST_Y))
+	ball.hit()
+	_expect(_field.count() == 0, "a dying ball monster emits no particles")
+	_expect(audio.is_playing("deadAlien"), "a dying ball monster plays deadAlien")
+
+	var flyer := _spawn("fly_bot", Vector2(600, 300))
+	flyer.hit()
+	_expect(audio.is_playing("hit"), "a monster that survives a hit plays hit")
+	await _frames(10)
+	_expect(_field.count() > 0, "a fly bot leaves exhaust")
+	flyer.free()
+
+	await _frames(30)
+	_field.clear()
+	Input.action_press("jetpack")
+	await _frames(10)
+	Input.action_release("jetpack")
+	_expect(_field.count() > 0, "the jetpack leaves particles")
+	_expect(audio.is_playing("jet"), "the jetpack plays jet")
+
+	var started := [0]
+	_player.death_started.connect(func() -> void: started[0] += 1)
+	_player.hp = 1
+	_player.hit()
+	_expect(started[0] == 1, "death_started is emitted when hp reaches zero")
+
+	_new_arena()
+	_launch(EnergyGrenadeScene, Vector2(400, REST_Y - 30.0), Vector2.ZERO)
+	await _frames(200)
+	_expect(_field.count() >= 10, "an exploding grenade bursts into at least 10 particles, got %d" % _field.count())
+
+
 func _new_arena(player_pos := PLAYER_REST) -> void:
 	if _arena != null:
 		root.remove_child(_arena)
@@ -287,6 +330,8 @@ func _new_arena(player_pos := PLAYER_REST) -> void:
 	_player.position = player_pos
 	_player.shot_fired.connect(_add_shot)
 	_arena.add_child(_player)
+	_field = load("res://effects/particle_field.gd").new()
+	_arena.add_child(_field)
 	root.add_child(_arena)
 
 

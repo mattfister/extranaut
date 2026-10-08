@@ -10,6 +10,7 @@ var _lurch_timer := 2.0
 
 
 func _behave(delta: float, player: Node2D) -> void:
+	exhaust(delta, 32.0, 1)
 	_shoot_timer -= delta
 	if _shoot_timer <= 0.0 and player != null:
 		_shoot_timer = 1.0

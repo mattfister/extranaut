@@ -18,7 +18,7 @@ func _physics_process(delta: float) -> void:
 	if _fuse >= 0.0:
 		_fuse -= delta
 		if _fuse < 0.0:
-			queue_free()
+			_explode()
 
 
 func _on_body_entered(body: Node) -> void:
@@ -26,4 +26,11 @@ func _on_body_entered(body: Node) -> void:
 		if _fuse < 0.0:
 			_fuse = FUSE
 	else:
-		queue_free()
+		_explode()
+
+
+func _explode() -> void:
+	if is_queued_for_deletion():
+		return
+	get_tree().call_group("particle_field", "emit", "energy", global_position, randi_range(10, 20))
+	queue_free()

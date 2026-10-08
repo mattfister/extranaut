@@ -23,6 +23,8 @@ max_hp = 6
 damages_player_on_touch = true
 drift_interval_max = 0.075
 drift_up_max = 0.0
+death_sound = "explode"
+death_particles = 40
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("shape")

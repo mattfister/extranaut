@@ -20,6 +20,7 @@ contact_monitor = true
 max_contacts_reported = 8
 script = ExtResource("1")
 damages_player_on_touch = true
+death_sound = "deadAlien"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("shape")

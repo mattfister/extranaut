@@ -4,6 +4,8 @@ extends RigidBody2D
 signal shot_fired(shot: RigidBody2D)
 ## Emitted once, DEATH_TIME after hp reaches zero.
 signal died
+## Emitted at the moment hp reaches zero.
+signal death_started
 
 const Jetpack := preload("res://entities/player/jetpack.gd")
 const EnergyBallScene := preload("res://entities/projectiles/energy_ball.tscn")
@@ -21,6 +23,9 @@ const FLASH_PERIOD := 0.06
 ## The original waited 5 s before respawning.
 const DEATH_TIME := 2.0
 const DEAD_ROW_OFFSET := 2
+const JET_PUFF_INTERVAL := 0.03
+## Where jet particles appear relative to the centre, facing right.
+const JET_OFFSET := Vector2(-6, 14)
 
 @export var run_speed := 200.0
 ## The original set horizontal velocity instantly; this reaches run_speed in 80 ms.
@@ -40,6 +45,9 @@ var _fire_cooldown := 0.0
 var _walk_elapsed := 0.0
 var _hit_timeout := 0.0
 var _death_timer := 0.0
+var _wants_thrust := false
+var _thrusting := false
+var _jet_puff_timer := 0.0
 
 @onready var _sprite: Sprite2D = $Sprite2D
 
@@ -57,8 +65,12 @@ func hit() -> void:
 		return
 	hp -= 1
 	_hit_timeout = HIT_INVULNERABLE_TIME
+	get_tree().call_group("audio", "play", "hit")
+	get_tree().call_group("screen_fx", "shake", 0.5)
+	get_tree().call_group("screen_fx", "flash")
 	if is_dead():
 		_death_timer = DEATH_TIME
+		death_started.emit()
 
 
 ## Restores the player after death. The caller positions it.
@@ -81,7 +93,9 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		facing = int(direction)
 	var velocity := state.linear_velocity
 	velocity.x = move_toward(velocity.x, direction * run_speed, run_accel * state.step)
-	if jetpack.step(state.step, wants_thrust):
+	_wants_thrust = wants_thrust
+	_thrusting = jetpack.step(state.step, wants_thrust)
+	if _thrusting:
 		velocity.y -= thrust_accel * state.step
 	state.linear_velocity = velocity
 
@@ -98,6 +112,7 @@ func _physics_process(delta: float) -> void:
 		_fire_cooldown = maxf(_fire_cooldown - delta, 0.0)
 		if Input.is_action_pressed("fire") and _fire_cooldown <= 0.0:
 			_fire()
+		_puff_jet(delta)
 	_animate(delta)
 
 
@@ -114,12 +129,27 @@ func _check_contacts() -> void:
 				body.apply_powerup(self)
 
 
+## Flame and the jet sound while thrusting; smoke and a sputter while the
+## button is held on an empty tank.
+func _puff_jet(delta: float) -> void:
+	if not _wants_thrust:
+		return
+	_jet_puff_timer -= delta
+	if _jet_puff_timer >= 0.0:
+		return
+	_jet_puff_timer = JET_PUFF_INTERVAL
+	var at := global_position + Vector2(JET_OFFSET.x * facing, JET_OFFSET.y)
+	get_tree().call_group("particle_field", "emit", "jet_fire" if _thrusting else "jet_smoke", at, randi_range(1, 5))
+	get_tree().call_group("audio", "play_if_idle", "jet" if _thrusting else "packEmpty")
+
+
 func _fire() -> void:
 	var shot: RigidBody2D = EnergyBallScene.instantiate()
 	shot.position = global_position + Vector2(MUZZLE_OFFSET.x * facing, MUZZLE_OFFSET.y)
 	shot.linear_velocity = Vector2(shot_speed * facing, 0.0)
 	shot_fired.emit(shot)
 	_fire_cooldown = FIRE_COOLDOWNS[clampi(gun_level, 1, MAX_GUN_LEVEL) - 1]
+	get_tree().call_group("audio", "play", "shoot")
 
 
 func _animate(delta: float) -> void:
