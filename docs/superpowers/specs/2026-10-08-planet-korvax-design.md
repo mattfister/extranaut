@@ -211,6 +211,34 @@ order going deeper so the two of a kind are far apart:
 
 Set pieces never hold a door, a treasure or a save point.
 
+## Structure: four areas, then the final one
+
+Revised to match how Zorta is won. The planet is shown to the player as
+"Zorta Depths"; its id, files and saves keep the name korvax.
+
+- The last zone in `worldmap.ZONES`, boiling point, is the final area: the
+  artifact door's room and everything behind it, six to fourteen rooms.
+- The other four zones share the rest of the map, each grown from a seed
+  room over the bare maze so it is one connected piece of at least ten rooms.
+- Each of those four zones has one boss, in the dead end deepest inside it,
+  guarding that zone's artifact. Nearest zone first, the bosses are OrbBoss,
+  HeadBoss, OctoBoss and, as on Zorta, the three BossBots together.
+- The Fallen Extranaut is the final boss, in the final room with two BossBot1
+  escorts. The way out, a hole in the floor, is in a tunnel plugged by a
+  MonsterDoor, which opens when nothing else in the room is left alive.
+- The room before each boss, and before the final room, has a save point.
+  More are added until no room is over six from one, to a limit of 14.
+
+Boss rooms and the final room are arenas rather than caves: one chamber
+about nineteen cells wide and twelve high with a flat floor, two side ledges
+and a higher centre ledge, no slopes and no other hostiles. The vault with
+the artifact (or the way out) opens off the floor on the side away from the
+entrance, and the player appears in the far corner from it.
+
+This supersedes the earlier notes above on where bosses go, on the Fallen
+Extranaut being one of four artifact guardians, and on the final room being
+an ordinary room with a hole in its floor.
+
 ## Decorations
 
 A last pass, `planet_gen/decor.py`, dresses each finished room with tiles and

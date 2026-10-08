@@ -23,6 +23,7 @@ func _run() -> void:
 	await process_frame
 	await _check_climbs()
 	await _check_gate()
+	await _check_final_boss()
 	await _check_final_room()
 	print("korvax test passed" if _failures == 0 else "korvax test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
@@ -94,6 +95,39 @@ func _check_gate() -> void:
 		player.artifacts = 4
 		await _frames(5)
 		_expect(not is_instance_valid(door), "the artifact door opens with 4 artifacts")
+	await _stop(campaign)
+
+
+## The way out of the final room stays plugged until the final boss and its
+## escorts are dead.
+func _check_final_boss() -> void:
+	var data := _room_of_kind("final")
+	var campaign := _start(Vector2i(int(data.x), int(data.y)))
+	var player: RigidBody2D = campaign.get_node("Player")
+	var entities: Node = campaign.room.get_node("Entities")
+	var door: RigidBody2D
+	var boss: Node
+	for entity in entities.get_children():
+		if entity.name.begins_with("MonsterDoor"):
+			door = entity
+		elif entity.name.begins_with("FallenExtranaut"):
+			boss = entity
+	_expect(door != null and boss != null, "the final room has a door and the final boss")
+	if door != null and boss != null:
+		var door_start := door.position
+		for i in 180:
+			await physics_frame
+			# Keep the player alive while the fight goes on around it.
+			player.hp = player.max_hp
+		_expect(is_instance_valid(door) and door.position.distance_to(door_start) < 4.0, "the way out stays plugged while the boss lives")
+		for entity in entities.get_children():
+			if entity != door and entity != boss and is_instance_valid(entity):
+				entity.die()
+		await _frames(5)
+		_expect(is_instance_valid(door), "killing the escorts alone does not open the way out")
+		boss.die()
+		await _frames(5)
+		_expect(not is_instance_valid(door), "the way out opens when the final boss is dead")
 	await _stop(campaign)
 
 

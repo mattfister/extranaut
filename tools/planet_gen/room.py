@@ -8,7 +8,7 @@ import random
 
 from . import reach
 from .reach import W, H
-from .worldmap import BOSSES, FEATURES, ZONES
+from .worldmap import BOSSES, FEATURES, FINAL_BOSS, ZONES
 
 TILE = 32
 
@@ -29,10 +29,10 @@ ELITES = ("BossBot1", "BossBot2", "BossBot3")
 HOSTILE = set(COST) | set(BOSSES)
 ## Monster-class entities that shots cannot remove. A MonsterDoor2 counts them.
 UNKILLABLE = {
-    "MonsterDoor2", "ArtifactDoor", "SavePoint",
+    "MonsterDoor", "MonsterDoor2", "ArtifactDoor", "SavePoint",
     "AlienArtifact", "GunPowerup", "HpPowerup", "FuelPowerup",
 }
-DOORS = ("MonsterDoor2", "ArtifactDoor")
+DOORS = ("MonsterDoor", "MonsterDoor2", "ArtifactDoor")
 TREASURES = ("AlienArtifact", "GunPowerup", "HpPowerup", "FuelPowerup")
 
 GROUND = ("JumpBot", "SpikyBallMonster", "DefenseTurretVertical")
@@ -48,7 +48,9 @@ EARLY_RANK = 0.25
 EARLY_DEAR = 3
 ## Rooms where the player is not sealed in with a door, so things that shots
 ## cannot clear may be added freely.
-OPEN_KINDS = ("normal", "final") + tuple(FEATURES)
+OPEN_KINDS = ("normal",) + tuple(FEATURES)
+## Rooms built as an arena for a boss.
+BOSS_ROOMS = ("boss", "final")
 
 BASE_BUDGET = 12
 RANK_BUDGET = 14
@@ -71,6 +73,19 @@ ATTEMPTS = 400
 ## The gate room's band of rock, and the tunnel through it.
 BAND = (12, 17)
 VAULT_W, VAULT_H, PORCH = 8, 4, 3
+## A boss arena: how high it is, the lengths of the vault beside it (shorter
+## than usual to leave the arena room), and its ledges.
+ARENA_HEIGHT = 12
+ARENA_VAULT_W = 7
+ARENA_FLOORS = (18, 21)
+## The floor when the way in comes up from below, to clear the opening.
+ARENA_FLOOR_OVER_ENTRY = 17
+ARENA_SIDE_LEDGE = (4, 4)     # cells above the floor, length
+ARENA_CENTRE_LEDGE = (8, 5)
+ARENA_BOSS_HEIGHT = 10
+ARENA_BOSS_SPACING = 5
+## Who stands with the final boss.
+FINAL_ESCORTS = ("BossBot1", "BossBot1")
 
 
 class Unbuildable(Exception):
@@ -177,6 +192,74 @@ def _open_stub(grid, direction, pos):
     return _box(pos, H - 1, pos + 2, H - 1) + _box(max(1, pos - 2), 20, min(W - 2, pos + 4), 22), (pos + 1, 19)
 
 
+def _vault(grid, mouth_left, bx, by, length):
+    """Reserves the rock of a vault whose block starts at (bx, by): a
+    dead-end tunnel two cells high, length - 1 cells long, sealed all round
+    but for its mouth. Returns (tunnel cells, door centre, treasure cell)."""
+    if mouth_left:
+        tunnel = _box(bx, by + 1, bx + length - 2, by + 2)
+        door = (bx + 2, by + 2)
+        treasure = (bx + length - 3, by + 2)
+    else:
+        tunnel = _box(bx + 1, by + 1, bx + length - 1, by + 2)
+        door = (bx + length - 2, by + 2)
+        treasure = (bx + 2, by + 2)
+    grid.protect(set(_box(bx, by, bx + length - 1, by + VAULT_H - 1)) - set(tunnel))
+    grid.no_spawn.update(tunnel)
+    return tunnel, door, treasure
+
+
+def _place_arena(world, at, grid, rng):
+    """Reserves a boss arena: one big flat-floored chamber with three ledges,
+    and a vault at floor level on the side away from the way in. In a boss
+    room the vault holds the artifact. In the final room it holds the way
+    out, a hole in its floor. Returns what the rest of the build needs."""
+    links = world.links[at]
+    final = world.kind[at] == "final"
+    if final:
+        floor = H - 1
+    elif "S" in links:
+        floor = ARENA_FLOOR_OVER_ENTRY
+    else:
+        floor = rng.randint(*ARENA_FLOORS)
+    if ("W" in links) != ("E" in links):
+        vault_right = "W" in links
+    else:
+        vault_right = rng.random() < 0.5
+    length = VAULT_W if final else ARENA_VAULT_W
+    bx = W - 1 - length if vault_right else 1
+    tunnel, door, treasure = _vault(grid, vault_right, bx, floor - 3, length)
+    left, right = (3, bx - 1) if vault_right else (bx + length, W - 4)
+    centre = (left + right) // 2
+
+    hole = None
+    if final:
+        hole = bx + 4 if vault_right else bx + 1
+        cells = _box(hole, H - 1, hole + 2, H - 1)
+        grid.keep_solid.difference_update(cells)
+        grid.carve(cells, keep=True, border=True)
+    grid.carve(tunnel, keep=True)
+    grid.carve(_box(left, floor - ARENA_HEIGHT, right, floor - 1))
+
+    up, length = ARENA_SIDE_LEDGE
+    ledges = _box(left + 3, floor - up, left + 2 + length, floor - up)
+    ledges += _box(right - 2 - length, floor - up, right - 3, floor - up)
+    up, length = ARENA_CENTRE_LEDGE
+    ledges += _box(centre - length // 2, floor - up, centre + length // 2, floor - up)
+    ledges = [c for c in ledges if c not in grid.keep_clear]
+    grid.solid.update(ledges)
+    grid.protect(ledges)
+    return {
+        "door": door,
+        "treasure": None if final else treasure,
+        "hole": hole,
+        "hub": (centre, floor - 3),
+        "boss": (centre, floor - ARENA_BOSS_HEIGHT),
+        # The player appears in the corner farthest from the vault.
+        "start": (left + 1, floor - 1) if vault_right else (right - 1, floor - 1),
+    }
+
+
 def _place_vault(grid, rng, blocked):
     """Reserves a vault: a dead-end tunnel two cells high with a porch at its
     mouth. Returns (cells to carve, anchor, door centre, treasure cell)."""
@@ -190,21 +273,13 @@ def _place_vault(grid, rng, blocked):
         if any(c in blocked or c in grid.keep_solid for c in footprint):
             continue
         if mouth_left:
-            tunnel = _box(bx, by + 1, bx + VAULT_W - 2, by + 2)
             porch = _box(bx - PORCH, by, bx - 1, by + 2)
-            door = (bx + 2, by + 2)
-            treasure = (bx + 5, by + 2)
             anchor = (bx - 2, by + 1)
         else:
-            tunnel = _box(bx + 1, by + 1, bx + VAULT_W - 1, by + 2)
             porch = _box(bx + VAULT_W, by, bx + VAULT_W - 1 + PORCH, by + 2)
-            door = (bx + VAULT_W - 2, by + 2)
-            treasure = (bx + 2, by + 2)
             anchor = (bx + VAULT_W + 1, by + 1)
-        shell = set(_box(bx, by, bx + VAULT_W - 1, by + VAULT_H - 1)) - set(tunnel)
-        grid.protect(shell)
+        tunnel, door, treasure = _vault(grid, mouth_left, bx, by, VAULT_W)
         grid.protect((x, by + VAULT_H - 1) for x in range(x0, x1 + 1))
-        grid.no_spawn.update(tunnel)
         return tunnel + porch, anchor, door, treasure
     raise Unbuildable("no space for a vault")
 
@@ -507,15 +582,16 @@ def _attempt(world, at, rng, slopes):
     zone = ZONES[world.zone[at]]
     style = zone["style"]
     # Rooms that are one great cave rather than a warren of small ones.
-    cavern = kind in ("boss", "arena", "den", "hoverfield", "honeycomb")
+    cavern = kind in ("arena", "den", "hoverfield", "honeycomb")
     links = world.links[at]
     grid = _Grid()
-    hole = rng.randint(4, 23) if kind == "final" else None
+    hole = None
+    arena = None
 
     # Reserve protected rock first, then carve, so nothing cuts into a gadget.
     carvings = []
     anchors = {}
-    for direction, pos in _exits(world, at, hole):
+    for direction, pos in sorted(links.items()):
         cells, anchor = _open_stub(grid, direction, pos)
         carvings.append(cells)
         anchors[direction] = anchor
@@ -534,6 +610,12 @@ def _attempt(world, at, rng, slopes):
             "R": (rng.randint(21, 25), rng.randint(8, 15)),
         }
         walks = [(left, "L"), (right, "R")] + [(anchors[d], world.gate_sides[d]) for d in sorted(links)]
+    elif kind in BOSS_ROOMS:
+        arena = _place_arena(world, at, grid, rng)
+        door, treasure_cell, hole = arena["door"], arena["treasure"], arena["hole"]
+        halves = {"A": (2, W - 3)}
+        hubs = {"A": arena["hub"]}
+        walks = [(anchors[key], "A") for key in sorted(anchors)]
     else:
         if kind in ("vault", "boss"):
             cells, anchor, door, treasure_cell = _place_vault(grid, rng, grid.keep_clear | grid.keep_solid)
@@ -550,6 +632,8 @@ def _attempt(world, at, rng, slopes):
     great_cave = []
     hall_top = set()
     for half, hub in sorted(hubs.items()):
+        if arena is not None:
+            continue
         if cavern:
             great_cave = _ellipse(hub, rng.randint(9, 11), rng.randint(6, 7))
             grid.carve(great_cave)
@@ -565,7 +649,7 @@ def _attempt(world, at, rng, slopes):
     paths = []
     for start, half in walks:
         paths.append(_tunnel(grid, rng, start, hubs[half], halves[half]))
-    if not cavern and kind != "gallery":
+    if not cavern and arena is None and kind != "gallery":
         # Side caves anywhere in the room, each joined to its hub, so the
         # room spreads across the screen instead of hugging its tunnels.
         for _ in range(rng.randint(*style["side_caves"])):
@@ -585,13 +669,13 @@ def _attempt(world, at, rng, slopes):
         raise Unbuildable("caves do not join up")
     if kind == "shaft":
         _add_platforms(grid, rng, (6, 9))
-    elif kind not in ("hoverfield", "honeycomb", "gallery"):
+    elif arena is None and kind not in ("hoverfield", "honeycomb", "gallery"):
         _add_platforms(grid, rng, style["platforms"])
 
     # Where the player appears: at the start of the game in the start room,
     # and after dying in any room that has become the checkpoint. It is kept
     # out of gadgets, so nobody respawns sealed inside a vault.
-    main_hub = hubs[sorted(hubs)[0]]
+    main_hub = arena["start"] if arena is not None else hubs[sorted(hubs)[0]]
     standing = sorted(
         (
             (x, y) for x in range(2, W - 2) for y in range(2, H - 2)
@@ -607,7 +691,7 @@ def _attempt(world, at, rng, slopes):
     nav, nodes = _repair(world, at, grid, rng, hole, extra)
     if grid.empty_count() < MIN_EMPTY:
         raise Unbuildable("too cramped")
-    if slopes:
+    if slopes and arena is None:
         _add_slopes(grid, rng, style["slopes"])
 
     safe_from = [reach.entry(d, pos)[0] for d, pos in sorted(links.items())] + [start_cell]
@@ -620,7 +704,9 @@ def _attempt(world, at, rng, slopes):
     player_start = _ground_pos(start_cell)
     placer.used.add(start_cell)
     if door is not None:
-        name = "ArtifactDoor" if kind == "gate" else "MonsterDoor2"
+        # A vault's door opens with its treasure still inside, so it counts
+        # to two. The final room's opens when nothing but the door is left.
+        name = {"gate": "ArtifactDoor", "final": "MonsterDoor"}.get(kind, "MonsterDoor2")
         placer.add_at(name, (door[0] * TILE, door[1] * TILE), door)
     if treasure_cell is not None:
         placer.add_at(world.treasure[at], _ground_pos(treasure_cell), treasure_cell)
@@ -638,10 +724,19 @@ def _attempt(world, at, rng, slopes):
             if not spots:
                 raise Unbuildable("nowhere for the fuel")
             placer.add_at("FuelPowerup", _ground_pos(spots[0]), spots[0])
-        if kind == "boss":
-            if not placer.add(world.bosses[at]):
-                raise Unbuildable("no room for the boss")
-            _add_hostiles(placer, rng, budget / 2.0, rank, zone)
+        if kind in BOSS_ROOMS:
+            # The boss alone, or with its own company: an arena is for the
+            # fight, not for the zone's rank and file.
+            if kind == "final":
+                names = (FINAL_ESCORTS[0], FINAL_BOSS, FINAL_ESCORTS[1])
+            elif world.bosses[at] == "BossBots":
+                names = ELITES
+            else:
+                names = (world.bosses[at],)
+            first = -(len(names) // 2)
+            for index, name in enumerate(names):
+                cell = (arena["boss"][0] + (first + index) * ARENA_BOSS_SPACING, arena["boss"][1])
+                placer.add_at(name, _air_pos(cell), cell)
         elif kind == "infested":
             for _ in range(rng.randint(*BALLS)):
                 placer.add("BallMonster", safe=False)
@@ -721,7 +816,12 @@ def check(world, at, room):
             problems.append("%s cannot be reached" % name)
 
     if doors:
-        closed_nav, closed_nodes, closed_stuck = _survey(world, at, solid | doors, room.hole, extra)
+        # With the doors shut, the final room's way out does not count as an
+        # exit: it is meant to be out of reach until the boss is dead.
+        shut_hole = None if kind == "final" else room.hole
+        closed_nav, closed_nodes, closed_stuck = _survey(world, at, solid | doors, shut_hole, extra)
+        if kind == "final" and closed_nav.leavers(closed_nodes, "S", room.hole):
+            problems.append("the way out is open before the boss is dead")
         if kind == "gate":
             far = (world.gate_dir, links[world.gate_dir])
             near = [d for d in links if d != world.gate_dir][0]

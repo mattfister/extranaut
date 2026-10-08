@@ -16,7 +16,7 @@ SEED = 2026
 ## Decorations draw from their own random stream, so changing them never
 ## changes a room's shape or its monsters.
 DECOR_SEED = 7919
-FINAL_STRETCH_MUSIC = "fallenExtranaut"
+FINAL_BOSS_MUSIC = "fallenExtranaut"
 BOSS_MUSIC = "bossBattle"
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,8 +40,8 @@ def generate(seed=SEED):
         )
         if world.kind[at] == "boss":
             music = BOSS_MUSIC
-        elif at in world.behind_gate:
-            music = FINAL_STRETCH_MUSIC
+        elif world.kind[at] == "final":
+            music = FINAL_BOSS_MUSIC
         hole = None if built.hole is None else (built.hole, built.hole + 2)
         rooms.append({
             "x": at[0],

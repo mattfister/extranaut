@@ -106,7 +106,7 @@ class WorldMapTest(unittest.TestCase):
         w = self.world
         got = collections.Counter(w.treasure.values())
         self.assertEqual(got, {"AlienArtifact": 4, "GunPowerup": 3, "HpPowerup": 3, "FuelPowerup": 6})
-        self.assertEqual(sorted(w.bosses.values()), ["FallenExtranaut", "HeadBoss", "OctoBoss", "OrbBoss"])
+        self.assertEqual(sorted(w.bosses.values()), sorted(worldmap.ZONE_BOSSES))
         for at in list(w.treasure) + list(w.bosses):
             self.assertNotIn(at, w.behind_gate)
         for at in w.bosses:
@@ -124,10 +124,35 @@ class WorldMapTest(unittest.TestCase):
             tucked = [at for at in held if at in zone_ends]
             self.assertEqual(len(tucked), min(len(held), len(zone_ends)), worldmap.ZONES[zone]["name"])
 
+    def test_each_outer_zone_ends_in_a_boss(self):
+        w = self.world
+        final_zone = worldmap.FINAL_ZONE
+        self.assertEqual(sorted(w.zone[at] for at in w.bosses), list(range(final_zone)))
+        # The nearer the zone's boss, the gentler it is.
+        by_depth = sorted(w.bosses, key=lambda at: (w.depth[at], at))
+        self.assertEqual([w.bosses[at] for at in by_depth], worldmap.ZONE_BOSSES)
+        for at in w.bosses:
+            before = (at[0] + STEP[next(iter(w.links[at]))][0], at[1] + STEP[next(iter(w.links[at]))][1])
+            if w.kind[before] == "normal":
+                self.assertIn(before, w.save_points, at)
+
+    def test_the_final_area_is_its_own_zone(self):
+        w = self.world
+        final_zone = worldmap.FINAL_ZONE
+        area = {at for at, zone in w.zone.items() if zone == final_zone}
+        self.assertEqual(area, w.behind_gate | {w.gate})
+        self.assertGreaterEqual(len(w.behind_gate), 6)
+        self.assertEqual(w.kind[w.final], "final")
+        # Each zone is one connected piece.
+        for zone in range(len(worldmap.ZONES)):
+            rooms = {at for at, z in w.zone.items() if z == zone}
+            start = min(rooms)
+            self.assertEqual(walk(w, start, blocked=set(w.links) - rooms), rooms, zone)
+
     def test_save_points_are_never_far(self):
         w = self.world
         self.assertIn(worldmap.START, w.save_points)
-        self.assertTrue(8 <= len(w.save_points) <= 10)
+        self.assertTrue(8 <= len(w.save_points) <= 14)
         for at in w.links:
             nearest = min(worldmap.distance(w, at, s) for s in w.save_points)
             self.assertLessEqual(nearest, 6)
@@ -183,10 +208,41 @@ class RoomTest(unittest.TestCase):
             permanent = [n for n in names if n in roomgen.UNKILLABLE]
             self.assertEqual(sorted(permanent), sorted(["MonsterDoor2", self.world.treasure[at]]), at)
 
-    def test_bosses_are_in_their_rooms(self):
+    def test_bosses_fight_alone_in_their_arenas(self):
         for at, boss in self.world.bosses.items():
-            names = [m[0] for m in self.rooms[at].monsters]
-            self.assertEqual(names.count(boss), 1, at)
+            hostiles = sorted(m[0] for m in self.rooms[at].monsters if m[0] in roomgen.HOSTILE)
+            expected = sorted(roomgen.ELITES) if boss == "BossBots" else [boss]
+            self.assertEqual(hostiles, expected, at)
+
+    def test_the_final_boss_guards_the_way_out(self):
+        built = self.rooms[self.world.final]
+        names = sorted(m[0] for m in built.monsters)
+        self.assertEqual(names, ["BossBot1", "BossBot1", "FallenExtranaut", "MonsterDoor"])
+        # The hole is in the floor of the tunnel the door plugs.
+        door = next(m for m in built.monsters if m[0] == "MonsterDoor")
+        self.assertEqual(door[2], 22 * 32)
+        self.assertTrue(abs(door[1] // 32 - built.hole) <= 6)
+
+    def test_arenas_are_open_and_flat(self):
+        for at, kind in self.world.kind.items():
+            if kind not in ("boss", "final"):
+                continue
+            rows = self.rooms[at].rows
+            self.assertNotIn("/", "".join(rows), at)
+            self.assertNotIn("\\", "".join(rows), at)
+            # A chamber at least 16 cells wide and 10 high, open but for ledges.
+            best = 0
+            for top in range(1, 13):
+                for left in range(1, 13):
+                    block = [rows[y][left:left + 16] for y in range(top, top + 10)]
+                    best = max(best, sum(row.count(".") for row in block))
+            self.assertGreaterEqual(best, 140, at)
+            # Three ledges to fight from.
+            ledges = sum(
+                1 for y in range(2, 22) for x in range(1, 28)
+                if rows[y][x] == "#" and rows[y][x - 1] == "." and rows[y - 1][x] == "." and rows[y + 1][x] == "."
+            )
+            self.assertGreaterEqual(ledges, 3, at)
 
     def test_infested_rooms_swarm_with_balls(self):
         for at, kind in self.world.kind.items():
@@ -248,7 +304,7 @@ class RoomTest(unittest.TestCase):
 
     def test_doors_only_count_what_can_be_cleared(self):
         for at, kind in self.world.kind.items():
-            if kind in ("vault", "boss"):
+            if kind in ("vault", "boss", "final"):
                 self.assertEqual(self._count(at, "HoverBlock", "BallMonster"), 0, at)
 
     def test_treasure_and_save_points_are_placed(self):

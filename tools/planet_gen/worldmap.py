@@ -75,17 +75,25 @@ FEATURES = [
 ]
 FEATURE_ROUNDS = 2
 ## Easiest first; the deepest boss room gets the last.
+## Every boss monster there is.
 BOSSES = ["OrbBoss", "HeadBoss", "OctoBoss", "FallenExtranaut"]
+## The guardian of each outer zone's artifact, nearest zone first. As on
+## Zorta, the fourth is the three BossBots together.
+ZONE_BOSSES = ["OrbBoss", "HeadBoss", "OctoBoss", "BossBots"]
+## Waits at the end of the final area; the way out opens when it dies.
+FINAL_BOSS = "FallenExtranaut"
+## The last zone in ZONES is the final area, behind the artifact door.
+FINAL_ZONE = len(ZONES) - 1
+MIN_ZONE_ROOMS = 10
 
 EXTRA_LINKS = 26
 ## How often the maze grows from its newest room rather than a random one.
 ## Lower values give more branches and dead ends.
 NEWEST_BIAS = 0.7
-MIN_BEHIND_GATE = 3
-MAX_BEHIND_GATE = 12
-MIN_BOSS_DEPTH = 5
+MIN_BEHIND_GATE = 6
+MAX_BEHIND_GATE = 14
 SAVE_POINTS_MIN = 8
-SAVE_POINTS_MAX = 10
+SAVE_POINTS_MAX = 14
 SAVE_POINT_REACH = 6
 INFESTED_ONE_IN = 8
 ## Floor rows for side openings and left columns for vertical ones.
@@ -156,7 +164,10 @@ def _attempt(rng):
     world = WorldMap()
     parent = _grow_tree(world, rng)
     _place_gate(world, parent)
-    _place_bosses(world, rng)
+    # Zones and bosses are settled on the bare maze, before loops are added,
+    # so each zone is one piece and each boss room a true dead end.
+    _assign_zones(world)
+    _place_bosses(world)
     _add_extra_links(world, rng)
     _place_openings(world, rng)
 
@@ -164,16 +175,16 @@ def _attempt(rng):
     deepest = max(world.depth.values())
     world.rank = {at: world.depth[at] / deepest for at in world.links}
 
-    _assign_zones(world)
     for at in world.links:
         world.kind[at] = "normal"
     world.kind[START] = "start"
     world.kind[world.gate] = "gate"
     world.kind[world.final] = "final"
     for index, at in enumerate(sorted(world.bosses, key=lambda b: (world.depth[b], b))):
-        world.bosses[at] = BOSSES[index]
+        world.bosses[at] = ZONE_BOSSES[index]
         world.treasure[at] = "AlienArtifact"
         world.kind[at] = "boss"
+    _reserve_save_points(world, parent)
     _place_powerups(world, rng)
     _place_save_points(world)
     _place_infestations(world, rng)
@@ -255,19 +266,28 @@ def _farthest_first(world, candidates, chosen, count):
     return picked
 
 
-def _place_bosses(world, rng):
+def _place_bosses(world):
+    """One boss for each outer zone, in the dead end deepest inside it, so
+    the artifact is the end of the area."""
     tree_depth = distances_from(world, START)
-    leaves = [
-        at for at in world.links
-        if len(world.links[at]) == 1
-        and at not in world.behind_gate
-        and at != START
-        and tree_depth[at] >= MIN_BOSS_DEPTH
-    ]
-    picked = _farthest_first(world, leaves, [START], len(BOSSES))
-    if len(picked) < len(BOSSES):
-        raise Unbuildable("too few dead ends for the bosses")
-    world.bosses = {at: "" for at in picked}
+    for zone in range(FINAL_ZONE):
+        leaves = [
+            at for at in world.links
+            if world.zone[at] == zone and len(world.links[at]) == 1 and at != START
+        ]
+        if not leaves:
+            raise Unbuildable("a zone has no dead end for its boss")
+        world.bosses[max(leaves, key=lambda at: (tree_depth[at], at))] = ""
+
+
+def _reserve_save_points(world, parent):
+    """A save point in the room before each boss, and before the final one."""
+    world.save_points = {START}
+    before = [neighbour(at, next(iter(world.links[at]))) for at in sorted(world.bosses)]
+    before.append(parent[world.final])
+    for at in before:
+        if world.kind[at] == "normal":
+            world.save_points.add(at)
 
 
 def _add_extra_links(world, rng):
@@ -318,7 +338,12 @@ def _place_openings(world, rng):
 
 
 def _assign_zones(world):
-    seeds = [START] + _farthest_first(world, [at for at in world.links if at != START], [START], len(ZONES) - 1)
+    """Everything from the artifact door on is the final zone. The rest is
+    shared out among the outer zones, each grown from a seed room."""
+    for at in world.behind_gate | {world.gate}:
+        world.zone[at] = FINAL_ZONE
+    outer = [at for at in world.links if at not in world.zone and at != START]
+    seeds = [START] + _farthest_first(world, outer, [START], FINAL_ZONE - 1)
     queue = collections.deque()
     for index, at in enumerate(seeds):
         world.zone[at] = index
@@ -330,6 +355,9 @@ def _assign_zones(world):
             if nxt not in world.zone:
                 world.zone[nxt] = world.zone[at]
                 queue.append(nxt)
+    sizes = collections.Counter(world.zone.values())
+    if min(sizes[zone] for zone in range(FINAL_ZONE)) < MIN_ZONE_ROOMS:
+        raise Unbuildable("a zone is too small")
 
 
 def _spread(rooms, count, rng):
@@ -368,7 +396,8 @@ def _tuck_away(world, at):
     is rewarded. Otherwise the room itself."""
     free = [
         end for end in dead_ends(world)
-        if end not in world.treasure and world.zone[end] == world.zone[at]
+        if end not in world.treasure and end not in world.save_points
+        and world.zone[end] == world.zone[at]
     ]
     if not free:
         return at
@@ -394,7 +423,7 @@ def _place_powerups(world, rng):
 
 
 def _place_save_points(world):
-    world.save_points = {START}
+    """Adds to the reserved save points until none is far away."""
     candidates = [
         at for at in sorted(world.links)
         if world.kind[at] == "normal" and at not in world.treasure
