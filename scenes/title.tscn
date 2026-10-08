@@ -32,7 +32,7 @@ mouse_filter = 2
 texture = ExtResource("3_hiwto")
 
 [node name="Logo" type="Sprite2D" parent="." unique_id=2105665521]
-position = Vector2(250, 107)
+position = Vector2(249, 107)
 scale = Vector2(4, 4)
 texture = ExtResource("4_w65of")
 centered = false
@@ -192,3 +192,13 @@ offset_right = -8.0
 offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
+
+[node name="Subtitle" type="Label" parent="." unique_id=933741335]
+layout_mode = 0
+offset_left = 550.0
+offset_top = 219.0
+offset_right = 1053.0
+offset_bottom = 300.0
+theme_override_colors/font_color = Color(6.160736e-06, 0.7059441, 0.9643088, 1)
+theme_override_font_sizes/font_size = 32
+text = "Extra Edition"
