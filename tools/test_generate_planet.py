@@ -131,6 +131,8 @@ class WorldMapTest(unittest.TestCase):
         self.assertEqual(kinds["boss"], 4)
         self.assertEqual(kinds["vault"], 6)
         self.assertGreaterEqual(kinds["infested"], 6)
+        for feature in worldmap.FEATURES:
+            self.assertEqual(kinds[feature], worldmap.FEATURE_ROUNDS, feature)
         for at in w.save_points:
             self.assertIn(w.kind[at], ("start", "normal"))
 
@@ -188,6 +190,55 @@ class RoomTest(unittest.TestCase):
             if self.world.kind[at] == "normal"
         ]
         self.assertGreaterEqual(sum(counts) / len(counts), 6.0)
+
+    def _count(self, at, *names):
+        return sum(1 for m in self.rooms[at].monsters if m[0] in names)
+
+    def test_each_zone_has_its_own_hostiles(self):
+        seen = collections.defaultdict(collections.Counter)
+        for at, built in self.rooms.items():
+            zone = worldmap.ZONES[self.world.zone[at]]
+            if self.world.kind[at] not in ("normal", "vault", "boss", "infested", "gate", "final"):
+                continue
+            for name, _, _ in built.monsters:
+                if name in roomgen.COST and name not in roomgen.ELITES:
+                    self.assertIn(name, zone["roster"], (at, zone["name"]))
+                    seen[zone["name"]][name] += 1
+        # No two zones are led by the same pair of hostiles.
+        leaders = {name: tuple(sorted(n for n, _ in counts.most_common(2))) for name, counts in seen.items()}
+        self.assertEqual(len(leaders), len(worldmap.ZONES))
+        self.assertEqual(len(set(leaders.values())), len(worldmap.ZONES), leaders)
+
+    def test_set_pieces_are_what_they_claim(self):
+        hostile = tuple(roomgen.HOSTILE)
+        for at, kind in self.world.kind.items():
+            if kind == "sanctuary":
+                self.assertEqual(self._count(at, *hostile), 0, at)
+                self.assertGreaterEqual(self._count(at, "BallMonster"), 3, at)
+            elif kind == "gallery":
+                self.assertGreaterEqual(self._count(at, "AimerTurret"), 5, at)
+                self.assertEqual(self._count(at, *hostile), self._count(at, "AimerTurret"), at)
+            elif kind == "spikes":
+                self.assertGreaterEqual(self._count(at, "SpikyBallMonster"), 8, at)
+            elif kind == "hoverfield":
+                self.assertGreaterEqual(self._count(at, "HoverBlock"), 6, at)
+                self.assertGreaterEqual(self._count(at, "FlyBot", "Flyer"), 4, at)
+            elif kind == "arena":
+                self.assertGreaterEqual(self._count(at, "HandBot"), 3, at)
+            elif kind == "den":
+                self.assertEqual(self._count(at, "BossBot1", "BossBot2"), 2, at)
+            elif kind == "honeycomb":
+                blocks = sum(row.count(".##.") for row in self.rooms[at].rows)
+                self.assertGreaterEqual(blocks, 8, at)
+            elif kind == "shaft":
+                # Some column is open for most of the room's height.
+                tallest = max(sum(row[x] == "." for row in self.rooms[at].rows) for x in range(30))
+                self.assertGreaterEqual(tallest, 16, at)
+
+    def test_doors_only_count_what_can_be_cleared(self):
+        for at, kind in self.world.kind.items():
+            if kind in ("vault", "boss"):
+                self.assertEqual(self._count(at, "HoverBlock", "BallMonster"), 0, at)
 
     def test_treasure_and_save_points_are_placed(self):
         for at, name in self.world.treasure.items():

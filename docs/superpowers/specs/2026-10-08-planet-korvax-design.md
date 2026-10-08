@@ -173,6 +173,40 @@ hostiles, rising with distance from the start.
 - SpikyHeadMonster is not used, because its death rule depends on Zorta's
   hand-tuned monster counts.
 
+## Zone identity and set pieces
+
+Added after the first play-test, in which every room felt like the same mix
+of enemies.
+
+Each zone has its own roster of hostiles and its own cave shape, defined
+together with its look in `worldmap.ZONES`:
+
+| Zone | Hostiles | Caves |
+|---|---|---|
+| Warrens (start) | spiky balls, flyers, a few jump bots, harmless balls wandering about | rolling caves with many slopes |
+| Gravitor | fly bots and flyers among hover blocks | huge open caverns with little floor |
+| Pyrite | aimer and grenade turrets, some jump bots | low, wide, flat-floored caves |
+| Emerald | jump bots and hand bots | broad terraces with slopes |
+| Boiling point | fly bots, spiky balls, hand bots, aimer turrets; elites from rank 0.4 | tall narrow caves with many ledges |
+
+Every room draws its hostiles from its zone's roster, boss and vault rooms
+included. Elsewhere a BossBot may join from rank 0.6.
+
+Sixteen ordinary rooms become set pieces, two of each, dealt out in this
+order going deeper so the two of a kind are far apart:
+
+- **Sanctuary**: no hostiles, a few ball monsters.
+- **Honeycomb**: one great cave filled with a staggered lattice of blocks.
+- **Spikes**: 10 to 14 spiky balls.
+- **Shaft**: a chimney the height of the room, climbed by ledges.
+- **Hover field**: a great cave holding 12 to 18 hover blocks, fly bots and
+  flyers.
+- **Gallery**: one long straight hall lined with 6 to 8 aimer turrets.
+- **Arena**: a great cave with three hand bots and a few of the zone's own.
+- **Den**: a great cave with BossBot1 and BossBot2 together.
+
+Set pieces never hold a door, a treasure or a save point.
+
 ## Testing
 
 - `tools/test_generate_planet.py` (unittest): the output is identical across

@@ -6,14 +6,74 @@ START = (2, 0)
 STEP = {"N": (0, -1), "E": (1, 0), "S": (0, 1), "W": (-1, 0)}
 OPPOSITE = {"N": "S", "S": "N", "E": "W", "W": "E"}
 
-## Per zone: midground sheet, background sheet, tint, music.
+## What gives each zone its identity: its look and music, the hostiles that
+## live there (name: how likely), and the shape of its caves.
+##   side_caves   how many caves branch off the middle of a room
+##   cave_rx/ry   half-width and half-height of those caves, in cells
+##   platforms    how hard to try to add floating ledges
+##   slopes       chance that a step in the floor becomes a ramp
+##   hover_blocks hover blocks per ordinary room
+##   balls        harmless ball monsters per ordinary room
+##   elite_rank   how deep a room must be before a BossBot may appear
 ZONES = [
-    ("rocks", "bgRocks", [0.75, 0.6, 1.0], "zortaSurface"),
-    ("rocksBlue", "rockBg", [0.6, 1.0, 0.85], "gravitorZone"),
-    ("yellowRocks", "bgYellowRocks", [1.0, 0.6, 0.45], "pyriteZone"),
-    ("greenRocks", "greenRocksDark", [0.6, 0.85, 1.0], "emeraldOrbit"),
-    ("grayRocks", "redRocksBg", [1.0, 0.55, 0.6], "boilingPoint"),
+    {
+        "name": "warrens",
+        "midground": "rocks", "background": "bgRocks",
+        "tint": [0.75, 0.6, 1.0], "music": "zortaSurface",
+        "roster": {"SpikyBallMonster": 5, "Flyer": 4, "JumpBot": 1},
+        "style": {
+            "side_caves": (2, 4), "cave_rx": (3, 6), "cave_ry": (2, 4), "platforms": (3, 6),
+            "slopes": 0.5, "hover_blocks": (0, 0), "balls": (1, 5), "elite_rank": 0.6,
+        },
+    },
+    {
+        "name": "gravitor",
+        "midground": "rocksBlue", "background": "rockBg",
+        "tint": [0.6, 1.0, 0.85], "music": "gravitorZone",
+        "roster": {"FlyBot": 5, "Flyer": 3, "AimerTurret": 1},
+        "style": {
+            "side_caves": (3, 5), "cave_rx": (5, 8), "cave_ry": (4, 6), "platforms": (1, 2),
+            "slopes": 0.1, "hover_blocks": (4, 9), "balls": (0, 0), "elite_rank": 0.6,
+        },
+    },
+    {
+        "name": "pyrite",
+        "midground": "yellowRocks", "background": "bgYellowRocks",
+        "tint": [1.0, 0.6, 0.45], "music": "pyriteZone",
+        "roster": {"AimerTurret": 5, "DefenseTurretVertical": 4, "JumpBot": 2},
+        "style": {
+            "side_caves": (2, 3), "cave_rx": (5, 9), "cave_ry": (1, 1), "platforms": (0, 1),
+            "slopes": 0.0, "hover_blocks": (0, 1), "balls": (0, 0), "elite_rank": 0.6,
+        },
+    },
+    {
+        "name": "emerald",
+        "midground": "greenRocks", "background": "greenRocksDark",
+        "tint": [0.6, 0.85, 1.0], "music": "emeraldOrbit",
+        "roster": {"JumpBot": 5, "HandBot": 4, "DefenseTurretVertical": 1},
+        "style": {
+            "side_caves": (2, 3), "cave_rx": (5, 8), "cave_ry": (2, 3), "platforms": (2, 4),
+            "slopes": 0.6, "hover_blocks": (0, 0), "balls": (0, 0), "elite_rank": 0.6,
+        },
+    },
+    {
+        "name": "boiling point",
+        "midground": "grayRocks", "background": "redRocksBg",
+        "tint": [1.0, 0.55, 0.6], "music": "boilingPoint",
+        "roster": {"FlyBot": 3, "SpikyBallMonster": 3, "HandBot": 2, "AimerTurret": 2},
+        "style": {
+            "side_caves": (3, 5), "cave_rx": (2, 3), "cave_ry": (4, 7), "platforms": (4, 8),
+            "slopes": 0.15, "hover_blocks": (0, 2), "balls": (0, 0), "elite_rank": 0.4,
+        },
+    },
 ]
+## Set-piece rooms, each built its own way. They are dealt out in this order
+## to rooms going deeper into the planet, FEATURE_ROUNDS times over, so the
+## list runs easy to hard.
+FEATURES = [
+    "sanctuary", "honeycomb", "spikes", "shaft", "hoverfield", "gallery", "arena", "den",
+]
+FEATURE_ROUNDS = 2
 ## Easiest first; the deepest boss room gets the last.
 BOSSES = ["OrbBoss", "HeadBoss", "OctoBoss", "FallenExtranaut"]
 
@@ -117,6 +177,7 @@ def _attempt(rng):
     _place_powerups(world, rng)
     _place_save_points(world)
     _place_infestations(world, rng)
+    _place_features(world, rng)
     return world
 
 
@@ -323,3 +384,15 @@ def _place_infestations(world, rng):
     rooms = _plain_rooms(world)
     for at in rng.sample(rooms, max(6, len(rooms) // INFESTED_ONE_IN)):
         world.kind[at] = "infested"
+
+
+def _place_features(world, rng):
+    """Turns some ordinary rooms into set pieces, spread through the planet
+    with the gentler ones nearer the start."""
+    count = len(FEATURES) * FEATURE_ROUNDS
+    # The first few rooms stay ordinary, so the opening teaches the basics.
+    rooms = sorted(_spread(_plain_rooms(world)[4:], count, rng), key=lambda at: (world.depth[at], at))
+    # Each pass through the list covers a deeper band of the planet, so the
+    # two rooms of a kind are far apart.
+    for index, at in enumerate(rooms):
+        world.kind[at] = FEATURES[index % len(FEATURES)]

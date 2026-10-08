@@ -86,7 +86,8 @@ def generate(seed=SEED):
     world = worldmap.build(random.Random(seed))
     rooms = []
     for at in sorted(world.links):
-        midground, backdrop, tint, music = worldmap.ZONES[world.zone[at]]
+        zone = worldmap.ZONES[world.zone[at]]
+        midground, backdrop, music = zone["midground"], zone["background"], zone["music"]
         slopes = not any(tile_is_blank(midground, *tile) for tile in render.SLOPE_TILES.values())
         built = room.build(world, at, seed * 100 + at[0] * 10 + at[1], slopes)
         if world.kind[at] == "boss":
@@ -107,7 +108,8 @@ def generate(seed=SEED):
             "animated": [],
             "walls": render.walls(built.rows, hole),
             "monsters": built.monsters,
-            "tint": tint,
+            "tint": zone["tint"],
+            "zone": zone["name"],
             "cells": built.rows,
             "links": dict(sorted(world.links[at].items())),
             "kind": world.kind[at],

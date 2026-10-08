@@ -8,7 +8,7 @@ import random
 
 from . import reach
 from .reach import W, H
-from .worldmap import BOSSES
+from .worldmap import BOSSES, FEATURES, ZONES
 
 TILE = 32
 
@@ -39,26 +39,33 @@ GROUND = ("JumpBot", "SpikyBallMonster", "DefenseTurretVertical")
 CEILING = ("AimerTurret", "Flyer")
 AIR = ("FlyBot",) + ELITES
 ## Most of one kind in a room.
-CAPS = {"HandBot": 2, "AimerTurret": 4, "DefenseTurretVertical": 3, "FlyBot": 4}
-## Kinds allowed near the start, and the most of the dearer ones there.
+CAPS = {
+    "HandBot": 3, "AimerTurret": 5, "DefenseTurretVertical": 4, "FlyBot": 5,
+    "JumpBot": 6, "Flyer": 6, "SpikyBallMonster": 6,
+}
+## Near the start, at most one of each kind costing this much or more.
 EARLY_RANK = 0.25
-EARLY = ("JumpBot", "Flyer", "SpikyBallMonster", "DefenseTurretVertical", "AimerTurret", "FlyBot")
-EARLY_CAPS = {"AimerTurret": 1, "FlyBot": 1}
+EARLY_DEAR = 3
+## Rooms where the player is not sealed in with a door, so things that shots
+## cannot clear may be added freely.
+OPEN_KINDS = ("normal", "final") + tuple(FEATURES)
 
 BASE_BUDGET = 12
 RANK_BUDGET = 14
 BUDGET_JITTER = 3
 BEHIND_GATE_BUDGET = 6
-ELITE_RANK = 0.6
 ## Hostiles keep this many cells (Chebyshev) from where the player arrives.
 SAFE_CELLS = 5
 FUEL_FAR_CELLS = 8
 MIN_EMPTY = 120
-SLOPE_CHANCE = 0.35
 BALLS = (25, 40)
-MAX_HOVER_BLOCKS = 4
 MAX_REPAIRS = 80
-SIDE_CAVES = (2, 4)
+## Set pieces.
+GALLERY_TURRETS = (6, 8)
+SPIKE_SWARM = (10, 14)
+FIELD_HOVER_BLOCKS = (12, 18)
+ARENA_HAND_BOTS = 3
+SANCTUARY_BALLS = (3, 6)
 ATTEMPTS = 400
 
 ## The gate room's band of rock, and the tunnel through it.
@@ -256,8 +263,8 @@ def _tunnel(grid, rng, start, hub, x_range):
     return path
 
 
-def _add_platforms(grid, rng):
-    for _ in range(rng.randint(3, 6) * 12):
+def _add_platforms(grid, rng, amount):
+    for _ in range(rng.randint(*amount) * 12):
         length = rng.randint(3, 6)
         x, y = rng.randint(2, W - 3 - length), rng.randint(5, H - 5)
         cells = [(x + i, y) for i in range(length)]
@@ -270,7 +277,15 @@ def _add_platforms(grid, rng):
             grid.solid.difference_update(cells)
 
 
-def _add_slopes(grid, rng):
+def _add_honeycomb(grid, cells):
+    """Fills a cave with a staggered lattice of two-cell blocks."""
+    for x, y in cells:
+        if y % 3 == 0 and (x + (y // 3 % 2) * 2) % 4 in (0, 1):
+            if (x, y) not in grid.keep_clear and 2 <= x <= W - 3 and 3 <= y <= H - 4:
+                grid.solid.add((x, y))
+
+
+def _add_slopes(grid, rng, chance):
     for x in range(2, W - 2):
         for y in range(2, H - 1):
             cell = (x, y)
@@ -288,7 +303,7 @@ def _add_slopes(grid, rng):
                     and (x + side, y + 1) not in grid.slopes
                     and (x + side, y - 1) not in grid.solid
                 )
-                if ramp and rng.random() < SLOPE_CHANCE:
+                if ramp and rng.random() < chance:
                     grid.slopes[cell] = char
                     break
 
@@ -382,6 +397,7 @@ class _Placer:
         self.safe_from = safe_from
         self.used = set()
         self.monsters = []
+        self.within = None
         solid = grid.solid
         usable = lambda c: c not in grid.no_spawn
         self.floor = sorted(c for c in nodes if usable(c))
@@ -406,11 +422,14 @@ class _Placer:
             c for c in cells
             if all(_cheb(c, u) >= spread for u in self.used)
             and (not safe or all(_cheb(c, s) >= SAFE_CELLS for s in self.safe_from))
+            and (self.within is None or c in self.within)
         ]
         return self.rng.choice(options) if options else None
 
-    def add(self, name, safe=True):
-        """Places one monster of a kind. Returns False if there is no room."""
+    def add(self, name, safe=True, within=None):
+        """Places one monster of a kind, in one of the cells of within if
+        given. Returns False if there is no room."""
+        self.within = within
         if name == "HandBot":
             cell = self._pick(self.big_floor, safe, 2)
             pos = None if cell is None else [(cell[0] + 1) * TILE, (cell[1] + 1) * TILE - 32]
@@ -447,22 +466,27 @@ class _Placer:
         ]
 
 
-def _add_hostiles(placer, rng, budget, rank):
+def _add_hostiles(placer, rng, budget, rank, zone, elites=True):
+    """Spends a difficulty budget on the zone's own hostiles, plus at most
+    one elite in a deep enough room."""
     early = rank < EARLY_RANK
+    weights = dict(zone["roster"])
+    if elites and rank >= zone["style"]["elite_rank"]:
+        weights.update({name: 1 for name in ELITES})
     counts = {}
     elite = False
     failures = 0
     while budget > 0 and failures < 30:
         names = [
-            n for n in sorted(COST)
+            n for n in sorted(weights)
             if COST[n] <= budget
             and counts.get(n, 0) < CAPS.get(n, 99)
-            and not (early and (n not in EARLY or counts.get(n, 0) >= EARLY_CAPS.get(n, 99)))
-            and not (n in ELITES and (elite or rank < ELITE_RANK))
+            and not (early and COST[n] >= EARLY_DEAR and counts.get(n, 0) >= 1)
+            and not (n in ELITES and elite)
         ]
         if not names:
             break
-        name = rng.choice(names)
+        name = rng.choices(names, [weights[n] for n in names])[0]
         if placer.add(name):
             budget -= COST[name]
             counts[name] = counts.get(name, 0) + 1
@@ -471,8 +495,19 @@ def _add_hostiles(placer, rng, budget, rank):
             failures += 1
 
 
+def _add_many(placer, name, count, within=None):
+    """Places up to count of a kind, preferring the cells of within."""
+    for _ in range(count):
+        if not (within is not None and placer.add(name, within=within)):
+            placer.add(name)
+
+
 def _attempt(world, at, rng, slopes):
     kind = world.kind[at]
+    zone = ZONES[world.zone[at]]
+    style = zone["style"]
+    # Rooms that are one great cave rather than a warren of small ones.
+    cavern = kind in ("boss", "arena", "den", "hoverfield", "honeycomb")
     links = world.links[at]
     grid = _Grid()
     hole = rng.randint(4, 23) if kind == "final" else None
@@ -506,37 +541,52 @@ def _attempt(world, at, rng, slopes):
             anchors["vault"] = anchor
         halves = {"A": (2, W - 3)}
         for _ in range(100):
-            hub = (rng.randint(11, 18), rng.randint(9, 13)) if kind == "boss" else (rng.randint(9, 20), rng.randint(7, 16))
+            hub = (rng.randint(11, 18), rng.randint(9, 13)) if cavern else (rng.randint(9, 20), rng.randint(7, 16))
             if hub not in grid.keep_solid and hub not in grid.keep_clear:
                 break
         hubs = {"A": hub}
         walks = [(anchors[key], "A") for key in sorted(anchors)]
 
+    great_cave = []
+    hall_top = set()
     for half, hub in sorted(hubs.items()):
-        if kind == "boss":
-            grid.carve(_ellipse(hub, rng.randint(8, 10), rng.randint(5, 6)))
+        if cavern:
+            great_cave = _ellipse(hub, rng.randint(9, 11), rng.randint(6, 7))
+            grid.carve(great_cave)
+        elif kind == "gallery":
+            # One long straight hall, four cells high, for turrets to line.
+            grid.carve(_box(2, hub[1] - 2, W - 3, hub[1] + 1))
+            hall_top = set(_box(2, hub[1] - 2, W - 3, hub[1] - 2))
+        elif kind == "shaft":
+            # A chimney the full height of the room.
+            grid.carve(_box(hub[0] - 4, 2, hub[0] + 4, H - 3))
         else:
             grid.carve(_ellipse(hub, rng.randint(3, 5), rng.randint(2, 3)))
     paths = []
     for start, half in walks:
         paths.append(_tunnel(grid, rng, start, hubs[half], halves[half]))
-    if kind != "boss":
+    if not cavern and kind != "gallery":
         # Side caves anywhere in the room, each joined to its hub, so the
         # room spreads across the screen instead of hugging its tunnels.
-        for _ in range(rng.randint(*SIDE_CAVES)):
+        for _ in range(rng.randint(*style["side_caves"])):
             half = rng.choice(sorted(hubs))
             lo, hi = halves[half]
             center = (rng.randint(lo + 1, hi - 1), rng.randint(4, H - 5))
             if center in grid.keep_solid:
                 continue
             paths.append(_tunnel(grid, rng, center, hubs[half], halves[half]))
-            grid.carve(_ellipse(center, rng.randint(3, 6), rng.randint(2, 4)))
+            grid.carve(_ellipse(center, rng.randint(*style["cave_rx"]), rng.randint(*style["cave_ry"])))
         for _ in range(rng.randint(1, 3)):
             path = rng.choice(paths)
             grid.carve(_ellipse(rng.choice(path), rng.randint(2, 5), rng.randint(2, 3)))
+    if kind == "honeycomb":
+        _add_honeycomb(grid, great_cave)
     if not grid.connected():
         raise Unbuildable("caves do not join up")
-    _add_platforms(grid, rng)
+    if kind == "shaft":
+        _add_platforms(grid, rng, (6, 9))
+    elif kind not in ("hoverfield", "honeycomb", "gallery"):
+        _add_platforms(grid, rng, style["platforms"])
 
     # Where the player appears: at the start of the game in the start room,
     # and after dying in any room that has become the checkpoint. It is kept
@@ -558,7 +608,7 @@ def _attempt(world, at, rng, slopes):
     if grid.empty_count() < MIN_EMPTY:
         raise Unbuildable("too cramped")
     if slopes:
-        _add_slopes(grid, rng)
+        _add_slopes(grid, rng, style["slopes"])
 
     safe_from = [reach.entry(d, pos)[0] for d, pos in sorted(links.items())] + [start_cell]
     placer = _Placer(grid, nav, nodes, safe_from, rng)
@@ -591,16 +641,36 @@ def _attempt(world, at, rng, slopes):
         if kind == "boss":
             if not placer.add(world.bosses[at]):
                 raise Unbuildable("no room for the boss")
-            _add_hostiles(placer, rng, budget / 2.0, rank)
+            _add_hostiles(placer, rng, budget / 2.0, rank, zone)
         elif kind == "infested":
             for _ in range(rng.randint(*BALLS)):
                 placer.add("BallMonster", safe=False)
-            _add_hostiles(placer, rng, budget / 4.0, rank)
+            _add_hostiles(placer, rng, budget / 4.0, rank, zone)
+        elif kind == "sanctuary":
+            # A breather: nothing here can hurt.
+            for _ in range(rng.randint(*SANCTUARY_BALLS)):
+                placer.add("BallMonster", safe=False)
+        elif kind == "gallery":
+            _add_many(placer, "AimerTurret", rng.randint(*GALLERY_TURRETS), hall_top)
+        elif kind == "spikes":
+            _add_many(placer, "SpikyBallMonster", rng.randint(*SPIKE_SWARM))
+        elif kind == "hoverfield":
+            _add_many(placer, "HoverBlock", rng.randint(*FIELD_HOVER_BLOCKS))
+            _add_many(placer, "FlyBot", 3)
+            _add_many(placer, "Flyer", 3)
+        elif kind == "arena":
+            _add_many(placer, "HandBot", ARENA_HAND_BOTS)
+            _add_hostiles(placer, rng, budget / 3.0, rank, zone)
+        elif kind == "den":
+            _add_many(placer, "BossBot1", 1)
+            _add_many(placer, "BossBot2", 1)
+            _add_hostiles(placer, rng, budget / 3.0, rank, zone, elites=False)
         else:
-            _add_hostiles(placer, rng, budget, rank)
-            if kind in ("normal", "final"):
-                for _ in range(rng.randint(0, MAX_HOVER_BLOCKS)):
-                    placer.add("HoverBlock")
+            _add_hostiles(placer, rng, budget, rank, zone)
+        if kind in OPEN_KINDS and kind not in ("hoverfield", "sanctuary"):
+            _add_many(placer, "HoverBlock", rng.randint(*style["hover_blocks"]))
+            for _ in range(rng.randint(*style["balls"])):
+                placer.add("BallMonster", safe=False)
 
     return Room(grid.rows(), placer.monsters, player_start, hole)
 
