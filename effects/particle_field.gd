@@ -41,14 +41,15 @@ func _ready() -> void:
 
 
 ## at is in this node's coordinates, which are world coordinates in the campaign.
-func emit(kind: String, at: Vector2, amount: int = 1) -> void:
+## life_scale shortens or lengthens how long these particles last.
+func emit(kind: String, at: Vector2, amount: int = 1, life_scale: float = 1.0) -> void:
 	var spec: Dictionary = _kinds[kind]
 	for i in amount:
 		var particle := Particle.new()
 		particle.position = at + Vector2(randf_range(-SPAWN_JITTER, SPAWN_JITTER), randf_range(-SPAWN_JITTER, SPAWN_JITTER))
 		particle.velocity = Vector2(randf_range(spec.vx[0], spec.vx[1]), randf_range(spec.vy[0], spec.vy[1]))
 		particle.friction = spec.friction
-		particle.life = randf_range(spec.life[0], spec.life[1])
+		particle.life = randf_range(spec.life[0], spec.life[1]) * life_scale
 		particle.sheet = spec.sheet
 		particle.row = spec.row
 		_particles.append(particle)
