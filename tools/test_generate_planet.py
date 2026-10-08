@@ -8,7 +8,7 @@ import random
 import unittest
 from pathlib import Path
 
-from planet_gen import reach
+from planet_gen import reach, worldmap
 
 TOOLS = Path(__file__).resolve().parent
 
@@ -61,6 +61,81 @@ class ReachTest(unittest.TestCase):
         self.assertEqual(reach.entry("S", 5), ((6, 22), reach.BUDGET - reach.CEILING_RESERVE))
         self.assertEqual(reach.exit_cells("W", 10), [(0, 7), (0, 8), (0, 9)])
         self.assertEqual(reach.exit_cells("S", 5), [(5, 23), (6, 23), (7, 23)])
+
+STEP = worldmap.STEP
+OPPOSITE = worldmap.OPPOSITE
+
+
+def walk(world, start, blocked=()):
+    seen, todo = {start}, [start]
+    while todo:
+        x, y = todo.pop()
+        for d in world.links[(x, y)]:
+            nxt = (x + STEP[d][0], y + STEP[d][1])
+            if nxt not in seen and nxt not in blocked:
+                seen.add(nxt)
+                todo.append(nxt)
+    return seen
+
+
+class WorldMapTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.world = worldmap.build(random.Random(2026))
+
+    def test_every_room_is_linked_both_ways(self):
+        w = self.world
+        self.assertEqual(len(w.links), 100)
+        for (x, y), links in w.links.items():
+            for d, pos in links.items():
+                other = (x + STEP[d][0], y + STEP[d][1])
+                self.assertEqual(w.links[other][OPPOSITE[d]], pos)
+        self.assertEqual(len(walk(w, worldmap.START)), 100)
+
+    def test_the_gate_is_the_only_way_to_the_final_stretch(self):
+        w = self.world
+        self.assertEqual(w.final[1], 9)
+        self.assertIn(w.final, w.behind_gate)
+        self.assertEqual(len(w.links[w.gate]), 2)
+        self.assertEqual(walk(w, worldmap.START, blocked={w.gate}) & w.behind_gate, set())
+        self.assertEqual(sorted(w.gate_sides.values()), ["L", "R"])
+
+    def test_progression_counts(self):
+        w = self.world
+        got = collections.Counter(w.treasure.values())
+        self.assertEqual(got, {"AlienArtifact": 4, "GunPowerup": 3, "HpPowerup": 3, "FuelPowerup": 6})
+        self.assertEqual(sorted(w.bosses.values()), ["FallenExtranaut", "HeadBoss", "OctoBoss", "OrbBoss"])
+        for at in list(w.treasure) + list(w.bosses):
+            self.assertNotIn(at, w.behind_gate)
+        for at in w.bosses:
+            self.assertEqual(w.treasure[at], "AlienArtifact")
+            self.assertEqual(len(w.links[at]), 1)
+
+    def test_save_points_are_never_far(self):
+        w = self.world
+        self.assertIn(worldmap.START, w.save_points)
+        self.assertTrue(8 <= len(w.save_points) <= 10)
+        for at in w.links:
+            nearest = min(worldmap.distance(w, at, s) for s in w.save_points)
+            self.assertLessEqual(nearest, 6)
+
+    def test_zones_and_kinds(self):
+        w = self.world
+        self.assertEqual(set(w.zone.values()), set(range(5)))
+        kinds = collections.Counter(w.kind.values())
+        self.assertEqual(kinds["start"], 1)
+        self.assertEqual(kinds["gate"], 1)
+        self.assertEqual(kinds["final"], 1)
+        self.assertEqual(kinds["boss"], 4)
+        self.assertEqual(kinds["vault"], 6)
+        self.assertGreaterEqual(kinds["infested"], 6)
+        for at in w.save_points:
+            self.assertIn(w.kind[at], ("start", "normal"))
+
+    def test_same_seed_same_world(self):
+        again = worldmap.build(random.Random(2026))
+        self.assertEqual(again.links, self.world.links)
+        self.assertEqual(again.kind, self.world.kind)
 
 
 if __name__ == "__main__":
