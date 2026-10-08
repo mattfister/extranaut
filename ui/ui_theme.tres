@@ -1,0 +1,43 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/KARNIVOR.ttf" id="1_udl1o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4mq11"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.85, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vuqvt"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.85, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bp0j3"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cnyj1"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.85, 0.2, 1)
+
+[resource]
+default_font = ExtResource("1_udl1o")
+default_font_size = 13
+Button/styles/focus = SubResource("StyleBoxFlat_4mq11")
+Button/styles/hover = SubResource("StyleBoxFlat_vuqvt")
+Button/styles/normal = SubResource("StyleBoxFlat_bp0j3")
+Button/styles/pressed = SubResource("StyleBoxFlat_cnyj1")

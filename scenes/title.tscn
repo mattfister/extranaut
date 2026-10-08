@@ -1,0 +1,207 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/ui_theme.tres" id="1_yql1r"]
+[ext_resource type="Script" path="res://scenes/title.gd" id="2_ia1n6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/titleTerrainSmall.png" id="3_hiwto"]
+[ext_resource type="Texture2D" path="res://assets/sprites/extranautTitleAnimated.png" id="4_w65of"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kopa.png" id="5_ygloa"]
+[ext_resource type="Texture2D" path="res://assets/sprites/matt.png" id="6_6civk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/options.png" id="7_7af2g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81wt4"]
+atlas = ExtResource("7_7af2g")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kcc3o"]
+atlas = ExtResource("7_7af2g")
+region = Rect2(0, 16, 16, 16)
+
+[node name="Title" type="Control" unique_id=310708177]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_yql1r")
+script = ExtResource("2_ia1n6")
+
+[node name="Background" type="TextureRect" parent="." unique_id=660696992]
+layout_mode = 0
+scale = Vector2(2, 2)
+mouse_filter = 2
+texture = ExtResource("3_hiwto")
+
+[node name="Logo" type="Sprite2D" parent="." unique_id=2105665521]
+position = Vector2(250, 50)
+scale = Vector2(4, 4)
+texture = ExtResource("4_w65of")
+centered = false
+hframes = 4
+frame = 1
+
+[node name="Kopa" type="TextureRect" parent="." unique_id=1182802455]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 250.0
+offset_right = 80.0
+offset_bottom = 250.0
+scale = Vector2(2, 2)
+mouse_filter = 2
+texture = ExtResource("5_ygloa")
+
+[node name="Matt" type="TextureRect" parent="." unique_id=984005798]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 300.0
+offset_right = 300.0
+offset_bottom = 300.0
+scale = Vector2(2, 2)
+mouse_filter = 2
+texture = ExtResource("6_6civk")
+
+[node name="PlanetPrev" type="Button" parent="." unique_id=198855797]
+custom_minimum_size = Vector2(34, 31)
+layout_mode = 0
+offset_left = 328.0
+offset_top = 344.0
+offset_right = 328.0
+offset_bottom = 344.0
+text = "<"
+
+[node name="PlanetNext" type="Button" parent="." unique_id=1959826637]
+custom_minimum_size = Vector2(34, 31)
+layout_mode = 0
+offset_left = 662.0
+offset_top = 344.0
+offset_right = 662.0
+offset_bottom = 344.0
+text = ">"
+
+[node name="PlanetLabel" type="Label" parent="." unique_id=873351407]
+layout_mode = 0
+offset_left = 362.0
+offset_top = 344.0
+offset_right = 662.0
+offset_bottom = 375.0
+text = "Planet Zorta (classic)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slots" type="Control" parent="." unique_id=888702549]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Slot1New" type="Button" parent="Slots" unique_id=467543376]
+custom_minimum_size = Vector2(240, 31)
+layout_mode = 0
+offset_left = 392.0
+offset_top = 384.0
+offset_right = 392.0
+offset_bottom = 384.0
+text = "New Game 1"
+
+[node name="Slot1Continue" type="Button" parent="Slots" unique_id=282321861]
+custom_minimum_size = Vector2(142, 31)
+layout_mode = 0
+offset_left = 347.0
+offset_top = 384.0
+offset_right = 347.0
+offset_bottom = 384.0
+text = "Continue Game 1"
+
+[node name="Slot1Delete" type="Button" parent="Slots" unique_id=2137220692]
+custom_minimum_size = Vector2(140, 31)
+layout_mode = 0
+offset_left = 537.0
+offset_top = 384.0
+offset_right = 537.0
+offset_bottom = 384.0
+text = "Delete Game 1"
+
+[node name="Slot2New" type="Button" parent="Slots" unique_id=108860008]
+custom_minimum_size = Vector2(240, 31)
+layout_mode = 0
+offset_left = 392.0
+offset_top = 444.0
+offset_right = 392.0
+offset_bottom = 444.0
+text = "New Game 2"
+
+[node name="Slot2Continue" type="Button" parent="Slots" unique_id=2027575386]
+custom_minimum_size = Vector2(142, 31)
+layout_mode = 0
+offset_left = 347.0
+offset_top = 444.0
+offset_right = 347.0
+offset_bottom = 444.0
+text = "Continue Game 2"
+
+[node name="Slot2Delete" type="Button" parent="Slots" unique_id=1016956828]
+custom_minimum_size = Vector2(140, 31)
+layout_mode = 0
+offset_left = 537.0
+offset_top = 444.0
+offset_right = 537.0
+offset_bottom = 444.0
+text = "Delete Game 2"
+
+[node name="Slot3New" type="Button" parent="Slots" unique_id=397592401]
+custom_minimum_size = Vector2(240, 31)
+layout_mode = 0
+offset_left = 392.0
+offset_top = 504.0
+offset_right = 392.0
+offset_bottom = 504.0
+text = "New Game 3"
+
+[node name="Slot3Continue" type="Button" parent="Slots" unique_id=704440420]
+custom_minimum_size = Vector2(142, 31)
+layout_mode = 0
+offset_left = 347.0
+offset_top = 504.0
+offset_right = 347.0
+offset_bottom = 504.0
+text = "Continue Game 3"
+
+[node name="Slot3Delete" type="Button" parent="Slots" unique_id=2086056031]
+custom_minimum_size = Vector2(140, 31)
+layout_mode = 0
+offset_left = 537.0
+offset_top = 504.0
+offset_right = 537.0
+offset_bottom = 504.0
+text = "Delete Game 3"
+
+[node name="Chaosnaut" type="Button" parent="." unique_id=1187459668]
+custom_minimum_size = Vector2(140, 31)
+layout_mode = 0
+offset_left = 442.0
+offset_top = 564.0
+offset_right = 442.0
+offset_bottom = 564.0
+text = "Chaosnaut"
+
+[node name="SoundToggle" type="Button" parent="." unique_id=758603741]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 0
+offset_top = 734.0
+offset_bottom = 734.0
+icon = SubResource("AtlasTexture_81wt4")
+expand_icon = true
+
+[node name="FullscreenToggle" type="Button" parent="." unique_id=418395301]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 0
+offset_left = 33.0
+offset_top = 734.0
+offset_right = 33.0
+offset_bottom = 734.0
+icon = SubResource("AtlasTexture_kcc3o")
+expand_icon = true
+
+[node name="Version" type="Label" parent="." unique_id=893136027]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 742.0
+offset_right = 76.0
+offset_bottom = 742.0
+text = "Version 2.0"

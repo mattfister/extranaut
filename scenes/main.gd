@@ -10,7 +10,7 @@ extends Node
 const Controls := preload("res://input/controls.gd")
 const SaveGame := preload("res://save/save_game.gd")
 const Planets := preload("res://world/planets.gd")
-const TitleScript := preload("res://scenes/title.gd")
+const TitleScene := preload("res://scenes/title.tscn")
 const ImageScreenScript := preload("res://scenes/image_screen.gd")
 const CampaignScene := preload("res://scenes/campaign.tscn")
 const ChaosnautScene := preload("res://scenes/chaosnaut.tscn")
@@ -51,8 +51,7 @@ func _ready() -> void:
 
 
 func show_title() -> void:
-	var title := Control.new()
-	title.set_script(TitleScript)
+	var title := TitleScene.instantiate()
 	title.new_game.connect(_on_new_game, CONNECT_DEFERRED)
 	title.continue_game.connect(_start_campaign, CONNECT_DEFERRED)
 	title.chaosnaut_pressed.connect(_start_chaosnaut, CONNECT_DEFERRED)

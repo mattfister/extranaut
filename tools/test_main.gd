@@ -82,6 +82,8 @@ func _run() -> void:
 
 	# Chaosnaut from the title and back.
 	_expect(_button("Chaosnaut") != null, "the title offers Chaosnaut")
+	_expect(_main.screen.scene_file_path == "res://scenes/title.tscn", "the title is a scene that can be laid out in the editor")
+	_expect(_main.screen.theme != null, "the title takes its look from a theme")
 	if _button("Chaosnaut") != null:
 		_button("Chaosnaut").pressed.emit()
 	await _settle()
@@ -145,8 +147,11 @@ func _is(script: Script) -> bool:
 	return _main.screen != null and _main.screen.get_script() == script
 
 
+## A button the screen is showing, or null. The title keeps every slot's
+## buttons in its scene and hides the ones that do not apply.
 func _button(node_name: String) -> Button:
-	return _main.screen.find_child(node_name, true, false) as Button
+	var button := _main.screen.find_child(node_name, true, false) as Button
+	return button if button != null and button.is_visible_in_tree() else null
 
 
 func _press_key(keycode: Key) -> void:
