@@ -353,14 +353,44 @@ def _plain_rooms(world):
     )
 
 
+def dead_ends(world):
+    """Rooms with one way in that a powerup may be tucked into."""
+    return sorted(
+        at for at in world.links
+        if len(world.links[at]) == 1 and at != START
+        and at not in world.bosses and at not in world.behind_gate
+    )
+
+
+def _tuck_away(world, at):
+    """The room a powerup picked for room at should go in: an empty dead end
+    of the same zone if there is one, the nearest in depth, so a side trip
+    is rewarded. Otherwise the room itself."""
+    free = [
+        end for end in dead_ends(world)
+        if end not in world.treasure and world.zone[end] == world.zone[at]
+    ]
+    if not free:
+        return at
+    return min(free, key=lambda end: (abs(world.depth[end] - world.depth[at]), end))
+
+
 def _place_powerups(world, rng):
     rooms = _plain_rooms(world)
     # The nearest few rooms are left alone so the first gun is a walk away.
     for index, at in enumerate(_spread(rooms[3:], 6, rng)):
+        at = _tuck_away(world, at)
         world.treasure[at] = "GunPowerup" if index % 2 == 0 else "HpPowerup"
         world.kind[at] = "vault"
     for at in _spread(_plain_rooms(world), 6, rng):
         world.treasure[at] = "FuelPowerup"
+    # Fuel is moved afterwards, so a dead end goes to a gun or HP powerup
+    # first: those sit in vaults, which suit a room with one way in.
+    for at in sorted(a for a, name in world.treasure.items() if name == "FuelPowerup"):
+        end = _tuck_away(world, at)
+        if end != at:
+            del world.treasure[at]
+            world.treasure[end] = "FuelPowerup"
 
 
 def _place_save_points(world):

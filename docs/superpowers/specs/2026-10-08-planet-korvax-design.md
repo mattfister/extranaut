@@ -108,6 +108,10 @@ Zorta's counts and rules, on a different route:
 - 8 to 10 save points, including one in the start room: as many as it takes
   for no room to be more than six rooms from one.
 
+Gun, HP and fuel powerups are moved into dead-end rooms of their own zone
+where the zone has one free, so a side trip is rewarded. Boss rooms, which
+are dead ends too, keep their artifacts.
+
 A vault is a dead-end tunnel two cells high, plugged by a MonsterDoor2 with
 the treasure behind it. MonsterDoor2 opens when two monster-class entities
 remain, which here means the door and the treasure, so the vault opens when

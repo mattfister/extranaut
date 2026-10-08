@@ -113,6 +113,17 @@ class WorldMapTest(unittest.TestCase):
             self.assertEqual(w.treasure[at], "AlienArtifact")
             self.assertEqual(len(w.links[at]), 1)
 
+    def test_powerups_fill_the_dead_ends_of_their_zone(self):
+        w = self.world
+        powerups = ("GunPowerup", "HpPowerup", "FuelPowerup")
+        ends = worldmap.dead_ends(w)
+        self.assertGreaterEqual(len(ends), 3)
+        for zone in range(len(worldmap.ZONES)):
+            held = [at for at, name in w.treasure.items() if name in powerups and w.zone[at] == zone]
+            zone_ends = [at for at in ends if w.zone[at] == zone]
+            tucked = [at for at in held if at in zone_ends]
+            self.assertEqual(len(tucked), min(len(held), len(zone_ends)), worldmap.ZONES[zone]["name"])
+
     def test_save_points_are_never_far(self):
         w = self.world
         self.assertIn(worldmap.START, w.save_points)
