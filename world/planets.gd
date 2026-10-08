@@ -18,7 +18,7 @@ const DATA := {
 		"start_room": Vector2i(4, 2),
 	},
 	KORVAX: {
-		"name": "Planet Korvax",
+		"name": "Zorta Depths",
 		"label": "new - 2026",
 		"rooms_dir": "res://world/rooms_korvax",
 		"world_json": "res://tools/korvax.json",

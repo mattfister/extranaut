@@ -1,6 +1,6 @@
-[gd_resource type="Theme" format=3]
+[gd_resource type="Theme" format=3 uid="uid://43m1psro41wi"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/KARNIVOR.ttf" id="1_udl1o"]
+[ext_resource type="FontFile" uid="uid://dc28i7mhwt3fl" path="res://assets/fonts/KARNIVOR.ttf" id="1_udl1o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4mq11"]
 bg_color = Color(0, 0, 0, 1)

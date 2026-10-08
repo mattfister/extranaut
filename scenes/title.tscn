@@ -1,12 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://fqhaokpv6qyw"]
 
-[ext_resource type="Theme" path="res://ui/ui_theme.tres" id="1_yql1r"]
-[ext_resource type="Script" path="res://scenes/title.gd" id="2_ia1n6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/titleTerrainSmall.png" id="3_hiwto"]
-[ext_resource type="Texture2D" path="res://assets/sprites/extranautTitleAnimated.png" id="4_w65of"]
-[ext_resource type="Texture2D" path="res://assets/sprites/kopa.png" id="5_ygloa"]
-[ext_resource type="Texture2D" path="res://assets/sprites/matt.png" id="6_6civk"]
-[ext_resource type="Texture2D" path="res://assets/sprites/options.png" id="7_7af2g"]
+[ext_resource type="Theme" uid="uid://43m1psro41wi" path="res://ui/ui_theme.tres" id="1_yql1r"]
+[ext_resource type="Script" uid="uid://siai8bycymbx" path="res://scenes/title.gd" id="2_ia1n6"]
+[ext_resource type="Texture2D" uid="uid://s50ikyx5fjbs" path="res://assets/sprites/titleTerrainSmall.png" id="3_hiwto"]
+[ext_resource type="Texture2D" uid="uid://7tvgrtirotwd" path="res://assets/sprites/extranautTitleAnimated.png" id="4_w65of"]
+[ext_resource type="Texture2D" uid="uid://bq0gbu5lmp44o" path="res://assets/sprites/options.png" id="7_7af2g"]
+[ext_resource type="PackedScene" path="res://ui/menu_credits.tscn" id="8_credits"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_81wt4"]
 atlas = ExtResource("7_7af2g")
@@ -21,6 +20,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_yql1r")
 script = ExtResource("2_ia1n6")
 
@@ -31,32 +32,12 @@ mouse_filter = 2
 texture = ExtResource("3_hiwto")
 
 [node name="Logo" type="Sprite2D" parent="." unique_id=2105665521]
-position = Vector2(250, 50)
+position = Vector2(250, 107)
 scale = Vector2(4, 4)
 texture = ExtResource("4_w65of")
 centered = false
 hframes = 4
 frame = 1
-
-[node name="Kopa" type="TextureRect" parent="." unique_id=1182802455]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 250.0
-offset_right = 80.0
-offset_bottom = 250.0
-scale = Vector2(2, 2)
-mouse_filter = 2
-texture = ExtResource("5_ygloa")
-
-[node name="Matt" type="TextureRect" parent="." unique_id=984005798]
-layout_mode = 0
-offset_left = 300.0
-offset_top = 300.0
-offset_right = 300.0
-offset_bottom = 300.0
-scale = Vector2(2, 2)
-mouse_filter = 2
-texture = ExtResource("6_6civk")
 
 [node name="PlanetPrev" type="Button" parent="." unique_id=198855797]
 custom_minimum_size = Vector2(34, 31)
@@ -198,10 +179,16 @@ offset_bottom = 734.0
 icon = SubResource("AtlasTexture_kcc3o")
 expand_icon = true
 
-[node name="Version" type="Label" parent="." unique_id=893136027]
-layout_mode = 0
-offset_left = 76.0
-offset_top = 742.0
-offset_right = 76.0
-offset_bottom = 742.0
-text = "Version 2.0"
+[node name="MenuCredits" parent="." unique_id=2087904031 instance=ExtResource("8_credits")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -112.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0

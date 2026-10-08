@@ -84,6 +84,17 @@ func _run() -> void:
 	_expect(_button("Chaosnaut") != null, "the title offers Chaosnaut")
 	_expect(_main.screen.scene_file_path == "res://scenes/title.tscn", "the title is a scene that can be laid out in the editor")
 	_expect(_main.screen.theme != null, "the title takes its look from a theme")
+	var credits: Node = _main.screen.find_child("MenuCredits", true, false)
+	_expect(credits != null, "the title shows the credits")
+	if credits != null:
+		var lines: Array[String] = []
+		for child in credits.get_node("VBoxContainer").get_children():
+			lines.append(String(child.name))
+		_expect(lines == ["NameVersionLabel", "CreatedByLabel", "DiscordLabel"], "the credits hold the name, creator and Discord lines, got %s" % [lines])
+		_expect(credits.get_node("%NameVersionLabel").text == "Extranaut v2.0", "the credits name the game and its version")
+		_expect(_main.screen.find_child("Version", true, false) == null, "the version is shown once, in the credits")
+		_expect(credits.get_node("%CreatedByLabel").text.contains("freezebeam.bsky.social"), "the credits link to Bluesky")
+		_expect(credits.get_node("%DiscordLabel").text.contains("discord.gg"), "the credits link to Discord")
 	if _button("Chaosnaut") != null:
 		_button("Chaosnaut").pressed.emit()
 	await _settle()
@@ -102,7 +113,7 @@ func _run() -> void:
 	_button("PlanetNext").pressed.emit()
 	await _settle()
 	_expect(_main.screen.planet == "korvax", "the switch moves to Korvax")
-	_expect(_label("PlanetLabel") == "Planet Korvax (new - 2026)", "the label names Korvax as new - 2026")
+	_expect(_label("PlanetLabel") == "Zorta Depths (new - 2026)", "the label names the new planet as new - 2026")
 	_expect(_button("Slot3New") != null and _button("Slot3Continue") == null, "Korvax's slot 3 is empty")
 	_button("Slot3New").pressed.emit()
 	await _settle()
