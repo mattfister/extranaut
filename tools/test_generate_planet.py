@@ -340,6 +340,101 @@ class PlanetTest(unittest.TestCase):
             self.assertFalse(generate_planet.tile_is_blank(sheet, tx, ty), (sheet, tx, ty))
         self.assertTrue(generate_planet.tile_is_blank("rocks", 0, 0))
 
+    def test_decorations_leave_the_rock_alone(self):
+        for at, r in self.rooms.items():
+            solid = {(x, y) for y, row in enumerate(r["cells"]) for x, c in enumerate(row) if c != "."}
+            for name, layer in r["layers"].items():
+                cells = [(t[0], t[1]) for t in layer]
+                self.assertEqual(len(cells), len(set(cells)), (at, name))
+                self.assertTrue(all(0 <= x < 30 and 0 <= y < 24 for x, y in cells), (at, name))
+            # Every rock cell still has its tile; anything else is decoration.
+            self.assertTrue(solid <= {(t[0], t[1]) for t in r["layers"]["midground"]}, at)
+            self.assertEqual(len(r["layers"]["background"]), 720, at)
+
+    def test_animated_tiles_exist(self):
+        from planet_gen import sheets
+        used = collections.Counter()
+        for at, r in self.rooms.items():
+            for a in r["animated"]:
+                self.assertIn(a["layer"], ("background", "midground", "foreground"))
+                self.assertLess(a["row"], sheets.animation_rows(a["sheet"]), a)
+                self.assertFalse(sheets.tile_is_blank(a["sheet"], 0, a["row"], "animations"), a)
+                self.assertTrue(a["pos"][0] % 32 == 0 and a["pos"][1] % 32 == 0, a)
+                self.assertTrue(0 <= a["pos"][0] < 960 and 0 <= a["pos"][1] < 768, a)
+                used[a["sheet"]] += 1
+        for sheet in ("animations", "grass", "waterfall", "ruinsAnimated"):
+            self.assertGreater(used[sheet], 0, sheet)
+
+    def test_columns_start_and_stop_on_flat_rock(self):
+        # Waterfalls: flat ceiling above, flat floor below.
+        checked = 0
+        for at, r in self.rooms.items():
+            cells = r["cells"]
+            columns = {
+                (a["pos"][0] // 32, a["pos"][1] // 32) for a in r["animated"]
+                if a["sheet"] == "waterfall"
+            }
+            for x, y in columns:
+                self.assertEqual(cells[y][x], ".", (at, x, y))
+                for dy, name in ((-1, "top"), (1, "bottom")):
+                    if (x, y + dy) in columns:
+                        continue
+                    self.assertEqual(cells[y + dy][x], "#", (at, x, y, name))
+                    # Level rock a cell either side, with air beside the
+                    # water, so the end meets a straight edge.
+                    for side in (x - 1, x + 1):
+                        self.assertEqual(cells[y + dy][side], "#", (at, x, y, name))
+                        self.assertEqual(cells[y][side], ".", (at, x, y, name))
+                    checked += 1
+        self.assertGreater(checked, 10)
+
+    def test_art_that_did_not_work_stays_out(self):
+        sheets = self.world["sheets"]
+        ship = {(5, 3), (6, 3), (7, 3), (5, 4), (6, 4), (7, 4)}
+        for at, r in self.rooms.items():
+            # The pulsing tile, tried as a conduit, read as flashing sand.
+            self.assertFalse(any((a["sheet"], a["row"]) == ("animations", 3) for a in r["animated"]), at)
+            # The dome is the player's ship, not scenery.
+            for t in r["layers"]["midground"]:
+                if sheets[t[2]] in ("rocks", "rocksBlue", "yellowRocks"):
+                    self.assertNotIn((t[3], t[4]), ship, at)
+            # Water is only for the zones it suits.
+            if r["zone"] not in ("warrens", "emerald"):
+                self.assertFalse(any(a["sheet"] == "waterfall" for a in r["animated"]), at)
+
+    def test_each_zone_is_dressed_in_its_own_way(self):
+        sheets = self.world["sheets"]
+
+        def rooms_with(zone, layer, sheet, tiles):
+            index = sheets.index(sheet)
+            return sum(
+                1 for r in self.rooms.values()
+                if r["zone"] == zone and any(t[2] == index and (t[3], t[4]) in tiles for t in r["layers"][layer])
+            )
+
+        self.assertGreaterEqual(rooms_with("emerald", "midground", "greenRocks", {(6, 3)}), 5)  # mushroom caps
+        self.assertGreaterEqual(rooms_with("emerald", "midground", "greenRocks", {(6, 1)}), 5)  # grass
+        self.assertGreaterEqual(rooms_with("warrens", "midground", "rocks", {(6, 1)}), 8)
+        self.assertGreaterEqual(rooms_with("warrens", "foreground", "rocks", {(6, 0)}), 8)  # tufts
+        self.assertGreaterEqual(rooms_with("gravitor", "background", "rockBg", {(5, 1)}), 5)  # stars
+        self.assertGreaterEqual(rooms_with("pyrite", "midground", "ruins", {(1, 3), (2, 3), (3, 3), (2, 1)}), 6)
+        self.assertGreaterEqual(rooms_with("boiling point", "midground", "grayRocks", {(5, 4), (6, 4)}), 6)
+        # Mushrooms and machines stay in their own zones.
+        self.assertEqual(rooms_with("pyrite", "midground", "greenRocks", {(6, 3)}), 0)
+        self.assertEqual(rooms_with("warrens", "midground", "grayRocks", {(5, 4)}), 0)
+
+    def test_surface_rooms_and_sanctuaries_look_out_on_space(self):
+        star = self.world["sheets"].index("rockBg")
+
+        def has_space(r):
+            return any(t[2] == star and (t[3], t[4]) == (5, 1) for t in r["layers"]["background"])
+
+        surface = [r for r in self.rooms.values() if r["y"] == 0]
+        self.assertGreaterEqual(sum(1 for r in surface if has_space(r)), 5)
+        for r in self.rooms.values():
+            if r["kind"] == "sanctuary":
+                self.assertTrue(has_space(r), (r["x"], r["y"]))
+
     def test_every_room_has_a_tint_music_and_a_player_start(self):
         sounds = TOOLS.parent / "assets" / "sounds"
         for r in self.rooms.values():

@@ -63,6 +63,14 @@ def walls(rows, open_floor=None):
     return segments
 
 
+def edge_tile(up, down, left, right):
+    """The piece of a rock sheet's nine-patch for a cell, given which of its
+    neighbours are open."""
+    ty = 1 if up else 3 if down else 2
+    tx = 1 if left and not right else 3 if right and not left else 2
+    return tx, ty
+
+
 def tiles(rows, sheet_index):
     """Midground tiles, as [cell x, cell y, sheet, tile x, tile y]: an edge
     or corner piece where rock meets air, and the fill tile inside."""
@@ -75,10 +83,10 @@ def tiles(rows, sheet_index):
             if char in SLOPE_TILES:
                 tx, ty = SLOPE_TILES[char]
             else:
-                up, down = not _solid(rows, x, y - 1), not _solid(rows, x, y + 1)
-                left, right = not _solid(rows, x - 1, y), not _solid(rows, x + 1, y)
-                ty = 1 if up else 3 if down else 2
-                tx = 1 if left and not right else 3 if right and not left else 2
+                tx, ty = edge_tile(
+                    not _solid(rows, x, y - 1), not _solid(rows, x, y + 1),
+                    not _solid(rows, x - 1, y), not _solid(rows, x + 1, y),
+                )
             result.append([x, y, sheet_index, tx, ty])
     return result
 

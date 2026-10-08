@@ -211,6 +211,38 @@ order going deeper so the two of a kind are far apart:
 
 Set pieces never hold a door, a treasure or a save point.
 
+## Decorations
+
+A last pass, `planet_gen/decor.py`, dresses each finished room with tiles and
+animated sprites taken from the kinds of decoration Zorta uses. It has its
+own random stream and only adds visuals: cells, walls and monsters are the
+same with or without it. Decorations have no collision. They go in empty
+cells of the midground layer, on the top edge of floors, in the background
+layer, or in the foreground layer in front of the player.
+
+| Zone | Decorations |
+|---|---|
+| Warrens | grass-topped floors with tufts and swaying blades, small mushrooms, the odd waterfall |
+| Gravitor | windows cut in the background onto a twinkling starfield |
+| Pyrite | ruin pillars, rings and blinking tablets |
+| Emerald | giant mushrooms three to eight cells tall, grass, small mushrooms, waterfalls |
+| Boiling point | machine panels and orbs |
+
+The dome in the rock sheets is the ship the player arrived in, so it is not
+used as scenery. Waterfalls only run from a flat stretch of ceiling to a flat
+stretch of floor, where their square ends meet a straight edge, and only in
+the warrens and emerald. The pulsing tile was tried as a conduit behind
+boiling point rooms and dropped: it read as flashing sand.
+
+Rooms in the top row look out on space whatever their zone. A sanctuary
+always gets grass, small mushrooms and a window onto space, and a waterfall
+where its zone has them.
+Each decoration has a chance per room, set in `decor.ZONE_DECOR`, so some
+rooms stay bare.
+
+The swaying grass (`grass.png`) and the waterfall (`waterfall.png`) are
+animation sheets from the original game that Zorta never placed.
+
 ## Testing
 
 - `tools/test_generate_planet.py` (unittest): the output is identical across
