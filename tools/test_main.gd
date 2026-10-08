@@ -3,7 +3,8 @@ extends SceneTree
 ## delete, ending.
 ## Run: godot --headless --path . --script res://tools/test_main.gd
 
-const Progress := preload("res://save/progress.gd")
+const Planets := preload("res://world/planets.gd")
+const Settings := preload("res://save/settings.gd")
 const SaveGame := preload("res://save/save_game.gd")
 const TitleScript := preload("res://scenes/title.gd")
 const ImageScreenScript := preload("res://scenes/image_screen.gd")
@@ -21,8 +22,7 @@ func _initialize() -> void:
 func _run() -> void:
 	SaveGame.directory = "user://test_saves/"
 	DirAccess.make_dir_recursive_absolute(SaveGame.directory)
-	for slot in SaveGame.SLOTS:
-		SaveGame.delete(slot)
+	_clear_saves()
 	await process_frame
 	_main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(_main)
@@ -36,12 +36,13 @@ func _run() -> void:
 	_button("Slot1New").pressed.emit()
 	await _settle()
 	_expect(_is(ImageScreenScript), "New Game shows the intro")
-	_expect(SaveGame.exists(1), "New Game writes the slot at once")
+	_expect(SaveGame.exists("zorta", 1), "New Game writes the slot at once")
 	_press_key(KEY_SPACE)
 	await _settle()
 	_expect(_is(CampaignScript), "dismissing the intro starts the campaign")
 	if _is(CampaignScript):
 		_expect(_main.screen.slot == 1, "the campaign uses the chosen slot")
+		_expect(_main.screen.planet == "zorta", "the first planet offered is Zorta")
 		_expect(_main.screen.grid == Vector2i(4, 2), "a new game starts in room 4,2")
 		_main.screen.quit_to_title.emit()
 	await _settle()
@@ -54,14 +55,14 @@ func _run() -> void:
 	# Delete.
 	_button("Slot1Delete").pressed.emit()
 	await _settle()
-	_expect(not SaveGame.exists(1), "Delete removes the slot file")
+	_expect(not SaveGame.exists("zorta", 1), "Delete removes the slot file")
 	_expect(_button("Slot1New") != null and _button("Slot1Delete") == null, "a deleted slot offers New Game again")
 
 	# Continue goes straight to the campaign at the saved checkpoint.
-	var progress := Progress.new()
+	var progress = Planets.new_progress("zorta")
 	progress.checkpoint = Vector2i(5, 2)
 	progress.max_hp = 7
-	SaveGame.write(2, progress)
+	SaveGame.write("zorta", 2, progress)
 	_main.show_title()
 	await _settle()
 	_button("Slot2Continue").pressed.emit()
@@ -90,10 +91,54 @@ func _run() -> void:
 	await _settle()
 	_expect(_is(TitleScript), "leaving Chaosnaut returns to the title")
 
-	for slot in SaveGame.SLOTS:
-		SaveGame.delete(slot)
+	# The planet switch shows the other planet's slots and starts its campaign.
+	SaveGame.write("zorta", 3, Planets.new_progress("zorta"))
+	_main.show_title()
+	await _settle()
+	_expect(_label("PlanetLabel") == "Planet Zorta (classic)", "the label names Zorta as classic")
+	_expect(_button("Slot3Continue") != null, "Zorta's slot 3 is in use")
+	_button("PlanetNext").pressed.emit()
+	await _settle()
+	_expect(_main.screen.planet == "korvax", "the switch moves to Korvax")
+	_expect(_label("PlanetLabel") == "Planet Korvax (new - 2026)", "the label names Korvax as new - 2026")
+	_expect(_button("Slot3New") != null and _button("Slot3Continue") == null, "Korvax's slot 3 is empty")
+	_button("Slot3New").pressed.emit()
+	await _settle()
+	_expect(SaveGame.exists("korvax", 3), "a Korvax new game writes a Korvax slot")
+	_press_key(KEY_SPACE)
+	await _settle()
+	_expect(_is(CampaignScript), "dismissing the intro starts the Korvax campaign")
+	if _is(CampaignScript):
+		_expect(_main.screen.planet == "korvax", "the campaign is on Korvax")
+		_expect(_main.screen.grid == Vector2i(2, 0), "Korvax starts in room 2,0")
+		_main.screen.quit_to_title.emit()
+	await _settle()
+	_expect(_is(TitleScript) and _main.screen.planet == "korvax", "the title remembers the last planet")
+	_expect(_button("Slot3Continue") != null, "the Korvax slot is now in use")
+	_button("Slot3Delete").pressed.emit()
+	await _settle()
+	_expect(not SaveGame.exists("korvax", 3) and SaveGame.exists("zorta", 3), "Delete removes only that planet's slot")
+	_button("PlanetPrev").pressed.emit()
+	await _settle()
+	_expect(_main.screen.planet == "zorta", "the switch moves back to Zorta")
+	_expect(_button("Slot3Continue") != null, "Zorta's slot 3 is still there")
+
+	_clear_saves()
 	print("main test passed" if _failures == 0 else "main test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
+
+
+func _clear_saves() -> void:
+	for planet: String in Planets.ORDER:
+		for slot in SaveGame.SLOTS:
+			SaveGame.delete(planet, slot)
+	if FileAccess.file_exists(Settings.path()):
+		DirAccess.remove_absolute(Settings.path())
+
+
+func _label(node_name: String) -> String:
+	var label := _main.screen.find_child(node_name, true, false) as Label
+	return "" if label == null else label.text
 
 
 func _is(script: Script) -> bool:

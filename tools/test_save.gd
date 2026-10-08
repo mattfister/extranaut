@@ -4,6 +4,8 @@ extends SceneTree
 
 const Progress := preload("res://save/progress.gd")
 const SaveGame := preload("res://save/save_game.gd")
+const Planets := preload("res://world/planets.gd")
+const Settings := preload("res://save/settings.gd")
 
 var _failures := 0
 
@@ -16,8 +18,9 @@ func _init() -> void:
 
 
 func _test_progress() -> void:
-	var fresh := Progress.new()
-	_expect(fresh.checkpoint == Vector2i(4, 2), "a new game starts in room 4,2")
+	var fresh = Planets.new_progress("zorta")
+	_expect(fresh.checkpoint == Vector2i(4, 2), "a new Zorta game starts in room 4,2")
+	_expect(Planets.new_progress("korvax").checkpoint == Vector2i(2, 0), "a new Korvax game starts in room 2,0")
 	_expect(fresh.max_hp == 5 and fresh.max_fuel == 2000.0, "a new game has 5 hp and 2000 fuel")
 	_expect(fresh.gun_level == 1 and fresh.artifacts == 0, "a new game has gun level 1 and no artifacts")
 
@@ -52,25 +55,44 @@ func _test_save_files() -> void:
 	SaveGame.directory = "user://test_saves/"
 	DirAccess.make_dir_recursive_absolute(SaveGame.directory)
 	for slot in SaveGame.SLOTS:
-		SaveGame.delete(slot)
-	_expect(not SaveGame.exists(1), "an unused slot does not exist")
-	_expect(SaveGame.read(1) == null, "an unused slot reads as null")
+		for planet: String in Planets.ORDER:
+			SaveGame.delete(planet, slot)
+	_expect(not SaveGame.exists("zorta", 1), "an unused slot does not exist")
+	_expect(SaveGame.read("zorta", 1) == null, "an unused slot reads as null")
 
 	var progress := Progress.new()
 	progress.artifacts = 3
-	_expect(SaveGame.write(2, progress), "writing a slot succeeds")
-	_expect(SaveGame.exists(2) and not SaveGame.exists(1), "only the written slot exists")
-	var loaded = SaveGame.read(2)
+	_expect(SaveGame.write("zorta", 2, progress), "writing a slot succeeds")
+	_expect(SaveGame.exists("zorta", 2) and not SaveGame.exists("zorta", 1), "only the written slot exists")
+	var loaded = SaveGame.read("zorta", 2)
 	_expect(loaded != null and loaded.artifacts == 3, "a written slot reads back")
 
-	var file := FileAccess.open(SaveGame.path(3), FileAccess.WRITE)
+	var file := FileAccess.open(SaveGame.path("zorta", 3), FileAccess.WRITE)
 	file.store_string("{ this is not json")
 	file.close()
-	_expect(SaveGame.read(3) == null, "a corrupt slot reads as null")
+	_expect(SaveGame.read("zorta", 3) == null, "a corrupt slot reads as null")
 
-	SaveGame.delete(2)
-	SaveGame.delete(3)
-	_expect(not SaveGame.exists(2), "a deleted slot is gone")
+	SaveGame.delete("zorta", 2)
+	SaveGame.delete("zorta", 3)
+	_expect(not SaveGame.exists("zorta", 2), "a deleted slot is gone")
+
+	_expect(SaveGame.path("zorta", 1).ends_with("save_1.json"), "Zorta keeps the original file names")
+	_expect(SaveGame.path("korvax", 1).ends_with("save_korvax_1.json"), "Korvax has its own files")
+	SaveGame.write("korvax", 1, Planets.new_progress("korvax"))
+	_expect(SaveGame.exists("korvax", 1) and not SaveGame.exists("zorta", 1), "planets do not share slots")
+	loaded = SaveGame.read("korvax", 1)
+	_expect(loaded != null and loaded.checkpoint == Vector2i(2, 0), "a Korvax slot reads back")
+	SaveGame.delete("korvax", 1)
+	_expect(not SaveGame.exists("korvax", 1), "a deleted Korvax slot is gone")
+
+	_expect(Settings.last_planet() == "zorta", "the first planet offered is Zorta")
+	Settings.set_last_planet("korvax")
+	_expect(Settings.last_planet() == "korvax", "the last planet is remembered")
+	file = FileAccess.open(Settings.path(), FileAccess.WRITE)
+	file.store_string(JSON.stringify({"planet": "pluto"}))
+	file.close()
+	_expect(Settings.last_planet() == "zorta", "an unknown planet falls back to Zorta")
+	DirAccess.remove_absolute(Settings.path())
 
 
 func _expect(condition: bool, message: String) -> void:

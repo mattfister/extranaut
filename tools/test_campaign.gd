@@ -3,7 +3,7 @@ extends SceneTree
 ## Run: godot --headless --path . --script res://tools/test_campaign.gd
 
 const CampaignScript := preload("res://scenes/campaign.gd")
-const Progress := preload("res://save/progress.gd")
+const Planets := preload("res://world/planets.gd")
 const SaveGame := preload("res://save/save_game.gd")
 
 var _failures := 0
@@ -18,7 +18,7 @@ func _run() -> void:
 
 	SaveGame.directory = "user://test_saves/"
 	DirAccess.make_dir_recursive_absolute(SaveGame.directory)
-	SaveGame.delete(3)
+	SaveGame.delete("zorta", 3)
 	var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
 	campaign.slot = 3
 	root.add_child(campaign)
@@ -109,7 +109,9 @@ func _run() -> void:
 	campaign.free()
 	await _check_one_tile_shaft()
 	await _check_win()
-	SaveGame.delete(3)
+	await _check_korvax()
+	await _check_korvax_vault()
+	SaveGame.delete("zorta", 3)
 
 	print("campaign test passed" if _failures == 0 else "campaign test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
@@ -121,7 +123,7 @@ func _run() -> void:
 func _check_one_tile_shaft() -> void:
 	for approach in ["drop", "run"]:
 		var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
-		campaign.progress = Progress.new()
+		campaign.progress = Planets.new_progress("zorta")
 		campaign.progress.checkpoint = Vector2i(3, 2)
 		root.add_child(campaign)
 		var player: RigidBody2D = campaign.get_node("Player")
@@ -207,7 +209,7 @@ func _count_powerups(room: Node2D) -> int:
 ## Runs in room (4, 2) after the save point there has been activated, in a
 ## campaign using slot 3 that has also visited room (5, 2).
 func _check_saving_map_and_pause(campaign: Node2D, player: RigidBody2D) -> void:
-	var saved = SaveGame.read(3)
+	var saved = SaveGame.read("zorta", 3)
 	_expect(saved != null, "the campaign writes its slot")
 	if saved != null:
 		_expect(saved.checkpoint == Vector2i(4, 2), "the save holds the checkpoint")
@@ -220,7 +222,7 @@ func _check_saving_map_and_pause(campaign: Node2D, player: RigidBody2D) -> void:
 	player.artifacts = 2
 	campaign.room.get_node("Entities").get_child(0).activated = false
 	campaign.room.get_node("Entities").get_child(0).hit()
-	saved = SaveGame.read(3)
+	saved = SaveGame.read("zorta", 3)
 	_expect(saved != null and saved.max_hp == 6 and saved.artifacts == 2, "a save point saves the player's stats")
 
 	var hud: Control = campaign.get_node("Hud/Strip")
@@ -259,7 +261,7 @@ func _check_saving_map_and_pause(campaign: Node2D, player: RigidBody2D) -> void:
 
 func _check_win() -> void:
 	var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
-	campaign.progress = Progress.new()
+	campaign.progress = Planets.new_progress("zorta")
 	campaign.progress.checkpoint = Vector2i(4, 9)
 	root.add_child(campaign)
 	var player: RigidBody2D = campaign.get_node("Player")
@@ -270,6 +272,92 @@ func _check_win() -> void:
 	player.global_position = campaign.room.position + Vector2(480, 790)
 	await _frames(5)
 	_expect(wins[0] == 1, "falling out of the bottom row wins once, count %d" % wins[0])
+	root.remove_child(campaign)
+	campaign.free()
+
+
+func _korvax_room(matches: Callable) -> Dictionary:
+	var world = JSON.parse_string(FileAccess.get_file_as_string("res://tools/korvax.json"))
+	for data in world.rooms:
+		if matches.call(data):
+			return data
+	return {}
+
+
+## Korvax starts in its own start room, on the ground, and its side opening
+## lines up with the floor of the room next door.
+func _check_korvax() -> void:
+	var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
+	campaign.planet = "korvax"
+	root.add_child(campaign)
+	var player: RigidBody2D = campaign.get_node("Player")
+	await _frames(120)
+	_expect(campaign.grid == Vector2i(2, 0), "Korvax starts in room 2,0, grid %s" % campaign.grid)
+	_expect(campaign.room.scene_file_path.contains("rooms_korvax"), "Korvax loads its own rooms")
+	_expect(player.linear_velocity.length() < 5.0, "the player rests in the Korvax start room")
+	_expect(player.hp == player.max_hp, "the Korvax start room is safe, hp %d" % player.hp)
+	_expect(campaign.room.get_node("Midground").modulate != Color.WHITE, "Korvax rooms are tinted")
+
+	var start := _korvax_room(func(data: Dictionary) -> bool: return int(data.x) == 2 and int(data.y) == 0)
+	_expect(start.links.has("E"), "the Korvax start room opens to the east")
+	if start.links.has("E"):
+		# Stand in the east opening, on its floor, and walk out.
+		var floor_y: float = float(start.links["E"]) * 32.0
+		player.global_position = campaign.room.position + Vector2(900, floor_y - 13.0)
+		player.linear_velocity = Vector2.ZERO
+		await _frames(20)
+		var local: Vector2 = player.global_position - campaign.room.position
+		_expect(absf(local.y - (floor_y - 13.0)) < 2.0, "the opening has a floor, y %.1f" % local.y)
+		Input.action_press("move_right")
+		var waited := 0
+		while campaign.grid != Vector2i(3, 0) and waited < 120:
+			await physics_frame
+			waited += 1
+		Input.action_release("move_right")
+		_expect(campaign.grid == Vector2i(3, 0), "walking east enters room 3,0, grid %s" % campaign.grid)
+		await _frames(40)
+		local = player.global_position - campaign.room.position
+		_expect(absf(local.y - (floor_y - 13.0)) < 2.0, "the next room continues the floor, y %.1f" % local.y)
+		_expect(local.x >= 17.0 and local.x < 200.0, "the player is inside the next room, x %.1f" % local.x)
+	root.remove_child(campaign)
+	campaign.free()
+
+
+## A vault door stays wedged in its tunnel while hostiles live and opens when
+## only the door and the treasure remain.
+func _check_korvax_vault() -> void:
+	var data := _korvax_room(func(room: Dictionary) -> bool: return room.kind == "vault")
+	_expect(not data.is_empty(), "Korvax has a vault room")
+	if data.is_empty():
+		return
+	var campaign: Node2D = load("res://scenes/campaign.tscn").instantiate()
+	campaign.planet = "korvax"
+	campaign.progress = Planets.new_progress("korvax")
+	campaign.progress.checkpoint = Vector2i(int(data.x), int(data.y))
+	root.add_child(campaign)
+	var player: RigidBody2D = campaign.get_node("Player")
+	var entities: Node = campaign.room.get_node("Entities")
+	var door: RigidBody2D
+	var treasure: RigidBody2D
+	for entity in entities.get_children():
+		if entity.name.begins_with("MonsterDoor2"):
+			door = entity
+		elif entity.is_powerup:
+			treasure = entity
+	_expect(door != null and treasure != null, "the vault room has a door and a treasure")
+	var door_start := door.position
+	var treasure_start := treasure.position
+	for i in 120:
+		await physics_frame
+		# Keep the player alive and out of the way while the room settles.
+		player.hp = player.max_hp
+	_expect(is_instance_valid(door) and door.position.distance_to(door_start) < 4.0, "the vault door stays put")
+	_expect(treasure.position.distance_to(treasure_start) < 4.0, "the treasure stays put")
+	for entity in entities.get_children():
+		if entity != door and entity != treasure:
+			entity.die()
+	await _frames(5)
+	_expect(not is_instance_valid(door), "the vault opens when the room is cleared")
 	root.remove_child(campaign)
 	campaign.free()
 

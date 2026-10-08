@@ -1,13 +1,16 @@
 extends Control
-## The title screen: a New Game button for each empty save slot, Continue and
-## Delete for each used one, and sound and fullscreen toggles.
+## The title screen: a planet switch, then for the chosen planet a New Game
+## button for each empty save slot and Continue and Delete for each used one,
+## and sound and fullscreen toggles.
 
-signal new_game(slot: int)
-signal continue_game(slot: int)
+signal new_game(planet: String, slot: int)
+signal continue_game(planet: String, slot: int)
 signal chaosnaut_pressed
 
 const UiKit := preload("res://ui/ui_kit.gd")
 const SaveGame := preload("res://save/save_game.gd")
+const Planets := preload("res://world/planets.gd")
+const Settings := preload("res://save/settings.gd")
 const Background := preload("res://assets/sprites/titleTerrainSmall.png")
 const TitleSheet := preload("res://assets/sprites/extranautTitleAnimated.png")
 const KopaStrip := preload("res://assets/sprites/kopa.png")
@@ -15,6 +18,9 @@ const MattStrip := preload("res://assets/sprites/matt.png")
 const OptionsSheet := preload("res://assets/sprites/options.png")
 
 const CENTER_X := 512.0
+const PLANET_Y := 344.0
+const ARROW_BUTTON := Vector2(34, 20)
+const PLANET_LABEL_WIDTH := 300.0
 const SLOTS_TOP := 384.0
 const SLOT_SPACING := 60.0
 const CHAOSNAUT_Y := 564.0
@@ -27,6 +33,10 @@ const ICON_SOUND_ON := Rect2(16, 0, 16, 16)
 const ICON_WINDOWED := Rect2(0, 16, 16, 16)
 const ICON_FULLSCREEN := Rect2(16, 16, 16, 16)
 
+## The planet whose save slots are shown.
+var planet := Planets.ZORTA
+
+var _planet_label: Label
 var _slots: Control
 var _title: Sprite2D
 var _title_elapsed := 0.0
@@ -47,6 +57,18 @@ func _ready() -> void:
 	add_child(_title)
 	_add_image(KopaStrip, Vector2(80, 250), 2.0)
 	_add_image(MattStrip, Vector2(300, 300), 2.0)
+
+	planet = Settings.last_planet()
+	var half := PLANET_LABEL_WIDTH / 2.0
+	_add_planet_button("PlanetPrev", "<", CENTER_X - half - ARROW_BUTTON.x, -1)
+	_add_planet_button("PlanetNext", ">", CENTER_X + half, 1)
+	_planet_label = UiKit.make_label("")
+	_planet_label.name = "PlanetLabel"
+	_planet_label.position = Vector2(CENTER_X - half, PLANET_Y)
+	_planet_label.size = Vector2(PLANET_LABEL_WIDTH, ARROW_BUTTON.y)
+	_planet_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_planet_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	add_child(_planet_label)
 
 	_slots = Control.new()
 	add_child(_slots)
@@ -72,25 +94,41 @@ func _process(delta: float) -> void:
 		_title.frame = (_title.frame + 1) % _title.hframes
 
 
+func _add_planet_button(node_name: String, text: String, x: float, step: int) -> void:
+	var button := UiKit.make_button(text, ARROW_BUTTON)
+	button.name = node_name
+	button.position = Vector2(x, PLANET_Y)
+	button.pressed.connect(_step_planet.bind(step))
+	add_child(button)
+
+
+func _step_planet(step: int) -> void:
+	var index := Planets.ORDER.find(planet)
+	planet = Planets.ORDER[posmod(index + step, Planets.ORDER.size())]
+	Settings.set_last_planet(planet)
+	_build_slots()
+
+
 func _build_slots() -> void:
+	_planet_label.text = Planets.title(planet)
 	for child in _slots.get_children():
 		_slots.remove_child(child)
 		child.free()
 	for slot: int in SaveGame.SLOTS:
 		var y: float = SLOTS_TOP + SLOT_SPACING * (slot - 1)
-		if SaveGame.read(slot) != null:
+		if SaveGame.read(planet, slot) != null:
 			var resume := _add_slot_button("Slot%dContinue" % slot, "Continue Game %d" % slot, Vector2(CENTER_X - SMALL_BUTTON.x - 25.0, y), SMALL_BUTTON)
-			resume.pressed.connect(func() -> void: continue_game.emit(slot))
+			resume.pressed.connect(func() -> void: continue_game.emit(planet, slot))
 			var delete := _add_slot_button("Slot%dDelete" % slot, "Delete Game %d" % slot, Vector2(CENTER_X + 25.0, y), SMALL_BUTTON)
 			delete.pressed.connect(_delete_slot.bind(slot))
 		else:
-			var fresh := _add_slot_button("Slot%dNew" % slot, "New Game %d - Planet Zorta" % slot, Vector2(CENTER_X - WIDE_BUTTON.x / 2.0, y), WIDE_BUTTON)
-			fresh.pressed.connect(func() -> void: new_game.emit(slot))
+			var fresh := _add_slot_button("Slot%dNew" % slot, "New Game %d" % slot, Vector2(CENTER_X - WIDE_BUTTON.x / 2.0, y), WIDE_BUTTON)
+			fresh.pressed.connect(func() -> void: new_game.emit(planet, slot))
 	(_slots.get_child(0) as Button).grab_focus.call_deferred()
 
 
 func _delete_slot(slot: int) -> void:
-	SaveGame.delete(slot)
+	SaveGame.delete(planet, slot)
 	# Deferred: rebuilding frees the button whose signal is being handled.
 	_build_slots.call_deferred()
 

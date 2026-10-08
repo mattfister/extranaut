@@ -2,10 +2,10 @@ extends RefCounted
 ## Everything a save slot remembers.
 
 const VERSION := 1
-const START_ROOM := Vector2i(4, 2)
 
-## The room the player respawns in. Set by save points and powerups.
-var checkpoint := START_ROOM
+## The room the player respawns in. Set by save points and powerups. A new
+## game's starting room comes from world/planets.gd.
+var checkpoint := Vector2i.ZERO
 var max_hp := 5
 var max_fuel := 2000.0
 var gun_level := 1

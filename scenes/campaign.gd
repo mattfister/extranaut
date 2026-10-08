@@ -1,15 +1,15 @@
 extends Node2D
 ## The campaign: owns the current room, the player, shots and the camera,
 ## moves between rooms when the player crosses an edge, and records progress.
-## Set slot and progress before adding it to the tree.
+## Set planet, slot and progress before adding it to the tree.
 
 ## The player fell out of the bottom of the world.
 signal won
 signal quit_to_title
 
 const Controls := preload("res://input/controls.gd")
-const Progress := preload("res://save/progress.gd")
 const SaveGame := preload("res://save/save_game.gd")
+const Planets := preload("res://world/planets.gd")
 
 const ROOM_SIZE := Vector2(960, 768)
 const GRID_SIZE := Vector2i(10, 10)
@@ -22,6 +22,8 @@ const WIN_DEPTH := 16.0
 const MAX_GUN_LEVEL := 4
 const RESPAWN_FADE_IN := 0.4
 
+## Which planet's rooms and saves to use.
+var planet := Planets.ZORTA
 ## Save slot 1 to 3, or 0 to play without saving.
 var slot := 0
 ## A save/progress.gd object. A fresh one is made if none is given.
@@ -49,7 +51,7 @@ var _finished := false
 func _ready() -> void:
 	Controls.setup()
 	if progress == null:
-		progress = Progress.new()
+		progress = Planets.new_progress(planet)
 	grid = progress.checkpoint
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--room="):
@@ -153,7 +155,7 @@ static func entry_position(step: Vector2i, local: Vector2) -> Vector2:
 ## Instantiates the room at a grid position, placed in world space, with its
 ## monsters wired to the campaign and any collected powerup removed.
 func load_room(at: Vector2i) -> Node2D:
-	var loaded: Node2D = load("res://world/rooms/room_%d_%d.tscn" % [at.x, at.y]).instantiate()
+	var loaded: Node2D = load(Planets.room_path(planet, at)).instantiate()
 	loaded.position = Vector2(at) * ROOM_SIZE
 	for entity in loaded.get_node("Entities").get_children():
 		if entity.is_powerup and progress.powerups_taken.has(at):
@@ -224,7 +226,7 @@ func _note_room() -> void:
 
 func _write_slot() -> void:
 	if slot > 0:
-		SaveGame.write(slot, progress)
+		SaveGame.write(planet, slot, progress)
 
 
 func _clear_shots() -> void:
