@@ -15,8 +15,10 @@ const FIRE_COOLDOWNS := [1.0, 0.8, 0.6, 0.4]
 const MAX_GUN_LEVEL := 4
 const WALK_FRAME_TIME := 0.06
 const WALK_MIN_SPEED := 30.0
-## Where a shot appears relative to the player's centre, facing right.
-const MUZZLE_OFFSET := Vector2(20, 7)
+## Where a shot appears relative to the player's centre, facing right. The
+## original was 7 px below a radius-16 body; 4 keeps the radius-8 shot the same
+## 1 px clear of the floor under this radius-13 one.
+const MUZZLE_OFFSET := Vector2(20, 4)
 const HIT_INVULNERABLE_TIME := 1.0
 ## While invulnerable the sprite is hidden for half of each period.
 const FLASH_PERIOD := 0.06

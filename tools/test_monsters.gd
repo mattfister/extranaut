@@ -38,6 +38,7 @@ func _run() -> void:
 	var sections := {
 		"every_kind_runs": _test_every_kind_runs,
 		"shots_damage_monsters": _test_shots_damage_monsters,
+		"grounded_shot": _test_grounded_shot,
 		"touch_damage": _test_touch_damage,
 		"powerups": _test_powerups,
 		"save_point": _test_save_point,
@@ -98,6 +99,22 @@ func _test_shots_damage_monsters() -> void:
 	_launch(EnergyBallScene, Vector2(420, REST_Y), Vector2(500, 0))
 	await _frames(30)
 	_expect(is_instance_valid(spiky), "spiky head ignores shots")
+
+
+func _test_grounded_shot() -> void:
+	_new_arena()
+	await _frames(30)
+	Input.action_press("fire")
+	await _frames(2)
+	Input.action_release("fire")
+	_expect(_shot_log.size() == 1, "the player fires one shot, got %d" % _shot_log.size())
+	if _shot_log.size() == 1:
+		# Untyped: the shot may already be freed, which a typed assignment rejects.
+		var shot = _shot_log[0].shot
+		await _frames(20)
+		_expect(is_instance_valid(shot), "a shot fired while standing on the floor survives")
+		if is_instance_valid(shot):
+			_expect(shot.position.x > _player.position.x + 150.0, "the shot flies along the floor, x %.1f" % shot.position.x)
 
 
 func _test_touch_damage() -> void:
@@ -350,6 +367,7 @@ func _spawn(file: String, pos: Vector2) -> RigidBody2D:
 func _add_shot(shot: RigidBody2D) -> void:
 	_arena.add_child(shot)
 	_shot_log.append({
+		"shot": shot,
 		"enemy": shot.is_in_group("enemy_shots"),
 		"velocity": shot.linear_velocity,
 		"gravity_scale": shot.gravity_scale,
