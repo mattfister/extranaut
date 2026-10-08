@@ -106,6 +106,8 @@ MONSTERS = [
             anim_frames=1, **BOSS, **BIG),
     monster("head_boss", "head_boss", "animations/snakeHeadBoss", max_hp=15, anim_frames=1,
             death_sound="explode", death_particles=200, **BOSS),
+    monster("chaos_bot", "chaos_bot", "animations/bots", frame=(0, 1), gravity=0.0,
+            damages_player_on_touch=True, **BOT),
 ]
 
 

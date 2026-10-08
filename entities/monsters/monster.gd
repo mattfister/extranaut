@@ -6,6 +6,8 @@ extends RigidBody2D
 signal shot_fired(shot: RigidBody2D)
 ## Emitted by save points and powerups. The campaign sets the checkpoint.
 signal save_requested(source: Node)
+## Emitted once when the monster dies, before it is freed.
+signal died
 
 const EnemyEnergyBallScene := preload("res://entities/projectiles/enemy_energy_ball.tscn")
 const EnergyGrenadeScene := preload("res://entities/projectiles/energy_grenade.tscn")
@@ -87,6 +89,7 @@ func die() -> void:
 	if death_particles > 0:
 		emit_particles("explosion", Vector2.ZERO, death_particles)
 		get_tree().call_group("screen_fx", "shake", 0.8 if death_particles >= BIG_EXPLOSION else 0.3)
+	died.emit()
 	queue_free()
 
 
