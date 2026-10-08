@@ -1,8 +1,8 @@
 extends SceneTree
-## Loads every generated room and checks it against tools/zorta.json.
+## Loads every planet's generated rooms and checks them against its JSON.
 ## Run: godot --headless --path . --script res://tools/smoke_test.gd
 
-const WORLD_JSON := "res://tools/zorta.json"
+const Planets := preload("res://world/planets.gd")
 const LAYERS := ["background", "midground", "foreground"]
 
 var _failures := 0
@@ -13,24 +13,29 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var world = JSON.parse_string(FileAccess.get_file_as_string(WORLD_JSON))
-	if world == null:
-		_fail("could not read %s" % WORLD_JSON)
-		quit(1)
-		return
-	for data in world.rooms:
-		await _check_room(data)
+	var total := 0
+	for planet: String in Planets.ORDER:
+		var world_json: String = Planets.DATA[planet].world_json
+		var world = JSON.parse_string(FileAccess.get_file_as_string(world_json))
+		if world == null:
+			_fail("could not read %s" % world_json)
+			continue
+		for data in world.rooms:
+			await _check_room(planet, data)
+		total += world.rooms.size()
+		var start := Vector2i(int(world.start_room[0]), int(world.start_room[1]))
+		_expect(Planets.DATA[planet].start_room == start, "%s start room is %s" % [planet, start])
 	if _failures == 0:
-		print("smoke test passed: %d rooms" % world.rooms.size())
+		print("smoke test passed: %d rooms" % total)
 	else:
 		print("smoke test FAILED: %d failures" % _failures)
 	quit(1 if _failures > 0 else 0)
 
 
-func _check_room(data: Dictionary) -> void:
+func _check_room(planet: String, data: Dictionary) -> void:
 	var x := int(data.x)
 	var y := int(data.y)
-	var path := "res://world/rooms/room_%d_%d.tscn" % [x, y]
+	var path := Planets.room_path(planet, Vector2i(x, y))
 	if not ResourceLoader.exists(path):
 		_fail("%s is missing" % path)
 		return
@@ -43,6 +48,12 @@ func _check_room(data: Dictionary) -> void:
 	var music: String = "" if data.music == null else data.music
 	_expect(room.music == music, "%s music is '%s'" % [path, room.music])
 	_expect(room.has_player_start == (data.player_start != null), "%s has_player_start" % path)
+	var tint := Color.WHITE
+	if data.has("tint"):
+		tint = Color(data.tint[0], data.tint[1], data.tint[2])
+	for layer_name in LAYERS:
+		_expect(room.get_node(layer_name.capitalize()).modulate.is_equal_approx(tint), "%s %s tint" % [path, layer_name])
+		_expect(room.get_node(layer_name.capitalize() + "Animated").modulate.is_equal_approx(tint), "%s %s animated tint" % [path, layer_name])
 
 	var animated_by_layer := {}
 	for a in data.animated:

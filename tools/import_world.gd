@@ -1,11 +1,11 @@
 extends SceneTree
-## Builds world/tileset.tres and world/rooms/room_X_Y.tscn from tools/zorta.json.
-## Re-running overwrites the generated scenes.
+## Builds world/tileset.tres and every planet's room_X_Y.tscn scenes from the
+## planet's world JSON. Re-running overwrites the generated scenes.
 ## Run: godot --headless --path . --script res://tools/import_world.gd
 
-const WORLD_JSON := "res://tools/zorta.json"
+const Planets := preload("res://world/planets.gd")
+
 const TILESET_PATH := "res://world/tileset.tres"
-const ROOMS_DIR := "res://world/rooms"
 const MONSTER_SCENE := "res://entities/monsters/%s.tscn"
 const SRC_TILE := 16
 const ART_SCALE := Vector2(2, 2)
@@ -22,23 +22,35 @@ func _init() -> void:
 
 
 func _run() -> int:
-	var world = JSON.parse_string(FileAccess.get_file_as_string(WORLD_JSON))
-	if world == null:
-		printerr("could not read %s" % WORLD_JSON)
-		return 1
-	DirAccess.make_dir_recursive_absolute(ROOMS_DIR)
-	var tileset := _build_tileset(world.sheets)
-	for data in world.rooms:
-		var room := _build_room(data, tileset)
-		var packed := PackedScene.new()
-		var err := packed.pack(room)
-		if err == OK:
-			err = ResourceSaver.save(packed, "%s/room_%d_%d.tscn" % [ROOMS_DIR, int(data.x), int(data.y)])
-		room.free()
-		if err != OK:
-			printerr("failed to save room %d,%d: %s" % [int(data.x), int(data.y), error_string(err)])
+	var tileset: TileSet
+	var sheets := []
+	for planet: String in Planets.ORDER:
+		var world_json: String = Planets.DATA[planet].world_json
+		var world = JSON.parse_string(FileAccess.get_file_as_string(world_json))
+		if world == null:
+			printerr("could not read %s" % world_json)
 			return 1
-	print("imported %d rooms" % world.rooms.size())
+		# Tiles name their sheet by index, so every planet must list the same
+		# sheets as the one the shared tile set is built from.
+		if tileset == null:
+			sheets = world.sheets
+			tileset = _build_tileset(sheets)
+		elif world.sheets != sheets:
+			printerr("%s lists different tile sheets" % world_json)
+			return 1
+		DirAccess.make_dir_recursive_absolute(Planets.DATA[planet].rooms_dir)
+		for data in world.rooms:
+			var at := Vector2i(int(data.x), int(data.y))
+			var room := _build_room(data, tileset)
+			var packed := PackedScene.new()
+			var err := packed.pack(room)
+			if err == OK:
+				err = ResourceSaver.save(packed, Planets.room_path(planet, at))
+			room.free()
+			if err != OK:
+				printerr("failed to save %s room %s: %s" % [planet, at, error_string(err)])
+				return 1
+		print("imported %d rooms for %s" % [world.rooms.size(), planet])
 	return 0
 
 
@@ -83,6 +95,10 @@ func _build_room(data: Dictionary, tileset: TileSet) -> Node2D:
 		if layer_name == "foreground":
 			layer.z_index = FOREGROUND_Z
 			animated.z_index = FOREGROUND_Z
+		if data.has("tint"):
+			var tint := Color(data.tint[0], data.tint[1], data.tint[2])
+			layer.modulate = tint
+			animated.modulate = tint
 		_add(room, room, animated)
 		for a in data.animated:
 			if a.layer == layer_name:
