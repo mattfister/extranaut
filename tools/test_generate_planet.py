@@ -8,7 +8,8 @@ import random
 import unittest
 from pathlib import Path
 
-from planet_gen import reach, worldmap
+import generate_planet
+from planet_gen import reach, render, worldmap
 from planet_gen import room as roomgen
 
 TOOLS = Path(__file__).resolve().parent
@@ -210,6 +211,94 @@ class RoomTest(unittest.TestCase):
                 snake = "".join("_" + c.lower() if c.isupper() or c.isdigit() else c for c in name).lstrip("_")
                 self.assertTrue((scenes / (snake + ".tscn")).exists(), name)
                 self.assertTrue(0 < x < 960 and 0 < y < 768, (name, x, y))
+
+
+class RenderTest(unittest.TestCase):
+    def test_a_box_has_four_inner_walls_and_a_border(self):
+        rows = ["#" * 30] + ["#" + "." * 28 + "#"] * 22 + ["#" * 30]
+        got = sorted(tuple(w) for w in render.walls(rows))
+        inner = [(32, 32, 928, 32), (32, 32, 32, 736), (32, 736, 928, 736), (928, 32, 928, 736)]
+        border = [(0, 0, 960, 0), (0, 0, 0, 768), (0, 768, 960, 768), (960, 0, 960, 768)]
+        self.assertEqual(got, sorted(inner + border))
+
+    def test_an_open_floor_splits_the_bottom_border(self):
+        rows = ["#" * 30] + ["#" + "." * 28 + "#"] * 22 + ["#" * 10 + "..." + "#" * 17]
+        got = [tuple(w) for w in render.walls(rows, open_floor=(10, 12))]
+        self.assertIn((0, 768, 320, 768), got)
+        self.assertIn((416, 768, 960, 768), got)
+        self.assertNotIn((0, 768, 960, 768), got)
+
+    def test_a_slope_is_one_diagonal(self):
+        rows = ["#" * 30] + ["#" + "." * 28 + "#"] * 21 + ["#" + "." * 10 + "/" + "#" * 18] + ["#" * 30]
+        got = [tuple(w) for w in render.walls(rows)]
+        self.assertIn((352, 736, 384, 704), got)
+        self.assertIn((384, 704, 928, 704), got)  # the floor beyond starts after the slope
+        self.assertNotIn((352, 704, 352, 736), got)  # no step in front of it
+
+    def test_edge_tiles(self):
+        rows = ["#" * 30] + ["#" + "." * 28 + "#"] * 22 + ["#" * 30]
+        got = {(t[0], t[1]): (t[3], t[4]) for t in render.tiles(rows, 7)}
+        self.assertEqual(got[(5, 0)], (2, 3))  # ceiling: empty below
+        self.assertEqual(got[(5, 23)], (2, 1))  # floor: empty above
+        self.assertEqual(got[(0, 5)], (3, 2))  # left wall: empty to the right
+        self.assertEqual(got[(29, 5)], (1, 2))
+        self.assertEqual(got[(0, 0)], (2, 2))
+        self.assertEqual(len(render.background(3)), 720)
+
+
+class PlanetTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.world = generate_planet.generate()
+        cls.rooms = {(r["x"], r["y"]): r for r in cls.world["rooms"]}
+        cls.zorta = json.loads((TOOLS / "zorta.json").read_text())
+
+    def test_is_repeatable(self):
+        self.assertEqual(json.dumps(generate_planet.generate()), json.dumps(self.world))
+
+    def test_matches_the_committed_file(self):
+        saved = json.loads((TOOLS / "korvax.json").read_text())
+        self.assertEqual(saved, json.loads(json.dumps(self.world)))
+
+    def test_has_the_shape_of_zorta(self):
+        self.assertEqual(set(self.rooms), {(x, y) for x in range(10) for y in range(10)})
+        self.assertEqual(self.world["sheets"], self.zorta["sheets"])
+        self.assertEqual(self.world["start_room"], [2, 0])
+        self.assertEqual(self.world["player"], self.zorta["player"])
+        self.assertTrue(set(self.zorta["rooms"][0]) <= set(self.world["rooms"][0]))
+
+    def test_tiles_exist_and_are_not_blank(self):
+        used = set()
+        for r in self.rooms.values():
+            self.assertEqual(len(r["layers"]["background"]), 720)
+            for layer in r["layers"].values():
+                for t in layer:
+                    used.add((self.world["sheets"][t[2]], t[3], t[4]))
+        for sheet, tx, ty in sorted(used):
+            self.assertFalse(generate_planet.tile_is_blank(sheet, tx, ty), (sheet, tx, ty))
+        self.assertTrue(generate_planet.tile_is_blank("rocks", 0, 0))
+
+    def test_every_room_has_a_tint_music_and_a_player_start(self):
+        sounds = TOOLS.parent / "assets" / "sounds"
+        for r in self.rooms.values():
+            self.assertEqual(len(r["tint"]), 3)
+            self.assertTrue((sounds / (r["music"] + ".ogg")).exists())
+            self.assertEqual(len(r["player_start"]), 2)
+
+    def test_one_room_has_an_open_floor(self):
+        finals = [r for r in self.rooms.values() if r["kind"] == "final"]
+        self.assertEqual(len(finals), 1)
+        self.assertEqual(finals[0]["y"], 9)
+        self.assertIn(".", finals[0]["cells"][23])
+        for r in self.rooms.values():
+            whole = [0, 768, 960, 768] in r["walls"]
+            self.assertEqual(whole, r["kind"] != "final", (r["x"], r["y"]))
+
+    def test_some_rooms_are_infested_with_balls(self):
+        infested = [r for r in self.rooms.values() if r["kind"] == "infested"]
+        self.assertGreaterEqual(len(infested), 6)
+        for r in infested:
+            self.assertGreaterEqual(sum(1 for m in r["monsters"] if m[0] == "BallMonster"), 25)
 
 
 if __name__ == "__main__":

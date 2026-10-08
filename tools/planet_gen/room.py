@@ -79,11 +79,11 @@ class Room:
         self.hole = hole
 
 
-def build(world, at, seed):
+def build(world, at, seed, slopes=True):
     for attempt in range(ATTEMPTS):
         rng = random.Random(seed * 1000 + attempt)
         try:
-            room = _attempt(world, at, rng)
+            room = _attempt(world, at, rng, slopes)
         except Unbuildable:
             continue
         if not check(world, at, room):
@@ -471,7 +471,7 @@ def _add_hostiles(placer, rng, budget, rank):
             failures += 1
 
 
-def _attempt(world, at, rng):
+def _attempt(world, at, rng, slopes):
     kind = world.kind[at]
     links = world.links[at]
     grid = _Grid()
@@ -538,53 +538,49 @@ def _attempt(world, at, rng):
         raise Unbuildable("caves do not join up")
     _add_platforms(grid, rng)
 
+    # Where the player appears: at the start of the game in the start room,
+    # and after dying in any room that has become the checkpoint. It is kept
+    # out of gadgets, so nobody respawns sealed inside a vault.
     main_hub = hubs[sorted(hubs)[0]]
-    start_cell = None
-    extra = []
-    if kind == "start":
-        standing = sorted(
-            ((x, y) for x in range(2, W - 2) for y in range(2, H - 2) if reach.standable(grid.solid, (x, y))),
-            key=lambda c: (_cheb(c, main_hub), c),
-        )
-        if not standing:
-            raise Unbuildable("nowhere to start")
-        start_cell = standing[0]
-        grid.protect([(start_cell[0], start_cell[1] + 1)])
-        extra = [start_cell]
+    standing = sorted(
+        (
+            (x, y) for x in range(2, W - 2) for y in range(2, H - 2)
+            if reach.standable(grid.solid, (x, y)) and (x, y) not in grid.keep_clear
+        ),
+        key=lambda c: (_cheb(c, main_hub), c),
+    )
+    if not standing:
+        raise Unbuildable("nowhere to start")
+    start_cell = standing[0]
+    grid.protect([(start_cell[0], start_cell[1] + 1)])
+    extra = [start_cell]
     nav, nodes = _repair(world, at, grid, rng, hole, extra)
     if grid.empty_count() < MIN_EMPTY:
         raise Unbuildable("too cramped")
-    _add_slopes(grid, rng)
+    if slopes:
+        _add_slopes(grid, rng)
 
-    safe_from = [reach.entry(d, pos)[0] for d, pos in sorted(links.items())]
-    if start_cell is not None:
-        safe_from.append(start_cell)
+    safe_from = [reach.entry(d, pos)[0] for d, pos in sorted(links.items())] + [start_cell]
     placer = _Placer(grid, nav, nodes, safe_from, rng)
     rank = world.rank[at]
     budget = BASE_BUDGET + RANK_BUDGET * rank + rng.randint(-BUDGET_JITTER, BUDGET_JITTER)
     if at in world.behind_gate:
         budget += BEHIND_GATE_BUDGET
 
-    player_start = None
+    player_start = _ground_pos(start_cell)
+    placer.used.add(start_cell)
     if door is not None:
         name = "ArtifactDoor" if kind == "gate" else "MonsterDoor2"
         placer.add_at(name, (door[0] * TILE, door[1] * TILE), door)
     if treasure_cell is not None:
         placer.add_at(world.treasure[at], _ground_pos(treasure_cell), treasure_cell)
 
-    if kind == "start":
-        player_start = _ground_pos(start_cell)
-        placer.used.add(start_cell)
+    if at in world.save_points:
         spots = sorted(placer.firm_floor(), key=lambda c: (_cheb(c, start_cell), c))
         if not spots:
             raise Unbuildable("nowhere for the save point")
         placer.add_at("SavePoint", _ground_pos(spots[0]), spots[0])
-    else:
-        if at in world.save_points:
-            spots = sorted(placer.firm_floor(), key=lambda c: (_cheb(c, main_hub), c))
-            if not spots:
-                raise Unbuildable("nowhere for the save point")
-            placer.add_at("SavePoint", _ground_pos(spots[0]), spots[0])
+    if kind != "start":
         if world.treasure.get(at) == "FuelPowerup":
             spots = placer.firm_floor()
             far = [c for c in spots if all(_cheb(c, s) >= FUEL_FAR_CELLS for s in safe_from)]
@@ -632,9 +628,9 @@ def check(world, at, room):
             if ((x, y) not in solid) != allowed:
                 problems.append("border cell %d,%d" % (x, y))
 
-    extra = []
-    if room.player_start is not None:
-        extra.append(_cell_of(*room.player_start))
+    if room.player_start is None:
+        return problems + ["no player start"]
+    extra = [_cell_of(*room.player_start)]
     doors = _door_cells(room.monsters)
     nav, nodes, stuck = _survey(world, at, solid, room.hole, extra)
     for (direction, pos), missing in sorted(stuck.items()):
@@ -663,6 +659,8 @@ def check(world, at, room):
             if near_nodes & closed_nav.leavers(near_nodes, *far):
                 problems.append("the gate can be bypassed")
         else:
+            if extra[0] not in closed_nodes:
+                problems.append("the player start is sealed in the vault")
             for (direction, pos), missing in sorted(closed_stuck.items()):
                 problems.append("the vault door blocks the way %s" % direction)
             for name, x, y in room.monsters:
