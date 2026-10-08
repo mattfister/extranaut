@@ -31,7 +31,7 @@ entry has:
 | rooms_dir | `res://world/rooms` | `res://world/rooms_korvax` |
 | world_json | `res://tools/zorta.json` | `res://tools/korvax.json` |
 | save_prefix | `save_` | `save_korvax_` |
-| start_room | (4, 2) | from the generator |
+| start_room | (4, 2) | (2, 0) |
 
 Zorta's folder and save file names do not change, so existing saves keep
 working.
@@ -83,9 +83,9 @@ offline rather than at run time lets the output be validated and adjusted.
 - A spanning maze over the 10x10 grid plus extra links for loops. Every room
   has content and is reachable.
 - Five zones, grown from seed cells so each is contiguous. A zone fixes the
-  midground sheet, the background sheet, the tint and the music. Music is set
-  on the room where a zone is entered and on boss rooms (`bossBattle`), and
-  left empty elsewhere, as Zorta does.
+  midground sheet, the background sheet, the tint and the music. Every room
+  names its zone's track, or `bossBattle` in a boss room; the audio player
+  ignores a request for the track already playing.
 - Midground sheets come from the five rock sheets that share one layout:
   `rocks`, `rocksBlue`, `yellowRocks`, `grayRocks`, `greenRocks`. Backgrounds
   come from `bgRocks`, `greenRocksDark`, `bgYellowRocks`, `redRocksBg` and
@@ -97,14 +97,23 @@ offline rather than at run time lets the output be validated and adjusted.
 
 Zorta's counts and rules, on a different route:
 
-- 4 alien artifacts, each in a dead-end room guarded by one of OrbBoss,
-  OctoBoss, HeadBoss and FallenExtranaut behind a monster door.
+- 4 alien artifacts, each in a dead-end room with one of OrbBoss, OctoBoss,
+  HeadBoss and FallenExtranaut. The artifact is in a vault (see below).
 - 1 artifact door on the only route to the final stretch, which ends in a
-  row-9 room with an open floor.
+  row-9 room with an open floor. The door sits in a two-cell-high tunnel
+  through a band of rock that splits its room in two.
 - 3 gun, 3 HP and 6 fuel powerups, at most one powerup per room, since a room
-  with a taken powerup respawns none.
-- 8 save points, including one in the start room, spaced so no room is more
-  than six rooms from one.
+  with a taken powerup respawns none. Gun and HP powerups are in vaults; fuel
+  powerups stand in the open on a high ledge.
+- 8 to 10 save points, including one in the start room: as many as it takes
+  for no room to be more than six rooms from one.
+
+A vault is a dead-end tunnel two cells high, plugged by a MonsterDoor2 with
+the treasure behind it. MonsterDoor2 opens when two monster-class entities
+remain, which here means the door and the treasure, so the vault opens when
+every hostile in the room is dead. Vault rooms hold nothing unkillable and no
+save point. Doors never stand between a room's openings: rooms reset on
+re-entry, so a door there would trap a player returning from the far side.
 - The start room has a player start and no hostile monsters.
 
 ### Room geometry
@@ -120,7 +129,10 @@ Each room is a 30x24 grid of solid and empty cells.
 - Collision walls are traced from the boundary between solid and empty cells,
   merged into long segments on the 32 px grid. Convex floor corners may be cut
   to 45-degree slopes.
-- Room borders are walled except at openings, as in Zorta.
+- The whole room border is walled, openings included, which keeps monsters
+  and shots in. The exit thresholds sit inside the border, so the player never
+  touches it. Only the final room's floor opening is left unwalled.
+- A ceiling opening has a ledge beside it within jetpack reach.
 
 ### Tiles
 
@@ -152,11 +164,9 @@ hostiles, rising with distance from the start.
   cheap ones (JumpBot, Flyer, HoverBlock), mid (FlyBot, AimerTurret,
   DefenseTurretVertical, SpikyBallMonster), dear (HandBot), and elites
   (BossBot1 to BossBot3, late zones only, at most one per room).
-- About one room in five is a lock-in: its exits are closed by monster doors
-  until the room is cleared.
 - **Ball infestations**: about one room in eight holds 25 to 40 BallMonsters
-  and little else. They are harmless. Infestation rooms never have monster
-  doors, because the door counts every monster in the room.
+  and little else. They are harmless. Infestation rooms are never vault
+  rooms, because the door counts every monster in the room.
 - Placement rules: ground monsters stand on floor cells, flyers and hover
   blocks sit in open air, aimer turrets start below a ceiling, and nothing
   hostile spawns within four cells of an opening or the player start.
