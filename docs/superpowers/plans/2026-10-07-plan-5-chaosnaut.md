@@ -795,3 +795,9 @@ git commit -m "Add Chaosnaut to the title screen"
 - Waves arrive every 10 seconds with a sound; bots drift left, wrap round angry, and can be shot.
 - Fuel never runs out; blocks that are shot away are replaced.
 - Dying shows wave, kills and the best result, and Back to Title returns to the title.
+
+## Changes made during execution
+
+1. **`--chaosnaut` development option added to `scenes/main.gd`.** It skips the title and starts the mode, so the arena can be screenshotted with `--shot`.
+2. **The flow test guards the button press** with a null check, so a missing button reports one clear failure instead of a script error.
+

@@ -3,6 +3,7 @@ extends Node
 ## (intro or ending) or the campaign.
 ## Development options after "--" on the command line:
 ##   --room=X,Y   skip the title and start an unsaved campaign in that room
+##   --chaosnaut  skip the title and start Chaosnaut
 ##   --shot=PATH  save a screenshot after one second and quit
 
 const Controls := preload("res://input/controls.gd")
@@ -11,6 +12,7 @@ const SaveGame := preload("res://save/save_game.gd")
 const TitleScript := preload("res://scenes/title.gd")
 const ImageScreenScript := preload("res://scenes/image_screen.gd")
 const CampaignScene := preload("res://scenes/campaign.tscn")
+const ChaosnautScene := preload("res://scenes/chaosnaut.tscn")
 const IntroImage := preload("res://assets/sprites/intro.png")
 const EndingImage := preload("res://assets/sprites/ending.png")
 
@@ -22,12 +24,17 @@ func _ready() -> void:
 	Controls.setup()
 	var shot_path := ""
 	var skip_title := false
+	var chaosnaut := false
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--room="):
 			skip_title = true
+		elif arg == "--chaosnaut":
+			chaosnaut = true
 		elif arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
-	if skip_title:
+	if chaosnaut:
+		_start_chaosnaut()
+	elif skip_title:
 		_start_campaign(0)
 	else:
 		show_title()
@@ -43,6 +50,7 @@ func show_title() -> void:
 	title.set_script(TitleScript)
 	title.new_game.connect(_on_new_game, CONNECT_DEFERRED)
 	title.continue_game.connect(_start_campaign, CONNECT_DEFERRED)
+	title.chaosnaut_pressed.connect(_start_chaosnaut, CONNECT_DEFERRED)
 	_show(title)
 
 
@@ -61,6 +69,12 @@ func _start_campaign(slot: int) -> void:
 	campaign.won.connect(_show_image.bind(EndingImage, show_title), CONNECT_DEFERRED)
 	campaign.quit_to_title.connect(show_title, CONNECT_DEFERRED)
 	_show(campaign)
+
+
+func _start_chaosnaut() -> void:
+	var chaosnaut := ChaosnautScene.instantiate()
+	chaosnaut.finished.connect(show_title, CONNECT_DEFERRED)
+	_show(chaosnaut)
 
 
 func _show_image(image: Texture2D, then: Callable) -> void:

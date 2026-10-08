@@ -211,7 +211,8 @@ Controls:
 - CPU particles for jet exhaust, empty-tank smoke, bot exhaust, energy-ball
   bursts and explosions, replacing the hand-rolled particle system.
 - `Audio` autoload: music crossfade between room tracks, effect playback, a
-  global mute toggle. Audio starts after the first user input, as browsers
+  global mute toggle. Callers reach it through the "audio" group, because
+  the global name is not defined when headless test scripts are compiled. Audio starts after the first user input, as browsers
   require.
 - Music by context: title `ruinsCore`, Chaosnaut `chaosNaut`, rooms per their
   data.

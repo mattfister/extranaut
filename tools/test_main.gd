@@ -8,6 +8,7 @@ const SaveGame := preload("res://save/save_game.gd")
 const TitleScript := preload("res://scenes/title.gd")
 const ImageScreenScript := preload("res://scenes/image_screen.gd")
 const CampaignScript := preload("res://scenes/campaign.gd")
+const ChaosnautScript := preload("res://scenes/chaosnaut.gd")
 
 var _failures := 0
 var _main: Node
@@ -77,6 +78,17 @@ func _run() -> void:
 	await _settle()
 	_expect(_is(TitleScript), "dismissing the ending returns to the title")
 	_expect(not paused, "the tree is not left paused")
+
+	# Chaosnaut from the title and back.
+	_expect(_button("Chaosnaut") != null, "the title offers Chaosnaut")
+	if _button("Chaosnaut") != null:
+		_button("Chaosnaut").pressed.emit()
+	await _settle()
+	_expect(_is(ChaosnautScript), "the Chaosnaut button starts the mode")
+	if _is(ChaosnautScript):
+		_main.screen.finished.emit()
+	await _settle()
+	_expect(_is(TitleScript), "leaving Chaosnaut returns to the title")
 
 	for slot in SaveGame.SLOTS:
 		SaveGame.delete(slot)

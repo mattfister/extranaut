@@ -4,6 +4,7 @@ extends Control
 
 signal new_game(slot: int)
 signal continue_game(slot: int)
+signal chaosnaut_pressed
 
 const UiKit := preload("res://ui/ui_kit.gd")
 const SaveGame := preload("res://save/save_game.gd")
@@ -16,6 +17,7 @@ const OptionsSheet := preload("res://assets/sprites/options.png")
 const CENTER_X := 512.0
 const SLOTS_TOP := 384.0
 const SLOT_SPACING := 60.0
+const CHAOSNAUT_Y := 564.0
 const SMALL_BUTTON := Vector2(140, 20)
 const WIDE_BUTTON := Vector2(240, 20)
 const TITLE_FRAME_TIME := 0.06
@@ -49,6 +51,11 @@ func _ready() -> void:
 	_slots = Control.new()
 	add_child(_slots)
 	_build_slots()
+	var chaosnaut := UiKit.make_button("Chaosnaut", SMALL_BUTTON)
+	chaosnaut.name = "Chaosnaut"
+	chaosnaut.position = Vector2(CENTER_X - SMALL_BUTTON.x / 2.0, CHAOSNAUT_Y)
+	chaosnaut.pressed.connect(func() -> void: chaosnaut_pressed.emit())
+	add_child(chaosnaut)
 
 	_sound_button = _add_toggle(Vector2(0, 734), _toggle_sound)
 	_fullscreen_button = _add_toggle(Vector2(33, 734), _toggle_fullscreen)
