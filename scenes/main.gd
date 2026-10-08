@@ -49,6 +49,7 @@ func show_title() -> void:
 func _on_new_game(slot: int) -> void:
 	SaveGame.write(slot, Progress.new())
 	_show_image(IntroImage, _start_campaign.bind(slot))
+	get_tree().call_group("audio", "play", "intro")
 
 
 ## slot 0 plays without saving.

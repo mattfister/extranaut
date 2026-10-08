@@ -25,6 +25,9 @@ func _run() -> void:
 	var player: RigidBody2D = campaign.get_node("Player")
 	var shots: Node = campaign.get_node("Shots")
 	await _frames(120)
+	_expect(root.get_node("Audio").current_music() == "zortaSurface", "the start room plays its music")
+	_expect(campaign.get_node("Particles").is_in_group("particle_field"), "the campaign hosts a particle field")
+	_expect(campaign.get_node("ScreenFx").camera == campaign.get_node("Camera2D"), "screen effects drive the campaign camera")
 
 	# Comes to rest on the ground of the start room.
 	var local: Vector2 = player.global_position - campaign.room.position
@@ -152,12 +155,15 @@ func _check_checkpoint_and_respawn(campaign: Node2D, player: RigidBody2D) -> voi
 	player.revive()
 	player.hp = 1
 	player.hit()
+	await _frames(60)
+	_expect(campaign.get_node("ScreenFx").overlay_color().a > 0.3, "the screen fades out during the death pause")
 	var waited := 0
 	while campaign.grid != Vector2i(4, 2) and waited < 180:
 		await physics_frame
 		waited += 1
 	_expect(campaign.grid == Vector2i(4, 2), "death respawns in the checkpoint room, grid %s" % campaign.grid)
 	_expect(player.hp == player.max_hp and not player.is_dead(), "respawn restores full hp")
+	_expect(campaign.get_node("Particles").count() == 0, "particles are cleared on respawn")
 	var local: Vector2 = player.global_position - campaign.room.position
 	_expect(local.distance_to(Vector2(480, 352)) < 80.0, "respawn is at the room's player start, at %s" % local)
 	_expect(campaign.get_node("World").get_child_count() == 1, "only the checkpoint room is loaded")

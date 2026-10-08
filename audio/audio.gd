@@ -74,6 +74,11 @@ func playing_count(sound: String) -> int:
 	return count
 
 
+## When the effect was last started, in Time.get_ticks_msec() terms, or -1.
+func last_played_msec(sound: String) -> int:
+	return int(_last_played.get(sound, -1))
+
+
 ## Crossfades to a looping track. Does nothing if it is already playing.
 func play_music(track: String) -> void:
 	if track == _music_name:

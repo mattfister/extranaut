@@ -33,6 +33,8 @@ var _fullscreen_button: Button
 
 
 func _ready() -> void:
+	get_tree().call_group("audio", "play_music", "ruinsCore")
+	get_tree().call_group("audio", "play", "extranautTitle")
 	_add_image(Background, Vector2.ZERO, 2.0)
 	_title = Sprite2D.new()
 	_title.texture = TitleSheet

@@ -702,14 +702,14 @@ func hit() -> void:
 	if hp <= 0:
 		die()
 	else:
-		Audio.play("hit")
+		get_tree().call_group("audio", "play", "hit")
 
 
 func die() -> void:
 	if is_queued_for_deletion():
 		return
 	if death_sound != "":
-		Audio.play(death_sound)
+		get_tree().call_group("audio", "play", death_sound)
 	if death_particles > 0:
 		emit_particles("explosion", Vector2.ZERO, death_particles)
 		get_tree().call_group("screen_fx", "shake", 0.8 if death_particles >= BIG_EXPLOSION else 0.3)
@@ -763,7 +763,7 @@ const SOUNDS := {
 and add directly before the line `save_requested.emit(self)`:
 
 ```gdscript
-	Audio.play(SOUNDS[kind])
+	get_tree().call_group("audio", "play", SOUNDS[kind])
 ```
 
 - [ ] **Step 5: Death sounds and particle counts**
@@ -874,7 +874,7 @@ func hit() -> void:
 		return
 	hp -= 1
 	_hit_timeout = HIT_INVULNERABLE_TIME
-	Audio.play("hit")
+	get_tree().call_group("audio", "play", "hit")
 	get_tree().call_group("screen_fx", "shake", 0.5)
 	get_tree().call_group("screen_fx", "flash")
 	if is_dead():
@@ -909,7 +909,7 @@ In `_physics_process`, add directly after the line `_fire()` and at the indentat
 In `_fire`, add as the last line:
 
 ```gdscript
-	Audio.play("shoot")
+	get_tree().call_group("audio", "play", "shoot")
 ```
 
 Add this function directly before `func _fire() -> void:`:
@@ -926,7 +926,7 @@ func _puff_jet(delta: float) -> void:
 	_jet_puff_timer = JET_PUFF_INTERVAL
 	var at := global_position + Vector2(JET_OFFSET.x * facing, JET_OFFSET.y)
 	get_tree().call_group("particle_field", "emit", "jet_fire" if _thrusting else "jet_smoke", at, randi_range(1, 5))
-	Audio.play_if_idle("jet" if _thrusting else "packEmpty")
+	get_tree().call_group("audio", "play_if_idle", "jet" if _thrusting else "packEmpty")
 ```
 
 - [ ] **Step 8: Run the monster test**
@@ -1085,7 +1085,7 @@ In `_note_room`, add as the first lines of the function:
 
 ```gdscript
 	if room.music != "":
-		Audio.play_music(room.music)
+		get_tree().call_group("audio", "play_music", room.music)
 ```
 
 - [ ] **Step 5: Title and intro sounds**
@@ -1093,14 +1093,14 @@ In `_note_room`, add as the first lines of the function:
 In `scenes/title.gd`, add as the first lines of `_ready`:
 
 ```gdscript
-	Audio.play_music("ruinsCore")
-	Audio.play("extranautTitle")
+	get_tree().call_group("audio", "play_music", "ruinsCore")
+	get_tree().call_group("audio", "play", "extranautTitle")
 ```
 
 In `scenes/main.gd`, in `_on_new_game`, add as the last line:
 
 ```gdscript
-	Audio.play("intro")
+	get_tree().call_group("audio", "play", "intro")
 ```
 
 - [ ] **Step 6: Run every check**
@@ -1137,3 +1137,11 @@ git commit -m "Campaign plays room music and hosts particles and screen effects"
 - Bots trail exhaust, the jetpack trails flame or smoke, bots and bosses explode into particles, grenades burst.
 - The screen shakes on hits and explosions, flashes when the player is hit, and fades out and back in around a death.
 - The author has listened to it: relative volume of music and effects cannot be judged by tests.
+
+## Changes made during execution
+
+1. **Audio is reached through the "audio" group, not the `Audio` global.** A headless `--script` run compiles the test script and everything it preloads before autoloads are registered, so any script naming `Audio` failed to compile there. Callers use `get_tree().call_group("audio", "play", "shoot")`, the same pattern as the particle field and screen effects. The autoload still exists and adds itself to the group. The code blocks above have been updated to match.
+2. **`Audio.last_played_msec(sound)` added.** The jet sound is 0.1 s long, so a test asking whether it is playing at a given instant was flaky.
+3. **Exit-time leak reports are not counted as errors.** When a test quits while sounds or scenes are still loaded, Godot logs `ERROR: ... at exit`. Count errors with `grep -E 'SCRIPT ERROR|^ERROR' | grep -v -c 'at exit'`.
+4. **`fade_out` starts from transparent black** instead of trying to continue from the overlay's current colour.
+

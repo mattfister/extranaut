@@ -291,11 +291,14 @@ func _test_effects() -> void:
 
 	await _frames(30)
 	_field.clear()
+	var before_jet := Time.get_ticks_msec()
 	Input.action_press("jetpack")
 	await _frames(10)
 	Input.action_release("jetpack")
 	_expect(_field.count() > 0, "the jetpack leaves particles")
-	_expect(audio.is_playing("jet"), "the jetpack plays jet")
+	# The jet sound is 0.1 s long, so ask when it last started, not whether
+	# it is sounding at this instant.
+	_expect(audio.last_played_msec("jet") >= before_jet, "the jetpack plays jet")
 
 	var started := [0]
 	_player.death_started.connect(func() -> void: started[0] += 1)

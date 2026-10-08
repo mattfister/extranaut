@@ -20,6 +20,7 @@ const SLIDE_TIME := 0.35
 ## How far below a bottom-row room the player must fall to win.
 const WIN_DEPTH := 16.0
 const MAX_GUN_LEVEL := 4
+const RESPAWN_FADE_IN := 0.4
 
 ## Save slot 1 to 3, or 0 to play without saving.
 var slot := 0
@@ -41,6 +42,8 @@ var _finished := false
 @onready var _hud: Control = $Hud/Strip
 @onready var _mini_map: Control = $Hud/Strip/MiniMap
 @onready var _pause_menu: CanvasLayer = $PauseMenu
+@onready var _particles: Node2D = $Particles
+@onready var _screen_fx: CanvasLayer = $ScreenFx
 
 
 func _ready() -> void:
@@ -61,6 +64,8 @@ func _ready() -> void:
 	_player.artifacts = progress.artifacts
 	_player.shot_fired.connect(_on_shot_fired)
 	_player.died.connect(_respawn)
+	_player.death_started.connect(func() -> void: _screen_fx.fade_out(_player.DEATH_TIME))
+	_screen_fx.camera = _camera
 	_pause_menu.resume_pressed.connect(_set_pause_menu.bind(false))
 	_pause_menu.quit_pressed.connect(_quit_to_title)
 
@@ -167,6 +172,7 @@ func _enter_room(next: Vector2i, step: Vector2i, local: Vector2) -> void:
 	room = load_room(grid)
 	_world.add_child(room)
 	_clear_shots()
+	_particles.clear()
 	_player.global_position = room.position + entry_position(step, local)
 	_note_room()
 
@@ -184,6 +190,8 @@ func _enter_room(next: Vector2i, step: Vector2i, local: Vector2) -> void:
 ## Reloads the checkpoint room and puts a revived player at its start.
 func _respawn() -> void:
 	_clear_shots()
+	_particles.clear()
+	_screen_fx.fade_in(RESPAWN_FADE_IN)
 	_world.remove_child(room)
 	room.queue_free()
 	grid = progress.checkpoint
@@ -204,6 +212,8 @@ func _place_player_at_start() -> void:
 ## Records the current room on the map and writes the slot, so the explored
 ## map survives quitting. Stats and checkpoint change only at save events.
 func _note_room() -> void:
+	if room.music != "":
+		get_tree().call_group("audio", "play_music", room.music)
 	progress.visited[grid] = true
 	for entity in room.get_node("Entities").get_children():
 		if entity.is_save_point:
