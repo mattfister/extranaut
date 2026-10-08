@@ -188,5 +188,10 @@ hostiles, rising with distance from the start.
   start room and can cross into a neighbouring room, and the title switch
   changes which saves are shown and which planet a new game starts.
 
+- `tools/test_korvax.gd` checks with the real physics what the generator's
+  player model takes on trust: flying up through ceiling openings and landing
+  in the room above, the artifact door holding until four artifacts are held,
+  and the drop through the final room's floor ending the game.
+
 Feel, difficulty balance and how the retinted rooms look are judged by the
 author in play-testing. A tuning pass is expected.

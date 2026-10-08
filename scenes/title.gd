@@ -60,12 +60,13 @@ func _ready() -> void:
 
 	planet = Settings.last_planet()
 	var half := PLANET_LABEL_WIDTH / 2.0
-	_add_planet_button("PlanetPrev", "<", CENTER_X - half - ARROW_BUTTON.x, -1)
+	var prev := _add_planet_button("PlanetPrev", "<", CENTER_X - half - ARROW_BUTTON.x, -1)
 	_add_planet_button("PlanetNext", ">", CENTER_X + half, 1)
 	_planet_label = UiKit.make_label("")
 	_planet_label.name = "PlanetLabel"
 	_planet_label.position = Vector2(CENTER_X - half, PLANET_Y)
-	_planet_label.size = Vector2(PLANET_LABEL_WIDTH, ARROW_BUTTON.y)
+	# As tall as the buttons really are, so the name sits level with the arrows.
+	_planet_label.size = Vector2(PLANET_LABEL_WIDTH, prev.get_combined_minimum_size().y)
 	_planet_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_planet_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(_planet_label)
@@ -94,12 +95,13 @@ func _process(delta: float) -> void:
 		_title.frame = (_title.frame + 1) % _title.hframes
 
 
-func _add_planet_button(node_name: String, text: String, x: float, step: int) -> void:
+func _add_planet_button(node_name: String, text: String, x: float, step: int) -> Button:
 	var button := UiKit.make_button(text, ARROW_BUTTON)
 	button.name = node_name
 	button.position = Vector2(x, PLANET_Y)
 	button.pressed.connect(_step_planet.bind(step))
 	add_child(button)
+	return button
 
 
 func _step_planet(step: int) -> void:
