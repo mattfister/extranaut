@@ -11,6 +11,9 @@ const SCREEN := Vector2(1024, 768)
 const MAP_CELL := 24.0
 const BUTTON_SIZE := Vector2(140, 20)
 
+## Set false before adding to the tree for modes that have no map.
+@export var show_map := true
+
 var _map: Control
 var _resume: Button
 
@@ -33,6 +36,7 @@ func _ready() -> void:
 	_map.position = Vector2((SCREEN.x - MAP_CELL * 10.0) / 2.0, 130)
 	_map.size = Vector2(MAP_CELL * 10.0, MAP_CELL * 10.0)
 	add_child(_map)
+	_map.visible = show_map
 
 	_resume = _add_button("Resume", "Resume Game", 420.0)
 	_resume.pressed.connect(func() -> void: resume_pressed.emit())
@@ -40,9 +44,10 @@ func _ready() -> void:
 	quit.pressed.connect(func() -> void: quit_pressed.emit())
 
 
-## progress is a save/progress.gd object.
+## progress is a save/progress.gd object, or null when there is no map.
 func open(progress: RefCounted, current: Vector2i) -> void:
-	_map.show_progress(progress, current)
+	if progress != null:
+		_map.show_progress(progress, current)
 	_resume.grab_focus()
 
 
