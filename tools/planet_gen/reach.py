@@ -109,3 +109,56 @@ def can_leave(reach, direction, pos):
     """Whether a reachable() result gets the player out through an opening."""
     limit = BUDGET - CEILING_RESERVE if direction == "N" else BUDGET
     return any(reach.get(cell, BUDGET + 1.0) <= limit for cell in exit_cells(direction, pos))
+
+
+class Nav:
+    """Reachability over a room, with each standable cell's flights cached."""
+
+    def __init__(self, solid):
+        self.solid = solid
+        self._flights = {}
+
+    def flight(self, cell):
+        if cell not in self._flights:
+            self._flights[cell] = fly(self.solid, cell)
+        return self._flights[cell]
+
+    def landings(self, flight):
+        return [cell for cell in flight if standable(self.solid, cell)]
+
+    def spread(self, starts):
+        """The standable cells reachable from (cell, spent) pairs."""
+        found = set()
+        todo = []
+        for start, spent in starts:
+            if is_empty(self.solid, start):
+                todo.extend(self.landings(fly(self.solid, start, spent)))
+        while todo:
+            cell = todo.pop()
+            if cell in found:
+                continue
+            found.add(cell)
+            todo.extend(c for c in self.landings(self.flight(cell)) if c not in found)
+        return found
+
+    def leavers(self, nodes, direction, pos):
+        """Those of nodes from which the opening can be left, in any number
+        of flights. nodes must be closed under spread()."""
+        limit = BUDGET - CEILING_RESERVE if direction == "N" else BUDGET
+        cells = exit_cells(direction, pos)
+        good = {n for n in nodes if any(self.flight(n).get(c, BUDGET + 1.0) <= limit for c in cells)}
+        changed = True
+        while changed:
+            changed = False
+            for node in nodes:
+                if node not in good and any(c in good for c in self.flight(node)):
+                    good.add(node)
+                    changed = True
+        return good
+
+    def air(self, nodes):
+        """Every cell the player can occupy, given the standable cells."""
+        cells = set()
+        for node in nodes:
+            cells.update(self.flight(node))
+        return cells

@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 
 from planet_gen import reach, worldmap
+from planet_gen import room as roomgen
 
 TOOLS = Path(__file__).resolve().parent
 
@@ -136,6 +137,79 @@ class WorldMapTest(unittest.TestCase):
         again = worldmap.build(random.Random(2026))
         self.assertEqual(again.links, self.world.links)
         self.assertEqual(again.kind, self.world.kind)
+
+
+class RoomTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.world = worldmap.build(random.Random(2026))
+        cls.rooms = {at: roomgen.build(cls.world, at, 2026 * 100 + at[0] * 10 + at[1]) for at in sorted(cls.world.links)}
+
+    def test_every_room_is_sound(self):
+        for at, built in self.rooms.items():
+            self.assertEqual(roomgen.check(self.world, at, built), [], at)
+
+    def test_rooms_are_the_right_shape(self):
+        for at, built in self.rooms.items():
+            self.assertEqual(len(built.rows), 24)
+            self.assertTrue(all(len(r) == 30 for r in built.rows))
+
+    def test_start_room_is_safe(self):
+        built = self.rooms[worldmap.START]
+        self.assertIsNotNone(built.player_start)
+        self.assertEqual([m[0] for m in built.monsters], ["SavePoint"])
+
+    def test_vaults_open_when_the_room_is_cleared(self):
+        for at, kind in self.world.kind.items():
+            if kind not in ("vault", "boss"):
+                continue
+            names = [m[0] for m in self.rooms[at].monsters]
+            self.assertEqual(names.count("MonsterDoor2"), 1, at)
+            self.assertEqual(names.count(self.world.treasure[at]), 1, at)
+            permanent = [n for n in names if n in roomgen.UNKILLABLE]
+            self.assertEqual(sorted(permanent), sorted(["MonsterDoor2", self.world.treasure[at]]), at)
+
+    def test_bosses_are_in_their_rooms(self):
+        for at, boss in self.world.bosses.items():
+            names = [m[0] for m in self.rooms[at].monsters]
+            self.assertEqual(names.count(boss), 1, at)
+
+    def test_infested_rooms_swarm_with_balls(self):
+        for at, kind in self.world.kind.items():
+            if kind == "infested":
+                balls = [m for m in self.rooms[at].monsters if m[0] == "BallMonster"]
+                self.assertGreaterEqual(len(balls), 25, at)
+
+    def test_harder_than_zorta(self):
+        counts = [
+            sum(1 for m in built.monsters if m[0] in roomgen.COST)
+            for at, built in self.rooms.items()
+            if self.world.kind[at] == "normal"
+        ]
+        self.assertGreaterEqual(sum(counts) / len(counts), 6.0)
+
+    def test_treasure_and_save_points_are_placed(self):
+        for at, name in self.world.treasure.items():
+            self.assertEqual([m[0] for m in self.rooms[at].monsters].count(name), 1, at)
+        for at in self.world.links:
+            saves = [m for m in self.rooms[at].monsters if m[0] == "SavePoint"]
+            self.assertEqual(len(saves), 1 if at in self.world.save_points else 0, at)
+
+    def test_the_gate_holds_the_artifact_door(self):
+        names = [m[0] for m in self.rooms[self.world.gate].monsters]
+        self.assertEqual(names.count("ArtifactDoor"), 1)
+
+    def test_only_the_final_room_has_a_hole(self):
+        for at, built in self.rooms.items():
+            self.assertEqual(built.hole is not None, at == self.world.final)
+
+    def test_only_known_monsters_are_used(self):
+        scenes = TOOLS.parent / "entities" / "monsters"
+        for built in self.rooms.values():
+            for name, x, y in built.monsters:
+                snake = "".join("_" + c.lower() if c.isupper() or c.isdigit() else c for c in name).lstrip("_")
+                self.assertTrue((scenes / (snake + ".tscn")).exists(), name)
+                self.assertTrue(0 < x < 960 and 0 < y < 768, (name, x, y))
 
 
 if __name__ == "__main__":
