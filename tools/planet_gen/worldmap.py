@@ -85,6 +85,11 @@ FINAL_BOSS = "FallenExtranaut"
 ## The last zone in ZONES is the final area, behind the artifact door.
 FINAL_ZONE = len(ZONES) - 1
 MIN_ZONE_ROOMS = 10
+## Powerups sealed in vaults, nearest the start first, and those left lying
+## in the open. One of each kind is in the open, so no kind takes a cleared
+## room to find.
+VAULT_POWERUPS = ["GunPowerup", "HpPowerup", "FuelPowerup", "GunPowerup", "HpPowerup", "FuelPowerup"]
+LOOSE_POWERUPS = ["GunPowerup", "FuelPowerup", "HpPowerup", "FuelPowerup", "FuelPowerup", "FuelPowerup"]
 
 EXTRA_LINKS = 26
 ## How often the maze grows from its newest room rather than a random one.
@@ -407,19 +412,19 @@ def _tuck_away(world, at):
 def _place_powerups(world, rng):
     rooms = _plain_rooms(world)
     # The nearest few rooms are left alone so the first gun is a walk away.
-    for index, at in enumerate(_spread(rooms[3:], 6, rng)):
+    for index, at in enumerate(_spread(rooms[3:], len(VAULT_POWERUPS), rng)):
         at = _tuck_away(world, at)
-        world.treasure[at] = "GunPowerup" if index % 2 == 0 else "HpPowerup"
+        world.treasure[at] = VAULT_POWERUPS[index]
         world.kind[at] = "vault"
-    for at in _spread(_plain_rooms(world), 6, rng):
-        world.treasure[at] = "FuelPowerup"
-    # Fuel is moved afterwards, so a dead end goes to a gun or HP powerup
-    # first: those sit in vaults, which suit a room with one way in.
-    for at in sorted(a for a, name in world.treasure.items() if name == "FuelPowerup"):
+    loose = _spread(_plain_rooms(world), len(LOOSE_POWERUPS), rng)
+    for index, at in enumerate(loose):
+        world.treasure[at] = LOOSE_POWERUPS[index]
+    # These are moved afterwards, so a dead end goes to a vault first: a
+    # vault suits a room with one way in.
+    for at in sorted(loose):
         end = _tuck_away(world, at)
         if end != at:
-            del world.treasure[at]
-            world.treasure[end] = "FuelPowerup"
+            world.treasure[end] = world.treasure.pop(at)
 
 
 def _place_save_points(world):

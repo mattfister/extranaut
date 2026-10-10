@@ -113,6 +113,14 @@ class WorldMapTest(unittest.TestCase):
             self.assertEqual(w.treasure[at], "AlienArtifact")
             self.assertEqual(len(w.links[at]), 1)
 
+    def test_every_kind_of_powerup_lies_in_the_open_somewhere(self):
+        w = self.world
+        powerups = ("GunPowerup", "HpPowerup", "FuelPowerup")
+        loose = collections.Counter(
+            name for at, name in w.treasure.items() if name in powerups and w.kind[at] != "vault"
+        )
+        self.assertEqual(loose, {"GunPowerup": 1, "HpPowerup": 1, "FuelPowerup": 4})
+
     def test_powerups_fill_the_dead_ends_of_their_zone(self):
         w = self.world
         powerups = ("GunPowerup", "HpPowerup", "FuelPowerup")

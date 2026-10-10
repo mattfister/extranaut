@@ -58,7 +58,8 @@ BUDGET_JITTER = 3
 BEHIND_GATE_BUDGET = 6
 ## Hostiles keep this many cells (Chebyshev) from where the player arrives.
 SAFE_CELLS = 5
-FUEL_FAR_CELLS = 8
+## A powerup lying in the open keeps this far from where the player arrives.
+LOOSE_FAR_CELLS = 8
 MIN_EMPTY = 120
 BALLS = (25, 40)
 MAX_REPAIRS = 80
@@ -717,13 +718,13 @@ def _attempt(world, at, rng, slopes):
             raise Unbuildable("nowhere for the save point")
         placer.add_at("SavePoint", _ground_pos(spots[0]), spots[0])
     if kind != "start":
-        if world.treasure.get(at) == "FuelPowerup":
+        if at in world.treasure and treasure_cell is None:
             spots = placer.firm_floor()
-            far = [c for c in spots if all(_cheb(c, s) >= FUEL_FAR_CELLS for s in safe_from)]
+            far = [c for c in spots if all(_cheb(c, s) >= LOOSE_FAR_CELLS for s in safe_from)]
             spots = sorted(far or spots, key=lambda c: (c[1], c))
             if not spots:
-                raise Unbuildable("nowhere for the fuel")
-            placer.add_at("FuelPowerup", _ground_pos(spots[0]), spots[0])
+                raise Unbuildable("nowhere for the powerup")
+            placer.add_at(world.treasure[at], _ground_pos(spots[0]), spots[0])
         if kind in BOSS_ROOMS:
             # The boss alone, or with its own company: an arena is for the
             # fight, not for the zone's rank and file.

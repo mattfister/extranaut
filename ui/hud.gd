@@ -1,7 +1,7 @@
 extends Control
 ## The strip down the right of the screen: HP and fuel pips stacked from the
-## bottom, artifacts collected, and a notice when the game saves. The minimap
-## is a child node.
+## bottom, and artifacts collected. A notice in the top left of the screen
+## shows when the game saves. The minimap is a child node.
 
 const UiKit := preload("res://ui/ui_kit.gd")
 const BarsTexture := preload("res://assets/sprites/bars.png")
@@ -15,6 +15,7 @@ const ARTIFACT_REGION := Rect2(0, 16, 16, 16)
 const FUEL_PER_PIP := 500.0
 const ARTIFACTS_TOP := 72.0
 const SAVED_NOTICE_TIME := 1.5
+const SAVED_NOTICE_AT := Vector2(8, 8)
 
 var _hp := 0
 var _fuel_pips := 0
@@ -29,9 +30,7 @@ static func fuel_pips(fuel: float) -> int:
 
 func _ready() -> void:
 	_saved_label = UiKit.make_label("SAVED")
-	_saved_label.position = Vector2(STRIP.position.x, ARTIFACTS_TOP + PIP_SIZE * 2.0 + 8.0)
-	_saved_label.size = Vector2(STRIP.size.x, 20.0)
-	_saved_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_saved_label.position = SAVED_NOTICE_AT
 	_saved_label.hide()
 	add_child(_saved_label)
 
