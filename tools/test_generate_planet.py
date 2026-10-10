@@ -177,8 +177,24 @@ class WorldMapTest(unittest.TestCase):
         self.assertGreaterEqual(kinds["infested"], 6)
         for feature in worldmap.FEATURES:
             self.assertEqual(kinds[feature], worldmap.FEATURE_ROUNDS, feature)
+        for oddity in worldmap.ODDITIES:
+            self.assertEqual(kinds[oddity], worldmap.ODDITY_ROUNDS, oddity)
         for at in w.save_points:
-            self.assertIn(w.kind[at], ("start", "normal"))
+            self.assertIn(w.kind[at], ("start", "normal", "threshold"))
+
+    def test_a_threshold_stands_at_every_crossing_between_zones(self):
+        w = self.world
+        crossings = worldmap.crossings(w)
+        self.assertGreaterEqual(len(crossings), 8)
+        for at, d in crossings:
+            sides = (at, (at[0] + STEP[d][0], at[1] + STEP[d][1]))
+            self.assertNotEqual(w.zone[sides[0]], w.zone[sides[1]])
+            self.assertIn("threshold", [w.kind[side] for side in sides], sides)
+        thresholds = [at for at, kind in w.kind.items() if kind == "threshold"]
+        for at in thresholds:
+            self.assertTrue(worldmap.borders(w, at), at)
+        # One hall to a crossing, not one each side.
+        self.assertLessEqual(len(thresholds), len(crossings))
 
     def test_same_seed_same_world(self):
         again = worldmap.build(random.Random(2026))
@@ -222,6 +238,25 @@ class RoomTest(unittest.TestCase):
             expected = sorted(roomgen.ELITES) if boss == "BossBots" else [boss]
             self.assertEqual(hostiles, expected, at)
 
+    def test_the_ground_boss_sits_in_the_bottom_right_corner(self):
+        # It can only shoot to its left, so everything else is on that side.
+        at = next(at for at, boss in self.world.bosses.items() if boss == worldmap.GROUND_BOSS)
+        built = self.rooms[at]
+        rows = built.rows
+        spots = {m[0]: (int(m[1]) // 32, int(m[2]) // 32) for m in built.monsters}
+        x, y = spots[worldmap.GROUND_BOSS]
+        # On a flat floor, two cells from the right wall, under open air.
+        self.assertEqual(rows[y + 2][x - 12:x + 2], "#" * 14, at)
+        self.assertEqual(rows[y][x:x + 3], "..#", at)
+        self.assertGreaterEqual(x, 22, at)
+        self.assertTrue(all(rows[y - k][x - 14:x + 2] == "." * 16 for k in range(11)), at)
+        for name in ("MonsterDoor2", "AlienArtifact"):
+            self.assertLess(spots[name][0], x - 12, name)
+        self.assertLess(built.player_start[0] // 32, x - 12)
+        (direction, pos), = self.world.links[at].items()
+        self.assertIn(direction, "NS")
+        self.assertLessEqual(pos, worldmap.GROUND_BOSS_ENTRY)
+
     def test_the_final_boss_guards_the_way_out(self):
         built = self.rooms[self.world.final]
         names = sorted(m[0] for m in built.monsters)
@@ -245,6 +280,8 @@ class RoomTest(unittest.TestCase):
                     block = [rows[y][left:left + 16] for y in range(top, top + 10)]
                     best = max(best, sum(row.count(".") for row in block))
             self.assertGreaterEqual(best, 140, at)
+            if self.world.bosses.get(at) == worldmap.GROUND_BOSS:
+                continue
             # Three ledges to fight from.
             ledges = sum(
                 1 for y in range(2, 22) for x in range(1, 28)
@@ -309,6 +346,51 @@ class RoomTest(unittest.TestCase):
                 # Some column is open for most of the room's height.
                 tallest = max(sum(row[x] == "." for row in self.rooms[at].rows) for x in range(30))
                 self.assertGreaterEqual(tallest, 16, at)
+
+    def test_thresholds_are_empty_halls(self):
+        for at, kind in self.world.kind.items():
+            if kind != "threshold":
+                continue
+            names = {m[0] for m in self.rooms[at].monsters}
+            self.assertLessEqual(names, set(roomgen.TREASURES) | {"SavePoint"}, at)
+            rows = self.rooms[at].rows
+            self.assertNotIn("/", "".join(rows), at)
+            self.assertNotIn("\\", "".join(rows), at)
+            # One big chamber.
+            x0, y0, x1, y1 = roomgen.HALL
+            self.assertGreaterEqual(sum(rows[y][x0:x1 + 1].count(".") for y in range(y0, y1 + 1)), 250, at)
+
+    def test_oddities_are_quiet_and_strange(self):
+        for at, kind in self.world.kind.items():
+            if kind not in worldmap.ODDITIES:
+                continue
+            rows = self.rooms[at].rows
+            cost = sum(roomgen.COST[m[0]] for m in self.rooms[at].monsters if m[0] in roomgen.COST)
+            self.assertLessEqual(cost, 7, at)
+            self.assertEqual(self._count(at, *roomgen.ELITES), 0, at)
+            if kind == "strata":
+                for top in roomgen.STRATA:
+                    self.assertGreaterEqual(rows[top + 1].count("."), 22, at)
+            elif kind == "hollow":
+                # Rock in the middle of the room with air all round it.
+                core = [(x, y) for y in range(8, 16) for x in range(11, 19) if rows[y][x] != "."]
+                self.assertGreaterEqual(len(core), 10, at)
+                x, y = core[len(core) // 2]
+                self.assertIn(".", [r[x] for r in rows[:y]], at)
+                self.assertIn(".", [r[x] for r in rows[y:]], at)
+            elif kind == "mirror":
+                # All but the openings, which have no twin.
+                same = sum(row[x] == row[29 - x] for row in rows[2:22] for x in range(4, 15))
+                self.assertGreaterEqual(same, 165, at)
+
+    def test_ordinary_rooms_are_not_all_as_hard(self):
+        costs = [
+            sum(roomgen.COST[m[0]] for m in built.monsters if m[0] in roomgen.COST)
+            for at, built in self.rooms.items()
+            if self.world.kind[at] == "normal"
+        ]
+        self.assertGreaterEqual(sum(1 for c in costs if c <= 10), 5)
+        self.assertGreaterEqual(sum(1 for c in costs if c >= 22), 5)
 
     def test_doors_only_count_what_can_be_cleared(self):
         for at, kind in self.world.kind.items():
@@ -486,6 +568,26 @@ class PlanetTest(unittest.TestCase):
         # Mushrooms and machines stay in their own zones.
         self.assertEqual(rooms_with("pyrite", "midground", "greenRocks", {(6, 3)}), 0)
         self.assertEqual(rooms_with("warrens", "midground", "grayRocks", {(5, 4)}), 0)
+
+    def test_thresholds_show_the_rock_of_both_zones(self):
+        sheets = self.world["sheets"]
+        zones = {zone["name"]: zone for zone in worldmap.ZONES}
+        seen = 0
+        for (x, y), r in self.rooms.items():
+            used = {sheets[t[2]] for t in r["layers"]["midground"]}
+            if r["kind"] != "threshold":
+                continue
+            seen += 1
+            own = zones[r["zone"]]
+            others = [
+                zones[self.rooms[(x + STEP[d][0], y + STEP[d][1])]["zone"]] for d in r["links"]
+            ]
+            others = [zone for zone in others if zone is not own]
+            self.assertTrue(others, (x, y))
+            self.assertEqual(used, {own["midground"]} | {zone["midground"] for zone in others}, (x, y))
+            self.assertNotEqual(r["tint"], own["tint"], (x, y))
+            self.assertEqual(r["animated"], [], (x, y))
+        self.assertGreaterEqual(seen, 6)
 
     def test_surface_rooms_and_sanctuaries_look_out_on_space(self):
         star = self.world["sheets"].index("rockBg")

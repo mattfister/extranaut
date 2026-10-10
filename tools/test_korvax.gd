@@ -22,6 +22,7 @@ func _run() -> void:
 	_world = JSON.parse_string(FileAccess.get_file_as_string(Planets.DATA[PLANET].world_json))
 	await process_frame
 	await _check_climbs()
+	await _check_head_boss()
 	await _check_gate()
 	await _check_final_boss()
 	await _check_final_room()
@@ -74,6 +75,39 @@ func _check_climbs() -> void:
 		_expect(rested >= 20 and local.y < 742.0, "%s: the player lands beside the hole, at %s" % [at, local])
 		await _stop(campaign)
 	_expect(tried == CLIMBS, "found %d ceiling openings to try" % tried)
+
+
+## The head boss can only shoot to its left: it rests in the bottom right
+## corner of its arena with the player to its left, and its shots fly.
+func _check_head_boss() -> void:
+	var at := Vector2i(-1, -1)
+	for data in _world.rooms:
+		for monster in data.monsters:
+			if monster[0] == "HeadBoss":
+				at = Vector2i(int(data.x), int(data.y))
+	_expect(at.x >= 0, "there is a head boss")
+	var campaign := _start(at)
+	var player: RigidBody2D = campaign.get_node("Player")
+	var boss: RigidBody2D
+	for entity in campaign.room.get_node("Entities").get_children():
+		if entity.name.begins_with("HeadBoss"):
+			boss = entity
+	var shots := []
+	boss.shot_fired.connect(func(shot: RigidBody2D) -> void: shots.append(shot))
+	for i in 240:
+		if not shots.is_empty():
+			break
+		await physics_frame
+	_expect(not shots.is_empty(), "the head boss fires")
+	var local: Vector2 = boss.global_position - campaign.room.position
+	_expect(boss.linear_velocity.length() < 5.0, "the head boss has come to rest")
+	_expect(local.x > 22.0 * TILE, "the head boss is at the right of its arena, x %.0f" % local.x)
+	_expect(player.global_position.x < boss.global_position.x - 10.0 * TILE, "the player starts well to its left")
+	if not shots.is_empty():
+		await _frames(15)
+		var shot: RigidBody2D = shots[0]
+		_expect(is_instance_valid(shot) and shot.global_position.x < boss.global_position.x - 4.0 * TILE, "its shot flies off to the left")
+	await _stop(campaign)
 
 
 ## The artifact door holds until the player has four artifacts.

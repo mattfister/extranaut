@@ -74,12 +74,21 @@ FEATURES = [
     "sanctuary", "honeycomb", "spikes", "shaft", "hoverfield", "gallery", "arena", "den",
 ]
 FEATURE_ROUNDS = 2
+## Quiet rooms with a strange shape, dealt out the same way among the
+## ordinary rooms the set pieces leave.
+ODDITIES = ["mirror", "hollow", "strata"]
+ODDITY_ROUNDS = 2
 ## Easiest first; the deepest boss room gets the last.
 ## Every boss monster there is.
 BOSSES = ["OrbBoss", "HeadBoss", "OctoBoss", "FallenExtranaut"]
 ## The guardian of each outer zone's artifact, nearest zone first. As on
 ## Zorta, the fourth is the three BossBots together.
 ZONE_BOSSES = ["OrbBoss", "HeadBoss", "OctoBoss", "BossBots"]
+## Sits on the floor and can only shoot to its left, so its arena is laid
+## out for it: see room._place_arena. Its room is entered from above or
+## below, through an opening no farther right than this column.
+GROUND_BOSS = "HeadBoss"
+GROUND_BOSS_ENTRY = 12
 ## Waits at the end of the final area; the way out opens when it dies.
 FINAL_BOSS = "FallenExtranaut"
 ## The last zone in ZONES is the final area, behind the artifact door.
@@ -189,11 +198,17 @@ def _attempt(rng):
         world.bosses[at] = ZONE_BOSSES[index]
         world.treasure[at] = "AlienArtifact"
         world.kind[at] = "boss"
+        if world.bosses[at] == GROUND_BOSS:
+            (direction, pos), = world.links[at].items()
+            if direction in "WE" or pos > GROUND_BOSS_ENTRY:
+                raise Unbuildable("the way in to the ground boss is on the wrong side")
     _reserve_save_points(world, parent)
     _place_powerups(world, rng)
     _place_save_points(world)
+    _place_thresholds(world)
     _place_infestations(world, rng)
     _place_features(world, rng)
+    _place_oddities(world, rng)
     return world
 
 
@@ -444,6 +459,39 @@ def _place_save_points(world):
         world.save_points.add(picked[0])
 
 
+def borders(world, at):
+    """The openings of a room that lead into another zone, as
+    {direction: that zone}."""
+    return {
+        direction: world.zone[neighbour(at, direction)]
+        for direction in world.links[at]
+        if world.zone[neighbour(at, direction)] != world.zone[at]
+    }
+
+
+def crossings(world):
+    """Every link between two zones, as (room, direction) from its west or
+    north side."""
+    return [
+        (at, direction) for at in sorted(world.links) for direction in "ES"
+        if direction in borders(world, at)
+    ]
+
+
+def _place_thresholds(world):
+    """One room at each crossing between zones becomes a threshold: an
+    empty hall that marks the border. Rooms on the most crossings are taken
+    first, so one hall serves them all, then the deeper side of a crossing,
+    so the hall is the first sight of the new zone."""
+    edge = sorted(
+        (at for at in world.links if world.kind[at] == "normal" and borders(world, at)),
+        key=lambda at: (-len(borders(world, at)), at in world.treasure, -world.depth[at], at),
+    )
+    for at in edge:
+        if any(world.kind[neighbour(at, d)] != "threshold" for d in borders(world, at)):
+            world.kind[at] = "threshold"
+
+
 def _place_infestations(world, rng):
     rooms = _plain_rooms(world)
     for at in rng.sample(rooms, max(6, len(rooms) // INFESTED_ONE_IN)):
@@ -460,3 +508,12 @@ def _place_features(world, rng):
     # two rooms of a kind are far apart.
     for index, at in enumerate(rooms):
         world.kind[at] = FEATURES[index % len(FEATURES)]
+
+
+def _place_oddities(world, rng):
+    """Turns some of the ordinary rooms that are left into quiet ones with a
+    strange shape, so the planet has lulls."""
+    count = len(ODDITIES) * ODDITY_ROUNDS
+    rooms = sorted(_spread(_plain_rooms(world), count, rng), key=lambda at: (world.depth[at], at))
+    for index, at in enumerate(rooms):
+        world.kind[at] = ODDITIES[index % len(ODDITIES)]

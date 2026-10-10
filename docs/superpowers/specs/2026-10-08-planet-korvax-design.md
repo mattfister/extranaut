@@ -211,6 +211,25 @@ order going deeper so the two of a kind are far apart:
 
 Set pieces never hold a door, a treasure or a save point.
 
+## Lulls: thresholds, oddities and moods
+
+Added after a later play-test, in which the ordinary rooms all felt as hard
+as each other and the borders between zones went unnoticed.
+
+- **Thresholds**: one room at every crossing between two zones, the one on
+  the deeper side unless a room serves several crossings. It is a plain
+  rectangular hall holding one piece of architecture (teeth, a monolith,
+  courses of slabs, or a pyramid standing or hanging) and no monsters or
+  decorations. The side nearest the other zone is drawn in that zone's rock,
+  with a ragged seam, and the room's tint is halfway between the two. It may
+  hold a save point or a loose powerup.
+- **Oddities**: six ordinary rooms, two of each, spend a quarter of their
+  budget and have a strange shape. **Mirror** is a cave the same on both
+  sides, **hollow** a round cave about a core of rock, and **strata** level
+  galleries stacked up the room and joined at alternating ends.
+- **Moods**: every remaining ordinary room scales its budget by 0.4, 0.7, 1,
+  1 or 1.4, so some are lulls and some are a fight.
+
 ## Structure: four areas, then the final one
 
 Revised to match how Zorta is won. The planet is shown to the player as
@@ -234,6 +253,13 @@ about nineteen cells wide and twelve high with a flat floor, two side ledges
 and a higher centre ledge, no slopes and no other hostiles. The vault with
 the artifact (or the way out) opens off the floor on the side away from the
 entrance, and the player appears in the far corner from it.
+
+The HeadBoss is the exception, because it sits on the floor and its shots
+to the right die at once. Its arena is like its room on Zorta: fifteen cells
+high with no ledges, the boss in the bottom right corner, and the vault, the
+way in and the player at the left end. A world whose HeadBoss room is
+entered from the side, or from above or below right of column 12, is
+rejected.
 
 This supersedes the earlier notes above on where bosses go, on the Fallen
 Extranaut being one of four artifact guardians, and on the final room being

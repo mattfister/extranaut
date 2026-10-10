@@ -178,7 +178,7 @@ Polish:
 Controls:
 
 - Move: arrows, A/D, d-pad, left stick.
-- Jetpack: up arrow, W, d-pad up, stick up, gamepad south button.
+- Jetpack: up arrow, W, gamepad south button.
 - Fire: Z, X, Space, gamepad west button.
 - Pause: P, Enter, gamepad Start.
 - Ctrl and Esc are not bound, because browsers intercept them.

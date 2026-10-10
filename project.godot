@@ -26,6 +26,10 @@ window/size/viewport_width=1024
 window/size/viewport_height=768
 window/stretch/mode="canvas_items"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/butler_push/plugin.cfg")
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

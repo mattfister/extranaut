@@ -18,6 +18,8 @@ SEED = 2026
 DECOR_SEED = 7919
 FINAL_BOSS_MUSIC = "fallenExtranaut"
 BOSS_MUSIC = "bossBattle"
+## How far a threshold's tint moves toward the zones it borders.
+THRESHOLD_TINT = 0.5
 
 ROOT = Path(__file__).resolve().parent.parent
 ZORTA_PATH = ROOT / "tools" / "zorta.json"
@@ -34,10 +36,14 @@ def generate(seed=SEED):
         slopes = not any(tile_is_blank(midground, *tile) for tile in render.SLOPE_TILES.values())
         room_seed = seed * 100 + at[0] * 10 + at[1]
         built = room.build(world, at, room_seed, slopes)
+        beyond = {d: worldmap.ZONES[z] for d, z in worldmap.borders(world, at).items()}
         dressed = decor.decorate(
             built.rows, built.monsters, built.player_start, zone, world.kind[at], at, sheets,
-            random.Random(room_seed * DECOR_SEED),
+            random.Random(room_seed * DECOR_SEED), beyond,
         )
+        tint = zone["tint"]
+        if world.kind[at] == "threshold":
+            tint = _blend(tint, [other["tint"] for _, other in sorted(beyond.items())])
         if world.kind[at] == "boss":
             music = BOSS_MUSIC
         elif world.kind[at] == "final":
@@ -52,7 +58,7 @@ def generate(seed=SEED):
             "animated": dressed.animated,
             "walls": render.walls(built.rows, hole),
             "monsters": built.monsters,
-            "tint": zone["tint"],
+            "tint": tint,
             "zone": zone["name"],
             "cells": built.rows,
             "links": dict(sorted(world.links[at].items())),
@@ -64,6 +70,14 @@ def generate(seed=SEED):
         "sheets": sheets,
         "rooms": rooms,
     }
+
+
+def _blend(tint, others):
+    """A tint part of the way to the average of some others."""
+    return [
+        round(own + (sum(other[i] for other in others) / len(others) - own) * THRESHOLD_TINT, 3)
+        for i, own in enumerate(tint)
+    ]
 
 
 def main():

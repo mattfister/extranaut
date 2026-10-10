@@ -106,11 +106,13 @@ func exhaust(delta: float, drop: float, max_amount: int) -> void:
 		emit_particles("exhaust", Vector2(randf_range(-4.0, 4.0), drop), randi_range(1, max_amount))
 
 
-## Monster-class entities still alive in this room, this one included.
+## Monster-class entities in this room, this one included. One that died this
+## frame still counts until it is freed, so every monster sees the same count
+## in a frame, as in the original: both spiky heads must see three remain.
 func monsters_in_room() -> int:
 	var count := 0
 	for node in get_parent().get_children():
-		if node.is_in_group("monsters") and not node.is_queued_for_deletion():
+		if node.is_in_group("monsters"):
 			count += 1
 	return count
 

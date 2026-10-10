@@ -1,6 +1,7 @@
 extends RefCounted
 ## Registers the game's input actions. Call setup() once at startup.
-## Ctrl and Esc are deliberately unbound: browsers intercept them.
+## Ctrl is deliberately unbound: browsers intercept it. Esc pauses, though a
+## browser in fullscreen takes it to leave fullscreen instead.
 
 const ACTIONS := {
 	"move_left": {
@@ -15,15 +16,14 @@ const ACTIONS := {
 	},
 	"jetpack": {
 		"keys": [KEY_UP, KEY_W],
-		"buttons": [JOY_BUTTON_DPAD_UP, JOY_BUTTON_A],
-		"axis": [JOY_AXIS_LEFT_Y, -1.0],
+		"buttons": [JOY_BUTTON_A],
 	},
 	"fire": {
 		"keys": [KEY_Z, KEY_X, KEY_SPACE],
 		"buttons": [JOY_BUTTON_X],
 	},
 	"pause": {
-		"keys": [KEY_P, KEY_ENTER],
+		"keys": [KEY_ESCAPE, KEY_P, KEY_ENTER],
 		"buttons": [JOY_BUTTON_START],
 	},
 }

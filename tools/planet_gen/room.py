@@ -8,7 +8,7 @@ import random
 
 from . import reach
 from .reach import W, H
-from .worldmap import BOSSES, FEATURES, FINAL_BOSS, ZONES
+from .worldmap import BOSSES, FEATURES, FINAL_BOSS, GROUND_BOSS, ODDITIES, ZONES
 
 TILE = 32
 
@@ -48,7 +48,7 @@ EARLY_RANK = 0.25
 EARLY_DEAR = 3
 ## Rooms where the player is not sealed in with a door, so things that shots
 ## cannot clear may be added freely.
-OPEN_KINDS = ("normal",) + tuple(FEATURES)
+OPEN_KINDS = ("normal",) + tuple(FEATURES) + tuple(ODDITIES)
 ## Rooms built as an arena for a boss.
 BOSS_ROOMS = ("boss", "final")
 
@@ -56,6 +56,11 @@ BASE_BUDGET = 12
 RANK_BUDGET = 14
 BUDGET_JITTER = 3
 BEHIND_GATE_BUDGET = 6
+## An ordinary room's budget is scaled by one of these, so some are lulls
+## and some are a fight.
+MOODS = (0.4, 0.7, 1.0, 1.0, 1.4)
+## The share of its budget a quiet, strange room spends.
+ODDITY_BUDGET = 0.25
 ## Hostiles keep this many cells (Chebyshev) from where the player arrives.
 SAFE_CELLS = 5
 ## A powerup lying in the open keeps this far from where the player arrives.
@@ -70,6 +75,10 @@ FIELD_HOVER_BLOCKS = (12, 18)
 ARENA_HAND_BOTS = 3
 SANCTUARY_BALLS = (3, 6)
 ATTEMPTS = 400
+## A threshold's hall, as a box of cells, and the levels of a strata room:
+## the top row of each gallery, which is three cells high.
+HALL = (3, 3, W - 4, H - 4)
+STRATA = (3, 8, 13, 18)
 
 ## The gate room's band of rock, and the tunnel through it.
 BAND = (12, 17)
@@ -85,6 +94,10 @@ ARENA_SIDE_LEDGE = (4, 4)     # cells above the floor, length
 ARENA_CENTRE_LEDGE = (8, 5)
 ARENA_BOSS_HEIGHT = 10
 ARENA_BOSS_SPACING = 5
+## The ground boss's arena is higher and has no ledges, like its room on
+## Zorta, and it sits this far from the right wall and above the floor.
+GROUND_ARENA_HEIGHT = 15
+GROUND_BOSS_INSET = (1, 2)
 ## Who stands with the final boss.
 FINAL_ESCORTS = ("BossBot1", "BossBot1")
 
@@ -214,16 +227,22 @@ def _place_arena(world, at, grid, rng):
     """Reserves a boss arena: one big flat-floored chamber with three ledges,
     and a vault at floor level on the side away from the way in. In a boss
     room the vault holds the artifact. In the final room it holds the way
-    out, a hole in its floor. Returns what the rest of the build needs."""
+    out, a hole in its floor. The ground boss can only shoot to its left, so
+    it gets a bare arena with the vault and the player on the left and
+    itself in the bottom right corner. Returns what the rest of the build
+    needs."""
     links = world.links[at]
     final = world.kind[at] == "final"
+    grounded = world.bosses.get(at) == GROUND_BOSS
     if final:
         floor = H - 1
     elif "S" in links:
         floor = ARENA_FLOOR_OVER_ENTRY
     else:
         floor = rng.randint(*ARENA_FLOORS)
-    if ("W" in links) != ("E" in links):
+    if grounded:
+        vault_right = False
+    elif ("W" in links) != ("E" in links):
         vault_right = "W" in links
     else:
         vault_right = rng.random() < 0.5
@@ -240,13 +259,16 @@ def _place_arena(world, at, grid, rng):
         grid.keep_solid.difference_update(cells)
         grid.carve(cells, keep=True, border=True)
     grid.carve(tunnel, keep=True)
-    grid.carve(_box(left, floor - ARENA_HEIGHT, right, floor - 1))
+    height = GROUND_ARENA_HEIGHT if grounded else ARENA_HEIGHT
+    grid.carve(_box(left, max(2, floor - height), right, floor - 1))
 
-    up, length = ARENA_SIDE_LEDGE
-    ledges = _box(left + 3, floor - up, left + 2 + length, floor - up)
-    ledges += _box(right - 2 - length, floor - up, right - 3, floor - up)
-    up, length = ARENA_CENTRE_LEDGE
-    ledges += _box(centre - length // 2, floor - up, centre + length // 2, floor - up)
+    ledges = []
+    if not grounded:
+        up, length = ARENA_SIDE_LEDGE
+        ledges = _box(left + 3, floor - up, left + 2 + length, floor - up)
+        ledges += _box(right - 2 - length, floor - up, right - 3, floor - up)
+        up, length = ARENA_CENTRE_LEDGE
+        ledges += _box(centre - length // 2, floor - up, centre + length // 2, floor - up)
     ledges = [c for c in ledges if c not in grid.keep_clear]
     grid.solid.update(ledges)
     grid.protect(ledges)
@@ -254,10 +276,16 @@ def _place_arena(world, at, grid, rng):
         "door": door,
         "treasure": None if final else treasure,
         "hole": hole,
-        "hub": (centre, floor - 3),
-        "boss": (centre, floor - ARENA_BOSS_HEIGHT),
-        # The player appears in the corner farthest from the vault.
-        "start": (left + 1, floor - 1) if vault_right else (right - 1, floor - 1),
+        # Ways in join the ground boss's arena at its left end, which
+        # leaves it a whole floor.
+        "hub": (left + 2 if grounded else centre, floor - 3),
+        "boss": (
+            (right - GROUND_BOSS_INSET[0], floor - GROUND_BOSS_INSET[1]) if grounded
+            else (centre, floor - ARENA_BOSS_HEIGHT)
+        ),
+        # The player appears in the corner farthest from the vault, or from
+        # the ground boss.
+        "start": (left + 1, floor - 1) if vault_right or grounded else (right - 1, floor - 1),
     }
 
 
@@ -359,6 +387,81 @@ def _add_honeycomb(grid, cells):
         if y % 3 == 0 and (x + (y // 3 % 2) * 2) % 4 in (0, 1):
             if (x, y) not in grid.keep_clear and 2 <= x <= W - 3 and 3 <= y <= H - 4:
                 grid.solid.add((x, y))
+
+
+def _fill(grid, cells):
+    """Turns cells to rock, all or none: nothing is built across an opening."""
+    if not any(c in grid.keep_clear for c in cells):
+        grid.solid.update(cells)
+
+
+def _carve_hall(grid, rng, links):
+    """A threshold: one plain rectangular hall holding a single piece of
+    architecture, as unlike a cave as the cells allow."""
+    x0, y0, x1, y1 = HALL
+    grid.carve(_box(*HALL))
+    # A pyramid would bury an opening on its own side of the room, so it
+    # is built where it can be, and usually then.
+    pyramids = [m for m, side in (("steps", "S"), ("hanging", "N")) if side not in links]
+    if pyramids and rng.random() < 0.6:
+        motif = rng.choice(pyramids)
+    else:
+        motif = rng.choice(("teeth", "monolith", "bars"))
+    if motif == "teeth":
+        # Columns hanging from the ceiling, longest in the middle or at the
+        # ends, over stumps on the floor between them.
+        columns = list(range(x0 + 1, x1 - 1, 4))
+        inward = rng.random() < 0.5
+        for index, x in enumerate(columns):
+            from_edge = min(index, len(columns) - 1 - index)
+            length = 3 + 3 * (from_edge if inward else len(columns) // 2 - 1 - from_edge)
+            _fill(grid, _box(x, y0, x + 1, y0 + length - 1))
+        for x in columns[:-1]:
+            _fill(grid, _box(x + 2, y1 - 1, x + 3, y1))
+    elif motif == "monolith":
+        # One block hanging in the middle of the hall.
+        _fill(grid, _box(x0 + 6, y0 + 6, x1 - 6, y1 - 6))
+    elif motif == "bars":
+        # Slabs laid like courses of brick.
+        for course, y in enumerate(range(y0 + 4, y1 - 3, 4)):
+            for x in range(x0 + 1 + 4 * (course % 2), x1 - 4, 8):
+                _fill(grid, _box(x, y, x + 4, y))
+    else:
+        # A stepped pyramid, standing on the floor or hanging from the ceiling.
+        for level in range(5):
+            left, right = x0 + 2 + 2 * level, x1 - 2 - 2 * level
+            if motif == "steps":
+                _fill(grid, _box(left, y1 - 2 * level - 1, right, y1 - 2 * level))
+            else:
+                _fill(grid, _box(left, y0 + 2 * level, right, y0 + 2 * level + 1))
+
+
+def _carve_strata(grid, rng):
+    """Level galleries the width of the room, stacked up it and joined at
+    alternating ends."""
+    first = rng.randrange(2)
+    for index, top in enumerate(STRATA):
+        grid.carve(_box(2, top, W - 3, top + 2))
+        if index:
+            x = 3 if index % 2 == first else W - 6
+            grid.carve(_box(x, top - 2, x + 2, top - 1))
+
+
+def _carve_hollow(grid, rng, centre):
+    """A great round cave about a core of rock. Returns a point in the ring
+    beneath the core."""
+    rx, ry = rng.randint(5, 7), rng.randint(2, 4)
+    grid.protect(c for c in _ellipse(centre, rx, ry) if c not in grid.keep_clear)
+    grid.carve(_ellipse(centre, rng.randint(11, 12), rng.randint(8, 9)))
+    return (centre[0], min(centre[1] + ry + 2, H - 3))
+
+
+def _mirror(grid):
+    """Makes a cave the same on both sides, which no cave is. The openings
+    are left out, so none gets a twin that leads nowhere."""
+    for x, y in [(x, y) for x in range(W) for y in range(H) if (x, y) not in grid.solid]:
+        if (x, y) not in grid.keep_clear:
+            grid.carve([(W - 1 - x, y)])
 
 
 def _add_slopes(grid, rng, chance):
@@ -583,7 +686,9 @@ def _attempt(world, at, rng, slopes):
     zone = ZONES[world.zone[at]]
     style = zone["style"]
     # Rooms that are one great cave rather than a warren of small ones.
-    cavern = kind in ("arena", "den", "hoverfield", "honeycomb")
+    cavern = kind in ("arena", "den", "hoverfield", "honeycomb", "hollow")
+    # Rooms laid out whole, with no tunnels wandering between their parts.
+    built = kind in ("threshold", "strata")
     links = world.links[at]
     grid = _Grid()
     hole = None
@@ -635,7 +740,13 @@ def _attempt(world, at, rng, slopes):
     for half, hub in sorted(hubs.items()):
         if arena is not None:
             continue
-        if cavern:
+        if kind == "threshold":
+            _carve_hall(grid, rng, links)
+        elif kind == "strata":
+            _carve_strata(grid, rng)
+        elif kind == "hollow":
+            hubs[half] = _carve_hollow(grid, rng, hub)
+        elif cavern:
             great_cave = _ellipse(hub, rng.randint(9, 11), rng.randint(6, 7))
             grid.carve(great_cave)
         elif kind == "gallery":
@@ -649,8 +760,9 @@ def _attempt(world, at, rng, slopes):
             grid.carve(_ellipse(hub, rng.randint(3, 5), rng.randint(2, 3)))
     paths = []
     for start, half in walks:
-        paths.append(_tunnel(grid, rng, start, hubs[half], halves[half]))
-    if not cavern and arena is None and kind != "gallery":
+        if not built:
+            paths.append(_tunnel(grid, rng, start, hubs[half], halves[half]))
+    if not cavern and not built and arena is None and kind != "gallery":
         # Side caves anywhere in the room, each joined to its hub, so the
         # room spreads across the screen instead of hugging its tunnels.
         for _ in range(rng.randint(*style["side_caves"])):
@@ -666,11 +778,13 @@ def _attempt(world, at, rng, slopes):
             grid.carve(_ellipse(rng.choice(path), rng.randint(2, 5), rng.randint(2, 3)))
     if kind == "honeycomb":
         _add_honeycomb(grid, great_cave)
+    elif kind == "mirror":
+        _mirror(grid)
     if not grid.connected():
         raise Unbuildable("caves do not join up")
     if kind == "shaft":
         _add_platforms(grid, rng, (6, 9))
-    elif arena is None and kind not in ("hoverfield", "honeycomb", "gallery"):
+    elif arena is None and not built and kind not in ("hoverfield", "honeycomb", "gallery", "hollow", "mirror"):
         _add_platforms(grid, rng, style["platforms"])
 
     # Where the player appears: at the start of the game in the start room,
@@ -692,7 +806,7 @@ def _attempt(world, at, rng, slopes):
     nav, nodes = _repair(world, at, grid, rng, hole, extra)
     if grid.empty_count() < MIN_EMPTY:
         raise Unbuildable("too cramped")
-    if slopes and arena is None:
+    if slopes and arena is None and kind != "threshold":
         _add_slopes(grid, rng, style["slopes"])
 
     safe_from = [reach.entry(d, pos)[0] for d, pos in sorted(links.items())] + [start_cell]
@@ -761,7 +875,12 @@ def _attempt(world, at, rng, slopes):
             _add_many(placer, "BossBot1", 1)
             _add_many(placer, "BossBot2", 1)
             _add_hostiles(placer, rng, budget / 3.0, rank, zone, elites=False)
-        else:
+        elif kind in ODDITIES:
+            _add_hostiles(placer, rng, budget * ODDITY_BUDGET, rank, zone, elites=False)
+        elif kind == "normal":
+            _add_hostiles(placer, rng, budget * rng.choice(MOODS), rank, zone)
+        elif kind != "threshold":
+            # A threshold is left empty.
             _add_hostiles(placer, rng, budget, rank, zone)
         if kind in OPEN_KINDS and kind not in ("hoverfield", "sanctuary"):
             _add_many(placer, "HoverBlock", rng.randint(*style["hover_blocks"]))

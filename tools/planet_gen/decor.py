@@ -62,6 +62,9 @@ SANCTUARY_DECOR = {"grass": 1.0, "small_mushrooms": 1.0, "space": (1.0, 1, 2)}
 ## Water only suits the zones that already have it; tinted orange or red it
 ## reads as something else.
 SANCTUARY_WATERFALLS = (1.0, 1, 2)
+## How far into a threshold the next zone's rock reaches from the opening
+## that leads there, as a share of the room: least and most.
+SEAM = (0.3, 0.45)
 
 
 class Decor:
@@ -99,6 +102,13 @@ class Decor:
         self.midground[cell] = [self.sheets.index(sheet), tile[0], tile[1]]
         self.taken.add(cell)
 
+    def repaint(self, cells, midground, background):
+        """Draws cells with other sheets, keeping each one's tile."""
+        for cell in cells:
+            if cell in self.midground:
+                self.midground[cell][0] = self.sheets.index(midground)
+            self.background[cell][0] = self.sheets.index(background)
+
     def animate(self, layer, cell, animation):
         self.animated.append({
             "layer": layer,
@@ -117,9 +127,15 @@ class Decor:
         }
 
 
-def decorate(rows, monsters, player_start, zone, kind, at, sheets, rng):
-    """Returns the Decor for a built room."""
+def decorate(rows, monsters, player_start, zone, kind, at, sheets, rng, beyond=None):
+    """Returns the Decor for a built room. beyond is the zone on the far
+    side of each opening that leaves this one, as {direction: zone}."""
     decor = Decor(rows, sheets, zone["midground"], zone["background"])
+    if kind == "threshold":
+        # Bare but for the two zones' rock meeting, so the border is plain.
+        for direction, other in sorted((beyond or {}).items()):
+            _seam(decor, rng, direction, other)
+        return decor
     for name, x, y in monsters:
         if name in UNKILLABLE:
             _keep_clear(decor, (int(x) // TILE, int(y) // TILE))
@@ -165,6 +181,22 @@ def _keep_clear(decor, cell):
     for dx in (-1, 0, 1):
         for dy in (-1, 0):
             decor.taken.add((cell[0] + dx, cell[1] + dy))
+
+
+def _seam(decor, rng, direction, zone):
+    """Draws the side of the room nearest an opening in the rock of the zone
+    it leads to, with a ragged edge where the two meet."""
+    sideways = direction in "WE"
+    across, along = (W, H) if sideways else (H, W)
+    least, most = round(across * SEAM[0]), round(across * SEAM[1])
+    depth = rng.randint(least, most)
+    cells = []
+    for i in range(along):
+        depth = min(max(depth + rng.choice((-1, 0, 0, 1)), least), most)
+        for j in range(depth):
+            k = j if direction in "WN" else across - 1 - j
+            cells.append((k, i) if sideways else (i, k))
+    decor.repaint(cells, zone["midground"], zone["background"])
 
 
 def _space(decor, rng, background, blobs):

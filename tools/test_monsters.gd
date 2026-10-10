@@ -43,6 +43,7 @@ func _run() -> void:
 		"powerups": _test_powerups,
 		"save_point": _test_save_point,
 		"doors": _test_doors,
+		"head_boss_room": _test_head_boss_room,
 		"turrets": _test_turrets,
 		"enemy_shots": _test_enemy_shots,
 		"player_death": _test_player_death,
@@ -207,6 +208,19 @@ func _test_doors() -> void:
 	await _frames(3)
 	_expect(not is_instance_valid(door), "the artifact door opens with 4 artifacts")
 
+
+## Zorta room 7,6: a door, the head boss and its two spiky heads.
+func _test_head_boss_room() -> void:
+	_new_arena()
+	var door := _spawn("monster_door", Vector2(300, 400))
+	var boss := _spawn("head_boss", Vector2(700, REST_Y))
+	var spikies := [_spawn("spiky_head_monster", Vector2(400, REST_Y)), _spawn("spiky_head_monster", Vector2(500, REST_Y))]
+	await _frames(10)
+	_expect(is_instance_valid(door) and is_instance_valid(spikies[0]) and is_instance_valid(spikies[1]), "the spiky heads and the door outlive a living head boss")
+	boss.die()
+	await _frames(5)
+	_expect(not is_instance_valid(spikies[0]) and not is_instance_valid(spikies[1]), "both spiky heads die with the head boss")
+	_expect(not is_instance_valid(door), "the door opens once the head boss room is clear")
 
 func _test_turrets() -> void:
 	_new_arena()
